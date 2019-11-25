@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+  <Include href="KnownImageIds.vsct" />
+
+  <Commands package="Package">
+    <Groups>
+      <Group guid="CmdSet" id="VSToolsMenuGroup" />
+      <Group guid="CmdSet" id="FileCommandGroup" />
+      <Group guid="CmdSet" id="MiscellaneousGroup" />
+    </Groups>
+
+    <Menus>
+      <Menu guid="CmdSet" id="MainMenu">
+        <Strings>
+          <ButtonText>Typescript Compiler</ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Buttons>
+      <Button guid="CmdSet" id="ConfigureCompileOnBuildCommandId">
+        <Icon guid="ImageCatalogGuid" id="NuGet" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Configure Compile on Build</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="CmdSet" id="GotoConfigurationPageCommandId">
+        <Icon guid="ImageCatalogGuid" id="Settings" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Options...</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <CommandPlacements>
+    <CommandPlacement guid="CmdSet" id="VSToolsMenuGroup" priority="500">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+    </CommandPlacement>
+
+    <CommandPlacement guid="CmdSet" id="FileCommandGroup" priority="1">
+      <Parent guid="CmdSet" id="MainMenu" />
+    </CommandPlacement>
+
+    <CommandPlacement guid="CmdSet" id="MiscellaneousGroup" priority="2">
+      <Parent guid="CmdSet" id="MainMenu" />
+    </CommandPlacement>
+
+    <CommandPlacement guid="CmdSet" id="ConfigureCompileOnBuildCommandId" priority="4">
+      <Parent guid="CmdSet" id="FileCommandGroup" />
+    </CommandPlacement>
+
+    <CommandPlacement guid="CmdSet" id="GotoConfigurationPageCommandId" priority="10">
+      <Parent guid="CmdSet" id="MiscellaneousGroup" />
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <VisibilityConstraints>
+    <VisibilityItem guid="CmdSet" id="ConfigureCompileOnBuildCommandId" context="UICONTEXT_SolutionExists" />
+  </VisibilityConstraints>
+
+  <Symbols>
+    <GuidSymbol name="Package" value="{648cd2ff-1416-4be6-bcb1-9e2f729a008d}" />
+
+    <GuidSymbol name="CmdSet" value="{979e0666-7021-4ff9-8026-8fda4bb84e0f}">
+      <!-- Groups -->
+      <IDSymbol name="VSToolsMenuGroup" value="0x0100" />
+      <IDSymbol name="FileCommandGroup" value="0x0101" />
+      <IDSymbol name="MiscellaneousGroup" value="0x0102" />
+
+      <!-- Menu -->
+      <IDSymbol name="MainMenu" value="0x0200" />
+
+      <!-- Commands -->
+      <IDSymbol name="ConfigureCompileOnBuildCommandId" value="0x0509" />
+      <IDSymbol name="GotoConfigurationPageCommandId" value="0x0510" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>
