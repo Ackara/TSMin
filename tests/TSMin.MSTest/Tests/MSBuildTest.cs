@@ -10,33 +10,39 @@ namespace Acklann.TSMin.Tests
     public class MSBuildTest
     {
         [TestMethod]
-        public void Can_invoke_compile_sass_task()
+        public void Can_invoke_compile_ts_task()
         {
             // Arrange
-            var projectFolder = Path.Combine(Path.GetTempPath(), "sassin-temp");
-            if (Directory.Exists(projectFolder)) Directory.Delete(projectFolder, recursive: true);
-            Directory.CreateDirectory(projectFolder);
+            var cwd = Path.Combine(Path.GetTempPath(), "tsbuild-temp");
+            if (Directory.Exists(cwd)) Directory.Delete(cwd, recursive: true);
+            Directory.Move(Path.Combine(Sample.DirectoryName, "Modles"), cwd);
 
-            File.Copy(Sample.GetCarTS().FullName, Path.Combine(projectFolder, Sample.File.CarTS));
+            var sourceFile = Path.Combine(cwd, Path.GetFileName(Sample.File.CarTS));
 
             var mockEngine = A.Fake<Microsoft.Build.Framework.IBuildEngine>();
-            A.CallTo(() => mockEngine.ProjectFileOfTaskNode).Returns(Path.Combine(projectFolder, "sassin.proj"));
+            A.CallTo(() => mockEngine.ProjectFileOfTaskNode).Returns(Path.Combine(cwd, "product.proj"));
+
+            var mockItem = A.Fake<Microsoft.Build.Framework.ITaskItem>();
+            A.CallTo(() => mockItem.ItemSpec).Returns(sourceFile);
+            A.CallTo(() => mockItem.GetMetadata(nameof(FileInfo.FullName))).Returns(sourceFile);
+            A.CallTo(() => mockItem.GetMetadata(MSBuild.CompileTypescript.MetaElement)).Returns("app.js");
 
             var sut = new MSBuild.CompileTypescript
             {
                 BuildEngine = mockEngine,
+                SourceFiles = new Microsoft.Build.Framework.ITaskItem[] { mockItem },
                 GenerateSourceMap = true,
                 Minify = true
             };
 
             // Act
             var success = sut.Execute();
-            var generatedFiles = Directory.EnumerateFiles(projectFolder).Select(x => Path.GetFileName(x)).ToArray();
+            var generatedFiles = Directory.EnumerateFiles(cwd).Select(x => Path.GetFileName(x)).ToArray();
 
             // Asser
             success.ShouldBeTrue();
             generatedFiles.ShouldNotBeEmpty();
-            generatedFiles.Length.ShouldBe(3);
+            generatedFiles.Length.ShouldBe(4);
         }
     }
 }
