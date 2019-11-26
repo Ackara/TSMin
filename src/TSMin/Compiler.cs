@@ -13,12 +13,6 @@ namespace Acklann.TSMin
             string scriptPath = Path.Combine(NodeJS.InstallationDirectory, "compiler.js");
             if (!File.Exists(scriptPath)) throw new FileNotFoundException($"Could not find file at '{scriptPath}'.");
 
-            if (!string.IsNullOrEmpty(options.OutputDirectory) && !Directory.Exists(options.OutputDirectory))
-                Directory.CreateDirectory(options.OutputDirectory);
-
-            if (!string.IsNullOrEmpty(options.SourceMapDirectory) && !Directory.Exists(options.SourceMapDirectory))
-                Directory.CreateDirectory(options.SourceMapDirectory);
-
             long start = System.DateTime.Now.Ticks;
             using (Process node = NodeJS.Execute($"/c node \"{scriptPath}\" \"{string.Join(";", sourceFiles)}\" {options.ToArgs()}"))
             {
@@ -44,8 +38,7 @@ namespace Acklann.TSMin
 
         private static IEnumerable<string> GetGeneratedFiles(StreamReader reader)
         {
-            JArray json; string line = null;
-
+            string line = null;
             while (!reader.EndOfStream)
             {
                 line = reader.ReadLine();

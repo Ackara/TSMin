@@ -17,20 +17,23 @@ namespace Acklann.TSMin.Tests
             if (Directory.Exists(cwd)) Directory.Delete(cwd, recursive: true);
             Directory.Move(Path.Combine(Sample.DirectoryName, "Modles"), cwd);
 
-            var sourceFile = Path.Combine(cwd, Path.GetFileName(Sample.File.CarTS));
-
             var mockEngine = A.Fake<Microsoft.Build.Framework.IBuildEngine>();
             A.CallTo(() => mockEngine.ProjectFileOfTaskNode).Returns(Path.Combine(cwd, "product.proj"));
 
-            var mockItem = A.Fake<Microsoft.Build.Framework.ITaskItem>();
-            A.CallTo(() => mockItem.ItemSpec).Returns(sourceFile);
-            A.CallTo(() => mockItem.GetMetadata(nameof(FileInfo.FullName))).Returns(sourceFile);
-            A.CallTo(() => mockItem.GetMetadata(MSBuild.CompileTypescript.MetaElement)).Returns("app.js");
+            var src = Path.Combine(cwd, Path.GetFileName(Sample.File.CarTS));
+            var sourceFile = A.Fake<Microsoft.Build.Framework.ITaskItem>();
+            A.CallTo(() => sourceFile.GetMetadata(MSBuild.CompileTypescript.FullPath))
+                .Returns(src);
+
+            var outFile = A.Fake<Microsoft.Build.Framework.ITaskItem>();
+            A.CallTo(() => outFile.GetMetadata(MSBuild.CompileTypescript.FullPath))
+                .Returns(Path.ChangeExtension(src, ".js"));
 
             var sut = new MSBuild.CompileTypescript
             {
                 BuildEngine = mockEngine,
-                SourceFiles = new Microsoft.Build.Framework.ITaskItem[] { mockItem },
+                OutputFile = Path.ChangeExtension(src, ".js"),
+                SourceFiles = new Microsoft.Build.Framework.ITaskItem[] { sourceFile },
                 GenerateSourceMap = true,
                 Minify = true
             };
@@ -39,7 +42,7 @@ namespace Acklann.TSMin.Tests
             var success = sut.Execute();
             var generatedFiles = Directory.EnumerateFiles(cwd).Select(x => Path.GetFileName(x)).ToArray();
 
-            // Asser
+            // Assert
             success.ShouldBeTrue();
             generatedFiles.ShouldNotBeEmpty();
             generatedFiles.Length.ShouldBe(4);

@@ -119,27 +119,13 @@ function CompilerOptions() {
 
     me.sourceFiles = process.argv[2].split(';');
     me.minify = bool.test(process.argv[3]);
-    me.typescriptOptions.outFile = process.argv[4];
+    me.shouldGenerateSourceMap = me.typescriptOptions.sourceMap = bool.test(process.argv[4]);
 
-    me.sourceMapDirectory = process.argv[5];
-    if (!me.sourceMapDirectory) { me.sourceMapDirectory = path.dirname(me.typescriptOptions.outFile); }
-
-    me.shouldGenerateSourceMap = bool.test(process.argv[6]);
-    me.typescriptOptions.sourceMap = me.shouldGenerateSourceMap;
-
-    me.getOutputPath = function (omitSuffix = false) {
-        let baseName = path.basename(me.sourceFile, path.extname(me.sourceFile));
-        return path.join(me.outputDirectory, (baseName + (omitSuffix ? "" : me.suffix) + ".js"));
-    }
-
-    me.getSourceMapPath = function (omitSuffix = false) {
-        let baseName = path.basename(me.sourceFile, path.extname(me.sourceFile));
-        return path.join(me.sourceMapDirectory, (baseName + (omitSuffix ? "" : me.suffix) + "js.map"));
-    }
+    me.typescriptOptions.outFile = process.argv[5];
 
     me.log = function () {
         console.log("src: " + me.sourceFiles);
-        console.log("smd: " + me.sourceMapDirectory);
+        console.log("out: " + me.typescriptOptions.outFile);
 
         console.log("min: " + me.minify);
         console.log("map: " + me.shouldGenerateSourceMap);

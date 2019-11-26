@@ -1,5 +1,6 @@
 ﻿using Microsoft.Build.Framework;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -7,59 +8,49 @@ namespace Acklann.TSMin.MSBuild
 {
     public class CompileTypescript : ITask
     {
-        public const string MetaElement = "OutFile";
-
         [Required]
         public ITaskItem[] SourceFiles { get; set; }
 
-        public string TypescriptCompilerOptions { get; set; }
-
-        public string UglifyjsOptions { get; set; }
-
-        public bool Minify { get; set; }
+        public string OutputFile { get; set; }
 
         public bool GenerateSourceMap { get; set; }
 
+        public bool Minify { get; set; }
+
         public bool Execute()
         {
-            GetData(SourceFiles, out string[] inputFiles, out string outFile);
-            System.Console.WriteLine("out: " + outFile);
-
             var options = new CompilerOptions
             {
                 Minify = Minify,
-                OutputFile = outFile,
-                GenerateSourceMaps = GenerateSourceMap
+                GenerateSourceMaps = GenerateSourceMap,
+                OutputFile = GetFullPath(OutputFile)
             };
 
-            bool success = true;
-            CompilerResult result = Compiler.Compile(options, inputFiles);
-            foreach (CompilerError error in result.Errors)
-            {
-                Log(error);
-                if (error.Severity == ErrorSeverity.Error) success = false;
-            }
+            NodeJS.Install((msg, _, __) => { Log(msg); });
 
-            if (success) Log(result);
-            return success;
+            CompilerResult result = Compiler.Compile(options, GetFullPaths(SourceFiles).ToArray());
+            foreach (CompilerError item in result.Errors) Log(item);
+            if (!result.HasErrors) Log(result);
+
+            return result.HasErrors == false;
         }
 
-        private void GetData(ITaskItem[] items, out string[] sourceFiles, out string outFile)
+        private static IEnumerable<string> GetFullPaths(ITaskItem[] items)
         {
-            outFile = null;
-            sourceFiles = new string[items.Length];
-
+            string fullPath;
             int n = items.Length;
             for (int i = 0; i < n; i++)
             {
-                if (string.IsNullOrEmpty(outFile))
-                {
-                    outFile = items[i].GetMetadata(MetaElement);
-                    if (!Path.IsPathRooted(outFile)) outFile = Path.Combine(Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode), outFile);
-                }
-
-                sourceFiles[i] = items[i].ItemSpec;
+                fullPath = items[i].GetMetadata(FullPath);
+                if (string.IsNullOrEmpty(fullPath)) continue;
+                yield return fullPath;
             }
+        }
+
+        private string GetFullPath(string path)
+        {
+            if (Path.IsPathRooted(path)) return path;
+            else return Path.Combine(Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode), path);
         }
 
         #region ITask
@@ -71,11 +62,13 @@ namespace Acklann.TSMin.MSBuild
 
         #region Backing Members
 
+        public const string FullPath = "FullPath";
+
         private void Log(CompilerResult result)
         {
             string cwd = Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode);
-            string rel(string x) => string.Format("{0}\\{1}", Path.GetDirectoryName(x).Replace(cwd, string.Empty), Path.GetFileName(x));
-            string merge(string[] l) => l.Length > 1 ? string.Concat('[', string.Join(" + ", l.Select(x => rel(x)).Take(3)), ']') : rel(l[0]);
+            string rel(string x) => (x == null ? null : string.Format("{0}\\{1}", Path.GetDirectoryName(x).Replace(cwd, string.Empty), Path.GetFileName(x)));
+            string merge(string[] l) => l.Length > 1 ? string.Concat('[', string.Join(" + ", l.Select(x => rel(x)).Take(3)), "...]") : string.Join(string.Empty, l.Select(x => rel(x)));
 
             BuildEngine.LogMessageEvent(new BuildMessageEventArgs(
                 string.Format(
@@ -121,6 +114,11 @@ namespace Acklann.TSMin.MSBuild
                         nameof(CompileTypescript)));
                     break;
             }
+        }
+
+        private void Log(string message, MessageImportance importance = MessageImportance.Normal)
+        {
+            BuildEngine.LogMessageEvent(new BuildMessageEventArgs(message, null, nameof(CompileTypescript), importance));
         }
 
         #endregion Backing Members

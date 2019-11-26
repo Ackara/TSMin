@@ -5,9 +5,9 @@
     <RootNamespace>Acklann.TSMin</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="compiler.js" />
-  </ItemGroup>
+  <PropertyGroup Label="Package">
+    <PackageIcon>icon.png</PackageIcon>
+  </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="compiler.js">
@@ -20,4 +20,24 @@
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 
+  <ItemGroup Label="Package">
+    <Content Include="..\..\art\export\icon.png">
+      <Visible>false</Visible>
+      <PackagePath>icon.png</PackagePath>
+    </Content>
+
+    <Content Include="..\..\license.txt">
+      <PackagePath>license.txt</PackagePath>
+      <Visible>false</Visible>
+    </Content>
+
+    <Content Include="$(OutputPath)publish\*">
+      <Visible>true</Visible>
+      <PackagePath>build</PackagePath>
+    </Content>
+
+    <Content Include="*.targets">
+      <PackagePath>build\$(AssemblyName).targets</PackagePath>
+    </Content>
+  </ItemGroup>
 </Project>

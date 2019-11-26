@@ -4,6 +4,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace Acklann.TSMin
 {
@@ -27,30 +29,29 @@ namespace Acklann.TSMin
             };
         }
 
-        private void Compile(string documentPath, IVsHierarchy hierarchy)
+        private void CompileTypescript(string documentPath, IVsHierarchy hierarchy)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             if (hierarchy == null) throw new ArgumentNullException(nameof(hierarchy));
             Microsoft.Build.Evaluation.Project config = GetMSBuildProject(hierarchy);
             if (config == null) return;
 
+            var doc = XDocument.Parse(config.Xml.RawXml);
+            XElement taskNode = doc.XPathSelectElement("//FooCompile");
 
-            //hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ExtObject, out object objProj);
-            //string projectFilePath = (objProj as EnvDTE.Project)?.FullName;
-            //if (!File.Exists(projectFilePath) || !File.Exists(documentPath)) return;
+            string value = taskNode.Attribute(nameof(MSBuild.CompileTypescript.SourceFiles))?.Value;
 
-            //Microsoft.Build.Evaluation.Project config;
 
-            //if (_msbulidProjects.ContainsKey(projectFilePath))
-            //    config = _msbulidProjects[projectFilePath];
-            //else
-            //    _msbulidProjects.Add(projectFilePath, config = new Microsoft.Build.Evaluation.Project(projectFilePath));
+        }
 
-            foreach (var item in config.Xml.ItemGroups)
+        private void UpdateTasks(string documentPath, IVsHierarchy hierarchy)
+        {
+            Microsoft.Build.Evaluation.Project config = GetMSBuildProject(hierarchy);
+
+            foreach (var item in config.Targets.Values)
             {
-                
+                Microsoft.Build.Execution.ProjectTaskInstance i;
             }
-
         }
 
         private void HandleError(CompilerError error, IVsHierarchy hierarchy)
@@ -111,10 +112,14 @@ namespace Acklann.TSMin
         {
             RunningDocumentInfo document = _runningDocumentTable.GetDocumentInfo(docCookie);
             string fileName = Path.GetFileName(document.Moniker);
+            System.Diagnostics.Debug.WriteLine($"{nameof(OnAfterSave)} -> {document.Moniker}");
 
             if (fileName.EndsWith(".ts", StringComparison.OrdinalIgnoreCase))
             {
-                Compile(document.Moniker, document.Hierarchy);
+                CompileTypescript(document.Moniker, document.Hierarchy);
+            }
+            else if (Path.GetExtension(document.Moniker).EndsWith("proj"))
+            {
             }
 
             return VSConstants.S_OK;

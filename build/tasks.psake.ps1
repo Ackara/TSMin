@@ -52,8 +52,25 @@ Task "Package Solution" -alias "pack" -description "This task generates all depl
 -depends @("restore") -action {
 	if (Test-Path $ArtifactsFolder) { Remove-Item $ArtifactsFolder -Recurse -Force; }
 	New-Item $ArtifactsFolder -ItemType Directory | Out-Null;
-	
-	
+
+	# Generate MSBuild tools (FDD) binaries.
+	$proj = Join-Path $SolutionFolder "src\$SolutionName\*.*proj" | Get-Item;
+	Write-Header "dotnet: publish '$($proj.Name)'";
+	Exec { &dotnet publish $proj.FullName --configuration $Configuration; }
+
+	# Generate nuget package.
+	Write-Header "dotnet: pack '$($proj.Name)'";
+	Exec { &dotnet pack $proj.FullName --output $ArtifactsFolder --configuration $Configuration; }
+
+	# Expand .nupkg for debugging
+	$nupkg = Join-Path $ArtifactsFolder "*.nupkg" | Get-Item;
+	$zip = [IO.Path]::ChangeExtension($nupkg.FullName, ".zip");
+	Copy-Item $nupkg.FullName -Destination $zip -Force;
+	Expand-Archive $zip -DestinationPath "$ArtifactsFolder\debug";
+
+	# Clean-up
+	Remove-Item $zip -Force;
+	Join-Path $proj.DirectoryName "bin/$Configuration/*/publish" | Resolve-Path | Remove-Item -Recurse -Force;
 }
 
 #region ----- COMPILATION ----------------------------------------------

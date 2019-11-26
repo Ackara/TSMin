@@ -2,6 +2,19 @@ namespace Acklann.TSMin
 {
     public class CompilerResult
     {
+        public CompilerResult()
+        {
+        }
+
+        public CompilerResult(bool success, System.TimeSpan elapse, CompilerError[] errors, string[] srcFiles, string[] generatedFiles)
+        {
+            Success = success;
+            SourceFiles = srcFiles;
+            Elapse = elapse;
+            Errors = errors;
+            GeneratedFiles = generatedFiles;
+        }
+
         public bool Success { get; set; }
 
         public string[] SourceFiles { get; set; }
@@ -25,7 +38,14 @@ namespace Acklann.TSMin
 
         public bool HasErrors
         {
-            get => Errors?.Length > 0;
+            get
+            {
+                for (int i = 0; i < Errors.Length; i++)
+                    if (Errors[i].Severity == ErrorSeverity.Error)
+                        return true;
+
+                return false;
+            }
         }
     }
 }
