@@ -28,6 +28,12 @@
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="compiler.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <ItemGroup Label="Package">
     <Content Include="..\..\art\export\$(PackageIcon)">
       <PackagePath>$(PackageIcon)</PackagePath>
