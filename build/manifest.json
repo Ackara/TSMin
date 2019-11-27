@@ -1,7 +1,8 @@
 ﻿{
   "name": "TSBuild",
   "description": "Helps you compile and minify typescript files on save and on build.",
-  "version": {
+  "version":
+  {
     "major": 0,
     "minor": 0,
     "patch": 23
@@ -15,8 +16,9 @@
   "releaseNotes": "https://github.com/{company}/{name}/blob/master/changelog.md",
   "icon": "icon.png",
   "tags": "typescript compiler bundle msbuild",
-  "branchVersionMap": {
-    "master": "C",
+  "branchVersionMap":
+  {
+    "master": "x.y.z-\\rc",
     "default": "x.y.z-\\beta"
   }
 }
