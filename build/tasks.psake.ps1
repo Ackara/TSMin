@@ -97,7 +97,7 @@ Task "Increment Version Number" -alias "version" -description "This task increme
 	$manifest = $ManifestFilePath | Step-NcrementVersionNumber -Major:$Major -Minor:$Minor -Patch | Edit-NcrementManifest $ManifestFilePath -Stage:$ShouldCommitChanges;
 	$newVersion = $ManifestFilePath | Select-NcrementVersionNumber $CurrentBranch;
 
-	Join-Path $SolutionFolder "src/*.VSIX" | Resolve-Path | Get-ChildItem | Where { ($_.Extension -ieq ".vsixmanifest") -or ($_.Extension -ieq ".csproj") } `
+	Join-Path $SolutionFolder "src/*/*.*" | Resolve-Path | Get-ChildItem | Where { ($_.Extension -ieq ".vsixmanifest") -or ($_.Extension -ieq ".csproj") } `
 		| Update-NcrementProjectFile $ManifestFilePath -Commit:$ShouldCommitChanges | Split-Path -Leaf `
 		| Out-StringFormat "  * incremented '{0}' version number to '$newVersion'." | Write-Host;
 }
