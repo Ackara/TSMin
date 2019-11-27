@@ -50,7 +50,6 @@ namespace Acklann.TSMin
                 System.Diagnostics.Debug.WriteLine(line);
 #endif
                 if (string.IsNullOrEmpty(line) || !line.StartsWith("-> ")) continue;
-
                 yield return line.Substring(3).Trim();
             }
         }

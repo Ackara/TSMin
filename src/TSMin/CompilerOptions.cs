@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace Acklann.TSMin
 {
     public class CompilerOptions
@@ -20,7 +22,7 @@ namespace Acklann.TSMin
             return string.Concat(
                 toJs(Minify), " ",
                 toJs(GenerateSourceMaps), " ",
-                escape(OutputFile)
+                escape(Path.ChangeExtension(OutputFile, ".js"))
                 );
         }
     }

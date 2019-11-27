@@ -36,7 +36,7 @@ namespace Acklann.TSMin
                 outputWindow.CreatePane(ref guid, Symbol.Name, 1, 1);
                 outputWindow.GetPane(ref guid, out IVsOutputWindowPane pane);
 
-                _watcher = new TypescriptWatcher(this, pane, vs?.StatusBar);
+                _watcher = new TypescriptWatcher(this, pane);
             }
         }
 

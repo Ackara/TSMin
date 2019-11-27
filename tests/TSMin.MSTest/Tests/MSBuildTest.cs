@@ -32,7 +32,7 @@ namespace Acklann.TSMin.Tests
             var sut = new MSBuild.CompileTypescript
             {
                 BuildEngine = mockEngine,
-                OutputFile = Path.ChangeExtension(src, ".js"),
+                OutFile = Path.ChangeExtension(src, ".js"),
                 SourceFiles = new Microsoft.Build.Framework.ITaskItem[] { sourceFile },
                 GenerateSourceMap = true,
                 Minify = true
@@ -46,15 +46,6 @@ namespace Acklann.TSMin.Tests
             success.ShouldBeTrue();
             generatedFiles.ShouldNotBeEmpty();
             generatedFiles.Length.ShouldBe(4);
-        }
-
-        [TestMethod]
-        public void Can_read_compiler_options_from_project_file()
-        {
-            // Arrange
-
-
-            // Act
         }
     }
 }

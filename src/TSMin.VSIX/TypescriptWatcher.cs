@@ -4,18 +4,18 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 
 namespace Acklann.TSMin
 {
     public class TypescriptWatcher : IVsRunningDocTableEvents3
     {
-        public TypescriptWatcher(VSPackage package, IVsOutputWindowPane pane, EnvDTE.StatusBar statusBar)
+        public TypescriptWatcher(VSPackage package, IVsOutputWindowPane pane)
         {
             if (package == null) throw new ArgumentNullException(nameof(package));
 
             _vsOutWindow = pane ?? throw new ArgumentNullException(nameof(pane));
-            _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
             _loadedProjects = new Dictionary<string, Microsoft.Build.Evaluation.Project>();
 
             _runningDocumentTable = new RunningDocumentTable(package);
@@ -28,28 +28,22 @@ namespace Acklann.TSMin
             };
         }
 
-        private void CompileTypescript(string documentPath, IVsHierarchy hierarchy)
+        private void CompileTypescriptFiles(string documentPath, IVsHierarchy hierarchy, Microsoft.Build.Evaluation.Project config)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            if (hierarchy == null) throw new ArgumentNullException(nameof(hierarchy));
-            Microsoft.Build.Evaluation.Project config = GetMSBuildProject(hierarchy);
-            if (config == null) return;
-
-            var xml = new XmlDocument();
-            xml.LoadXml(config.Xml.RawXml);
+            XmlDocument xml = GetDocument(config.FullPath);
 
             foreach (XmlElement item in xml.SelectNodes($"//{nameof(MSBuild.CompileTypescript)}"))
             {
-                TryGetOptions(item, documentPath, out string[] sourceFiles, out CompilerOptions options);
+                GetArguments(item, out string source, out CompilerOptions options, out string condition);
+                options.OutputFile = ExpandPath(options.OutputFile, config);
+                string[] sourceFiles = ExpandPaths(source, config);
+
+                if (sourceFiles.Contains(documentPath) == false) continue;
+
                 CompilerResult result = Compiler.Compile(options, sourceFiles);
                 foreach (var err in result.Errors) HandleError(err, hierarchy);
-                if (result.HasErrors == false) Log(result);
+                if (result.HasErrors == false) Log(result, config.DirectoryPath);
             }
-        }
-
-        private bool TryGetOptions(XmlElement element, string documentPath, out string[] sourceFiles, out CompilerOptions options)
-        {
-            throw new System.NotImplementedException();
         }
 
         private void HandleError(CompilerError error, IVsHierarchy hierarchy)
@@ -86,40 +80,36 @@ namespace Acklann.TSMin
             });
         }
 
-        private Microsoft.Build.Evaluation.Project GetMSBuildProject(IVsHierarchy hierarchy)
+        private static void GetArguments(XmlElement element, out string source, out CompilerOptions options, out string condition)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
+            condition = element.GetAttribute(nameof(Microsoft.Build.Execution.ProjectTaskInstance.Condition));
+            source = element.GetAttribute(nameof(MSBuild.CompileTypescript.SourceFiles));
+            bool.TryParse(element.GetAttribute(nameof(MSBuild.CompileTypescript.Minify)), out bool shouldMinify);
+            bool.TryParse(element.GetAttribute(nameof(MSBuild.CompileTypescript.GenerateSourceMap)), out bool shouldGenerateSourceMap);
 
-            hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ExtObject, out object objProj);
-            string projectFilePath = (objProj as EnvDTE.Project)?.FullName;
-            if (!File.Exists(projectFilePath)) return null;
-
-            Microsoft.Build.Evaluation.Project config;
-
-            if (_loadedProjects.ContainsKey(projectFilePath))
-                config = _loadedProjects[projectFilePath];
-            else
-                _loadedProjects.Add(projectFilePath, config = new Microsoft.Build.Evaluation.Project(projectFilePath));
-
-            return config;
+            options = new CompilerOptions
+            {
+                OutputFile = element.GetAttribute(nameof(MSBuild.CompileTypescript.OutFile)),
+                GenerateSourceMaps = shouldGenerateSourceMap,
+                Minify = shouldMinify
+            };
         }
 
         #region IVsRunningDocTableEvents3
 
         public int OnAfterSave(uint docCookie)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             RunningDocumentInfo document = _runningDocumentTable.GetDocumentInfo(docCookie);
-            string fileName = Path.GetFileName(document.Moniker);
+            Microsoft.Build.Evaluation.Project config = GetMSBuildProject(document.Hierarchy);
+
+            if (Path.GetFileName(document.Moniker).EndsWith(".ts", StringComparison.OrdinalIgnoreCase))
+            {
+                if (config != null)
+                    System.Threading.Tasks.Task.Run(() => { CompileTypescriptFiles(document.Moniker, document.Hierarchy, config); });
+            }
+
             System.Diagnostics.Debug.WriteLine($"{nameof(OnAfterSave)} -> {document.Moniker}");
-
-            if (fileName.EndsWith(".ts", StringComparison.OrdinalIgnoreCase))
-            {
-                CompileTypescript(document.Moniker, document.Hierarchy);
-            }
-            else if (Path.GetExtension(document.Moniker).EndsWith("proj"))
-            {
-            }
-
             return VSConstants.S_OK;
         }
 
@@ -145,7 +135,6 @@ namespace Acklann.TSMin
         private readonly RunningDocumentTable _runningDocumentTable;
         private readonly ErrorListProvider _errorList;
         private readonly IVsOutputWindowPane _vsOutWindow;
-        private readonly EnvDTE.StatusBar _statusBar;
 
         private static TaskErrorCategory ToCatetory(ErrorSeverity severity)
         {
@@ -163,9 +152,68 @@ namespace Acklann.TSMin
             }
         }
 
-        private void Log(CompilerResult result)
+        private static string ExpandPath(string text, Microsoft.Build.Evaluation.Project config)
         {
+            text = config.ExpandString(text);
+            if (!Path.IsPathRooted(text)) text = Path.Combine(config.DirectoryPath, text);
 
+            return text;
+        }
+
+        private static string[] ExpandPaths(string text, Microsoft.Build.Evaluation.Project config)
+        {
+            string[] paths = config.ExpandString(text).Split(';');
+            for (int i = 0; i < paths.Length; i++)
+            {
+                if (!Path.IsPathRooted(paths[i]))
+                    paths[i] = Path.Combine(config.DirectoryPath, paths[i]);
+            }
+
+            return paths;
+        }
+
+        private static XmlDocument GetDocument(string fullPath)
+        {
+            var doc = new XmlDocument();
+            using (var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                doc.Load(stream);
+            }
+
+            return doc;
+        }
+
+        private Microsoft.Build.Evaluation.Project GetMSBuildProject(IVsHierarchy hierarchy)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ExtObject, out object objProj);
+            string projectFilePath = (objProj as EnvDTE.Project)?.FullName;
+            if (!File.Exists(projectFilePath)) return null;
+
+            Microsoft.Build.Evaluation.Project config;
+
+            if (_loadedProjects.ContainsKey(projectFilePath))
+                config = _loadedProjects[projectFilePath];
+            else
+                _loadedProjects.Add(projectFilePath, config = new Microsoft.Build.Evaluation.Project(projectFilePath));
+
+            return config;
+        }
+
+        private void Log(CompilerResult result, string cwd)
+        {
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
+            string rel(string x) => (x == null ? null : string.Format("{0}\\{1}", Path.GetDirectoryName(x).Replace(cwd, string.Empty), Path.GetFileName(x)).Trim('\\'));
+
+            _vsOutWindow.OutputStringThreadSafe(string.Format(
+                ("tsc -> in:[{0}] out:[{1}] elapse:{2}" + Environment.NewLine),
+
+                string.Join(" + ", result.SourceFiles.Select(x => rel(x))),
+                string.Join(" + ", result.GeneratedFiles.Select(x => rel(x))),
+                result.Elapse.ToString("hh\\:mm\\:ss\\.fff"))
+                );
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
         }
 
         #endregion Backing Members

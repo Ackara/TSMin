@@ -58,6 +58,7 @@
     <Compile Include="ConfigurationPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Symbol.cs">
       <AutoGen>True</AutoGen>

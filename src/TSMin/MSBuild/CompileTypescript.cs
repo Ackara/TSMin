@@ -11,7 +11,7 @@ namespace Acklann.TSMin.MSBuild
         [Required]
         public ITaskItem[] SourceFiles { get; set; }
 
-        public string OutputFile { get; set; }
+        public string OutFile { get; set; }
 
         public bool GenerateSourceMap { get; set; }
 
@@ -25,7 +25,7 @@ namespace Acklann.TSMin.MSBuild
             {
                 Minify = Minify,
                 GenerateSourceMaps = GenerateSourceMap,
-                OutputFile = GetFullPath(OutputFile)
+                OutputFile = GetFullPath(OutFile)
             };
 
             CompilerResult result = Compiler.Compile(options, GetFullPaths(SourceFiles).ToArray());
