@@ -332,7 +332,6 @@ ASALocalRun/
 # Generated Files
 [Tt]ools/
 *.map
-*.js
 
 # Sensitive Files
 [Ss]ecrets.*

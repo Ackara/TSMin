@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -22,12 +22,6 @@
     <PackageReleaseNotes>https://github.com/Ackara/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
     <PackageTags>typescript compiler bundle msbuild</PackageTags>
   </PropertyGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="compiler.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" Version="16.3.0" />
