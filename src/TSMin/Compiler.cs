@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Acklann.TSMin
 {
@@ -26,6 +27,9 @@ namespace Acklann.TSMin
                 };
             }
         }
+
+        public static Task<CompilerResult> CompilerAsync(CompilerOptions options, params string[] sourceFiles)
+            => Task.Run(() => Compile(options, sourceFiles));
 
         public static IEnumerable<string> FindFiles(string directoryPath)
         {

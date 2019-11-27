@@ -47,5 +47,14 @@ namespace Acklann.TSMin.Tests
             generatedFiles.ShouldNotBeEmpty();
             generatedFiles.Length.ShouldBe(4);
         }
+
+        [TestMethod]
+        public void Can_read_compiler_options_from_project_file()
+        {
+            // Arrange
+
+
+            // Act
+        }
     }
 }

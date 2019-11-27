@@ -4,8 +4,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml.Linq;
-using System.Xml.XPath;
+using System.Xml;
 
 namespace Acklann.TSMin
 {
@@ -17,7 +16,7 @@ namespace Acklann.TSMin
 
             _vsOutWindow = pane ?? throw new ArgumentNullException(nameof(pane));
             _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
-            _msbulidProjects = new Dictionary<string, Microsoft.Build.Evaluation.Project>();
+            _loadedProjects = new Dictionary<string, Microsoft.Build.Evaluation.Project>();
 
             _runningDocumentTable = new RunningDocumentTable(package);
             _runningDocumentTable.Advise(this);
@@ -36,22 +35,21 @@ namespace Acklann.TSMin
             Microsoft.Build.Evaluation.Project config = GetMSBuildProject(hierarchy);
             if (config == null) return;
 
-            var doc = XDocument.Parse(config.Xml.RawXml);
-            XElement taskNode = doc.XPathSelectElement("//FooCompile");
+            var xml = new XmlDocument();
+            xml.LoadXml(config.Xml.RawXml);
 
-            string value = taskNode.Attribute(nameof(MSBuild.CompileTypescript.SourceFiles))?.Value;
-
-
+            foreach (XmlElement item in xml.SelectNodes($"//{nameof(MSBuild.CompileTypescript)}"))
+            {
+                TryGetOptions(item, documentPath, out string[] sourceFiles, out CompilerOptions options);
+                CompilerResult result = Compiler.Compile(options, sourceFiles);
+                foreach (var err in result.Errors) HandleError(err, hierarchy);
+                if (result.HasErrors == false) Log(result);
+            }
         }
 
-        private void UpdateTasks(string documentPath, IVsHierarchy hierarchy)
+        private bool TryGetOptions(XmlElement element, string documentPath, out string[] sourceFiles, out CompilerOptions options)
         {
-            Microsoft.Build.Evaluation.Project config = GetMSBuildProject(hierarchy);
-
-            foreach (var item in config.Targets.Values)
-            {
-                Microsoft.Build.Execution.ProjectTaskInstance i;
-            }
+            throw new System.NotImplementedException();
         }
 
         private void HandleError(CompilerError error, IVsHierarchy hierarchy)
@@ -96,12 +94,12 @@ namespace Acklann.TSMin
             string projectFilePath = (objProj as EnvDTE.Project)?.FullName;
             if (!File.Exists(projectFilePath)) return null;
 
-            Microsoft.Build.Evaluation.Project config = null;
+            Microsoft.Build.Evaluation.Project config;
 
-            if (_msbulidProjects.ContainsKey(projectFilePath))
-                config = _msbulidProjects[projectFilePath];
+            if (_loadedProjects.ContainsKey(projectFilePath))
+                config = _loadedProjects[projectFilePath];
             else
-                _msbulidProjects.Add(projectFilePath, config = new Microsoft.Build.Evaluation.Project(projectFilePath));
+                _loadedProjects.Add(projectFilePath, config = new Microsoft.Build.Evaluation.Project(projectFilePath));
 
             return config;
         }
@@ -143,7 +141,7 @@ namespace Acklann.TSMin
 
         #region Backing Members
 
-        private readonly IDictionary<string, Microsoft.Build.Evaluation.Project> _msbulidProjects;
+        private readonly IDictionary<string, Microsoft.Build.Evaluation.Project> _loadedProjects;
         private readonly RunningDocumentTable _runningDocumentTable;
         private readonly ErrorListProvider _errorList;
         private readonly IVsOutputWindowPane _vsOutWindow;
@@ -163,6 +161,11 @@ namespace Acklann.TSMin
                 case ErrorSeverity.Error:
                     return TaskErrorCategory.Error;
             }
+        }
+
+        private void Log(CompilerResult result)
+        {
+
         }
 
         #endregion Backing Members

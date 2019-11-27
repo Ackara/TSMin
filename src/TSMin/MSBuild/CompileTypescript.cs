@@ -19,14 +19,14 @@ namespace Acklann.TSMin.MSBuild
 
         public bool Execute()
         {
+            NodeJS.Install((msg, _, __) => { Log(msg); });
+
             var options = new CompilerOptions
             {
                 Minify = Minify,
                 GenerateSourceMaps = GenerateSourceMap,
                 OutputFile = GetFullPath(OutputFile)
             };
-
-            NodeJS.Install((msg, _, __) => { Log(msg); });
 
             CompilerResult result = Compiler.Compile(options, GetFullPaths(SourceFiles).ToArray());
             foreach (CompilerError item in result.Errors) Log(item);
