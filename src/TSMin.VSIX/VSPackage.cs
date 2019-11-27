@@ -1,6 +1,9 @@
-﻿using Microsoft.VisualStudio;
+﻿using Microsoft;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using NuGet.VisualStudio;
 using System;
 using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
@@ -12,8 +15,9 @@ namespace Acklann.TSMin
 {
     [Guid(Symbol.Package.GuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideOptionPage(typeof(ConfigurationPage), Symbol.Name, "General", 0, 0, true)]
+    [InstalledProductRegistration("#110", "#112", Symbol.Version, IconResourceID = 500)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string, PackageAutoLoadFlags.BackgroundLoad)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class VSPackage : AsyncPackage
@@ -24,6 +28,7 @@ namespace Acklann.TSMin
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             vs = (EnvDTE.DTE)await GetServiceAsync(typeof(EnvDTE.DTE));
+            Assumes.Present(vs);
 
             var commandService = (await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService);
             commandService.AddCommand(new OleMenuCommand(OnGotoConfigurationPageCommandInvoked, new CommandID(Symbol.CmdSet.Guid, Symbol.CmdSet.GotoConfigurationPageCommandId)));
@@ -38,14 +43,37 @@ namespace Acklann.TSMin
 
                 _watcher = new TypescriptWatcher(this, pane);
             }
+
+            vs.StatusBar.Text = $"{Symbol.Name}: installation completed.";
         }
 
         private void OnConfigureCompileOnBuildCommandInvoked(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (vs != null && vs.TryGetSelectedProject(out EnvDTE.Project project))
+            {
+                IComponentModel componentModel = (IComponentModel)GetGlobalService(typeof(SComponentModel));
+                IVsPackageInstallerServices nuget = componentModel.GetService<IVsPackageInstallerServices>();
+                IVsPackageInstaller installer = componentModel.GetService<IVsPackageInstaller>();
+                EnvDTE.StatusBar status = vs.StatusBar;
+
+                if (!nuget.IsPackageInstalled(project, nameof(TSMin)))
+                    try
+                    {
+                        status.Text = $"{Symbol.Name}: installing {nameof(TSMin)} package...";
+                        status.Animate(true, EnvDTE.vsStatusAnimation.vsStatusAnimationBuild);
+
+                        installer.InstallPackage(null, project, nameof(TSMin), Convert.ToString(null), false);
+                    }
+                    catch { status.Text = $"{Symbol.Name}: failed to install {nameof(TSMin)}."; }
+                    finally { status.Animate(false, EnvDTE.vsStatusAnimation.vsStatusAnimationBuild); }
+            }
         }
 
         private void OnGotoConfigurationPageCommandInvoked(object sender, EventArgs e)
         {
+            ShowOptionPage(typeof(ConfigurationPage));
         }
 
         #region Backing Members

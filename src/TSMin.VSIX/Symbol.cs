@@ -6,7 +6,7 @@ namespace Acklann.TSMin
 	{
 		public const string Name = "TSMin";
 
-		public const string Version = "1.0.0.0";
+		public const string Version = "0.0.18";
 		
 		public struct Package
 		{

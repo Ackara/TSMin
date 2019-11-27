@@ -1,7 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Package">
-    <Title>TSMin</Title>
+    <Title>TSBuild</Title>
+    <Version>0.0.19</Version>
+    <AssemblyVersion>0.0.19</AssemblyVersion>
+    <PackageIcon>icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Ackara/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
+    <Copyright>Copyright 2019 Ackara, All Rights Reserved.</Copyright>
+    <PackageLicenseFile>license.md</PackageLicenseFile>
+    <PackageTags>typescript compiler bundle msbuild</PackageTags>
+    <Authors>Ackara</Authors>
+    <Company>Ackara</Company>
+    <Description>Helps you compile and minify typescript files on save and on build.</Description>
   </PropertyGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
@@ -58,7 +69,6 @@
     <Compile Include="ConfigurationPage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Symbol.cs">
       <AutoGen>True</AutoGen>
@@ -89,6 +99,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.202" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.3.2099" />
+    <PackageReference Include="NuGet.VisualStudio">
+      <Version>5.3.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="VSPackage.vsct">
@@ -102,11 +115,23 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Command1.png" />
-    <Content Include="Resources\Command1Package.ico" />
+    <Content Include="..\..\art\export\icon.ico">
+      <Link>Resources\icon.ico</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\changelog.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Symbol.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Symbol.cs</LastGenOutput>
+    </Content>
+    <Content Include="..\..\license.txt">
+      <Link>Resources\license.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +143,9 @@
       <Name>TSMin</Name>
     </ProjectReference>
   </ItemGroup>
+  <Target Name="CopyMetaFiles" BeforeTargets="PreBuildEvent">
+    <Copy SourceFiles="..\..\changelog.md" DestinationFiles="Resources/changelog.txt" SkipUnchangedFiles="true" />
+  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>
