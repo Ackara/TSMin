@@ -4,12 +4,12 @@
   "version": {
     "major": 0,
     "minor": 0,
-    "patch": 19
+    "patch": 20
   },
   "authors": "Ackara",
   "company": "Ackara",
   "copyright": "Copyright {year} {company}, All Rights Reserved.",
-  "license": "license.md",
+  "license": "license.txt",
   "website": "https://github.com/{company}/{name}",
   "repository": "https://github.com/{company}/{name}.git",
   "releaseNotes": "https://github.com/{company}/{name}/blob/master/changelog.md",
