@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Acklann.TSMin
+namespace Acklann.TSBuild
 {
     public class Compiler
     {

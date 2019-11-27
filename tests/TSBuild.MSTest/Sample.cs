@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Acklann.TSMin
+namespace Acklann.TSBuild
 {
 	internal static partial class Sample
 	{

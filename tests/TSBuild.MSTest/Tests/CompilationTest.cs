@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Acklann.TSMin.Tests
+namespace Acklann.TSBuild.Tests
 {
     [TestClass]
     public class CompilationTest

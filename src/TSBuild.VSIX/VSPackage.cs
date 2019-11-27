@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Task = System.Threading.Tasks.Task;
 
-namespace Acklann.TSMin
+namespace Acklann.TSBuild
 {
     [Guid(Symbol.Package.GuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
@@ -58,15 +58,15 @@ namespace Acklann.TSMin
                 IVsPackageInstaller installer = componentModel.GetService<IVsPackageInstaller>();
                 EnvDTE.StatusBar status = vs.StatusBar;
 
-                if (!nuget.IsPackageInstalled(project, nameof(TSMin)))
+                if (!nuget.IsPackageInstalled(project, nameof(TSBuild)))
                     try
                     {
-                        status.Text = $"{Symbol.Name}: installing {nameof(TSMin)} package...";
+                        status.Text = $"{Symbol.Name}: installing {nameof(TSBuild)} package...";
                         status.Animate(true, EnvDTE.vsStatusAnimation.vsStatusAnimationBuild);
 
-                        installer.InstallPackage(null, project, nameof(TSMin), Convert.ToString(null), false);
+                        installer.InstallPackage(null, project, nameof(TSBuild), Convert.ToString(null), false);
                     }
-                    catch { status.Text = $"{Symbol.Name}: failed to install {nameof(TSMin)}."; }
+                    catch { status.Text = $"{Symbol.Name}: failed to install {nameof(TSBuild)}."; }
                     finally { status.Animate(false, EnvDTE.vsStatusAnimation.vsStatusAnimationBuild); }
             }
         }

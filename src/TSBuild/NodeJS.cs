@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Acklann.TSMin
+namespace Acklann.TSBuild
 {
     public delegate void ProgressHandler(string message, int progress, int max);
 

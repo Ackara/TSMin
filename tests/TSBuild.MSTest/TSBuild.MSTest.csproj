@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\TSMin\TSMin.csproj" />
+    <ProjectReference Include="..\..\src\TSBuild\TSBuild.csproj" />
   </ItemGroup>
 
   <ItemGroup>

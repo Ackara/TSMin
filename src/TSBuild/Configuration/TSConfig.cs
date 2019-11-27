@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Acklann.TSMin.Configuration
+namespace Acklann.TSBuild.Configuration
 {
     public class TSConfig
     {

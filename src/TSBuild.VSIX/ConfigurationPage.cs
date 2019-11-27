@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace Acklann.TSMin
+namespace Acklann.TSBuild
 {
     [Guid("d1a0510d-c863-4819-a5c7-ed6fe0f71a4c")]
     public class ConfigurationPage : DialogPage

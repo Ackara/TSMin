@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.IO;
 
-namespace Acklann.TSMin.Tests
+namespace Acklann.TSBuild.Tests
 {
     [TestClass]
     public class NodeJsTest

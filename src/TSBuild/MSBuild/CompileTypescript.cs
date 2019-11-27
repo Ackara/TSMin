@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Acklann.TSMin.MSBuild
+namespace Acklann.TSBuild.MSBuild
 {
     public class CompileTypescript : ITask
     {

@@ -1,4 +1,4 @@
-namespace Acklann.TSMin
+namespace Acklann.TSBuild
 {
     public readonly struct CompilerError
     {

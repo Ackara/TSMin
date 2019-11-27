@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Acklann.TSMin
+namespace Acklann.TSBuild
 {
 	public static class Symbol
 	{

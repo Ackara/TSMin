@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.IO;
 
-namespace Acklann.TSMin
+namespace Acklann.TSBuild
 {
     internal static class Helper
     {

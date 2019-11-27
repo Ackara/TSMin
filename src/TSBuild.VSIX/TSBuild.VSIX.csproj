@@ -1,4 +1,4 @@
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Package">
     <Title>TSBuild</Title>
     <Version>0.0.23</Version>
@@ -138,9 +138,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TSMin\TSMin.csproj">
+    <ProjectReference Include="..\TSBuild\TSBuild.csproj">
       <Project>{d5fc5207-16f8-44fb-adef-3c3498e45972}</Project>
-      <Name>TSMin</Name>
+      <Name>TSBuild</Name>
     </ProjectReference>
   </ItemGroup>
   <Target Name="CopyMetaFiles" BeforeTargets="PreBuildEvent">

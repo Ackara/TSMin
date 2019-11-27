@@ -4,7 +4,7 @@ using Shouldly;
 using System.IO;
 using System.Linq;
 
-namespace Acklann.TSMin.Tests
+namespace Acklann.TSBuild.Tests
 {
     [TestClass]
     public class MSBuildTest

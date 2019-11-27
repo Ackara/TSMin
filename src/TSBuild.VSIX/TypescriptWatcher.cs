@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 
-namespace Acklann.TSMin
+namespace Acklann.TSBuild
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD110:Observe result of async calls", Justification = "<Pending>")]
     public class TypescriptWatcher : IVsRunningDocTableEvents3

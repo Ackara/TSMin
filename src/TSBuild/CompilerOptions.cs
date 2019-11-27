@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Acklann.TSMin
+namespace Acklann.TSBuild
 {
     public class CompilerOptions
     {
