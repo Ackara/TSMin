@@ -53,6 +53,9 @@ Task "Package Solution" -alias "pack" -description "This task generates all depl
 	if (Test-Path $ArtifactsFolder) { Remove-Item $ArtifactsFolder -Recurse -Force; }
 	New-Item $ArtifactsFolder -ItemType Directory | Out-Null;
 
+	# Copy .vsix package to artifacts folder.
+	Join-Path $SolutionFolder "src/*.VSIX/bin/$Configuration/*.vsix" | Get-Item | Copy-Item -Destination $ArtifactsFolder;
+
 	# Generate MSBuild tools (FDD) binaries.
 	$proj = Join-Path $SolutionFolder "src\$SolutionName\*.*proj" | Get-Item;
 	Write-Header "dotnet: publish '$($proj.Name)'";

@@ -4,9 +4,9 @@ namespace Acklann.TSBuild
 {
 	public static class Symbol
 	{
-		public const string Name = "TSMin";
+		public const string Name = "TSBuild";
 
-		public const string Version = "0.0.18";
+		public const string Version = "0.0.23";
 		
 		public struct Package
 		{

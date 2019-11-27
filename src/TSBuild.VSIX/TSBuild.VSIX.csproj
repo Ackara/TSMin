@@ -34,8 +34,8 @@
     <ProjectGuid>{1D6A88A7-69F3-4B5A-8E30-903F75EE5BA7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Acklann.TSMin</RootNamespace>
-    <AssemblyName>TSMin.VSIX</AssemblyName>
+    <RootNamespace>Acklann.TSBuild</RootNamespace>
+    <AssemblyName>TSBuild.VSIX</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <UseCodebase>true</UseCodebase>
