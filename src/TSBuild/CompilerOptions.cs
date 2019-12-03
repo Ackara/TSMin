@@ -13,6 +13,7 @@ namespace Acklann.TSBuild
         public bool GenerateSourceMaps { get; set; }
 
         public string OutputFile { get; set; }
+        public string ConfigurationFile { get; set; }
 
         public string ToArgs()
         {
@@ -20,9 +21,11 @@ namespace Acklann.TSBuild
             string escape(object obj) => string.Concat('"', obj, '"');
 
             return string.Concat(
-                toJs(Minify), " ",
-                toJs(GenerateSourceMaps), " ",
-                escape(Path.ChangeExtension(OutputFile, ".js"))
+                escape(ConfigurationFile), ' ',
+                escape(Path.ChangeExtension(OutputFile, ".js")), ' ',
+
+                toJs(Minify), ' ',
+                toJs(GenerateSourceMaps), ' '
                 );
         }
     }

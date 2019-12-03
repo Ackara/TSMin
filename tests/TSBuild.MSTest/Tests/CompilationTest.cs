@@ -27,7 +27,7 @@ namespace Acklann.TSBuild.Tests
 
         [DataTestMethod]
         [DynamicData(nameof(GetCompilierOptions), DynamicDataSourceType.Method)]
-        public void Can_bundle_ts_files(string label, int expectedFiles, CompilerOptions options)
+        public void Can_compile_ts_files(string label, int expectedFiles, CompilerOptions options)
         {
             // Arrange
             var cwd = Path.Combine(AppContext.BaseDirectory, "generated", label);
@@ -35,10 +35,10 @@ namespace Acklann.TSBuild.Tests
             Directory.CreateDirectory(cwd);
             options.OutputFile = Path.Combine(cwd, "app.js");
 
-            var input = Directory.EnumerateFiles(Path.Combine(Sample.DirectoryName, "domain"), "*.ts").ToArray();
+            var inputFiles = Directory.EnumerateFiles(Path.Combine(Sample.DirectoryName, "domain"), "*.ts").ToArray();
 
             // Act
-            var result = Compiler.Compile(options, input);
+            var result = Compiler.Compile(options, inputFiles);
             var totalFiles = Directory.GetFiles(cwd, "*").Length;
 
             var builder = new StringBuilder();
@@ -112,25 +112,7 @@ namespace Acklann.TSBuild.Tests
             yield return new object[] { "js", 1, new CompilerOptions
             {
                 Minify = false,
-                GenerateSourceMaps = false,
-            }};
-
-            yield return new object[] { "map", 2, new CompilerOptions()
-            {
-                Minify = false,
-                GenerateSourceMaps = true
-            }};
-
-            yield return new object[] { "js-min", 1, new CompilerOptions()
-            {
-                Minify = true,
                 GenerateSourceMaps = false
-            }};
-
-            yield return new object[] { "js-min-map", 2, new CompilerOptions()
-            {
-                Minify = true,
-                GenerateSourceMaps = true
             }};
         }
 

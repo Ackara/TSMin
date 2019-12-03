@@ -12,12 +12,8 @@ namespace Acklann.TSBuild
     {
         static NodeJS()
         {
-            InstallationDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            if (Directory.Exists(InstallationDirectory) == false) InstallationDirectory = Path.GetDirectoryName(typeof(NodeJS).Assembly.Location);
-#if DEBUG
-            InstallationDirectory = Path.GetDirectoryName(typeof(NodeJS).Assembly.Location);
-#endif
-            InstallationDirectory = Path.Combine(InstallationDirectory, "tools");
+            Assembly assembly = typeof(NodeJS).Assembly;
+            InstallationDirectory = Path.Combine(Path.GetDirectoryName(assembly.Location), "tools", assembly.GetName().Version.ToString());
         }
 
         public static readonly string InstallationDirectory;
@@ -37,16 +33,11 @@ namespace Acklann.TSBuild
                 npm.WaitForExit();
                 return npm.ExitCode == 0;
             }
-#if DEBUG
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                Console.WriteLine(ex.Message);
                 return false;
             }
-#else
-            catch { return false; }
-#endif
             finally { npm.Dispose(); }
         }
 
@@ -64,8 +55,7 @@ namespace Acklann.TSBuild
         {
             int progress = 1, goal = (_dependencies.Length + 1);
 
-            string modulesFolder = Path.Combine(InstallationDirectory, "node_modules");
-            if (!Directory.Exists(modulesFolder))
+            if (!Directory.Exists(Path.Combine(InstallationDirectory, "node_modules")))
                 InstallModules(handler, ref progress, goal);
 
             if (!Directory.EnumerateFiles(InstallationDirectory, "*.js").Any())

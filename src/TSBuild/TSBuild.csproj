@@ -54,4 +54,10 @@
       <PackagePath>build\$(AssemblyName).targets</PackagePath>
     </Content>
   </ItemGroup>
+
+  <Target Name="TransformT4BeforeBuild" BeforeTargets="PreBuildEvent">
+    <CallTarget Targets="TransformAll" />
+  </Target>
+
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TextTemplating\Microsoft.TextTemplating.targets" />
 </Project>

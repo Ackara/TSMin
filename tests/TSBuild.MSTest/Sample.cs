@@ -23,6 +23,7 @@ namespace Acklann.TSBuild
 		public static FileInfo GetError5TS() => GetFile(@"error-5.ts");
 		public static FileInfo GetIndexHTML() => GetFile(@"index.html");
 		public static FileInfo GetProjXML() => GetFile(@"proj.xml");
+		public static FileInfo GetTsbuildconfigJSON() => GetFile(@"tsbuildconfig.json");
 		public static FileInfo GetServerTS() => GetFile(@"domain\Server.ts");
 		public static FileInfo GetToastTS() => GetFile(@"domain\Toast.ts");
 		public static FileInfo GetCarTS() => GetFile(@"Modles\Car.ts");
@@ -33,6 +34,7 @@ namespace Acklann.TSBuild
 			public const string Error5TS = @"error-5.ts";
 			public const string IndexHTML = @"index.html";
 			public const string ProjXML = @"proj.xml";
+			public const string TsbuildconfigJSON = @"tsbuildconfig.json";
 			public const string ServerTS = @"domain\Server.ts";
 			public const string ToastTS = @"domain\Toast.ts";
 			public const string CarTS = @"Modles\Car.ts";

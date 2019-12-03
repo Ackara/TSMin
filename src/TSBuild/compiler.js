@@ -110,6 +110,17 @@ function convertToInt(value) {
     return category;
 }
 
+function mergeOptions(args) {
+    var configFile = { ts: null, js: null };
+    if (args.optionsFile) {
+        configFile = JSON.parse(fs.readFileSync(args.optionsFile).toString());
+    }
+
+    if (configFile.hasOwnProperty("minify")) { args.minify = configFile.minify; }
+    if (configFile.hasOwnProperty("outFile")) { args.outFile = configFile.outFile; }
+    if (configFile.hasOwnProperty("generateSourceMaps")) { args.generateSourceMaps = configFile.generateSourceMaps; }
+}
+
 function CompilerOptions() {
     let me = this;
     let bool = /true/i;
@@ -118,10 +129,23 @@ function CompilerOptions() {
     me.uglifyJsOptions = JSON.parse("{}");
 
     me.sourceFiles = process.argv[2].split(';');
-    me.minify = bool.test(process.argv[3]);
-    me.shouldGenerateSourceMap = me.typescriptOptions.sourceMap = bool.test(process.argv[4]);
+    me.optionsFile = process.argv[3];
+    me.outFile = process.argv[4];
 
-    me.typescriptOptions.outFile = process.argv[5];
+    me.minify = bool.test(process.argv[5]);
+    me.shouldGenerateSourceMap = me.typescriptOptions.sourceMap = bool.test(process.argv[6]);
+
+    mergeOptions(me);
+
+    me.getOutputPath = function () {
+        let baseName = path.basename(me.sourceFile, path.extname(me.sourceFile));
+        return path.join(me.outputDirectory, (baseName + ".css"));
+    }
+
+    me.getSourceMapPath = function () {
+        let baseName = path.basename(me.sourceFile, path.extname(me.sourceFile));
+        return path.join(me.sourceMapDirectory, (baseName + ".css.map"));
+    }
 
     me.log = function () {
         console.log("src: " + me.sourceFiles);
@@ -132,7 +156,7 @@ function CompilerOptions() {
         console.log("====================");
         console.log("");
     }
-    //me.log();
+    me.log();
 }
 
 compileTs(new CompilerOptions());
