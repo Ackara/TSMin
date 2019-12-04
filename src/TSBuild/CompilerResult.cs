@@ -1,12 +1,8 @@
 namespace Acklann.TSBuild
 {
-    public class CompilerResult
+    public readonly struct CompilerResult
     {
-        public CompilerResult()
-        {
-        }
-
-        public CompilerResult(bool success, System.TimeSpan elapse, CompilerError[] errors, string[] srcFiles, string[] generatedFiles)
+        public CompilerResult(bool success, CompilerError[] errors, string[] srcFiles, string[] generatedFiles, System.TimeSpan elapse)
         {
             Success = success;
             SourceFiles = srcFiles;
@@ -15,15 +11,15 @@ namespace Acklann.TSBuild
             GeneratedFiles = generatedFiles;
         }
 
-        public bool Success { get; set; }
+        public bool Success { get; }
 
-        public string[] SourceFiles { get; set; }
+        public string[] SourceFiles { get; }
 
-        public System.TimeSpan Elapse { get; set; }
+        public System.TimeSpan Elapse { get; }
 
-        public CompilerError[] Errors { get; set; }
+        public CompilerError[] Errors { get; }
 
-        public string[] GeneratedFiles { get; set; }
+        public string[] GeneratedFiles { get; }
 
         public string OutputFile
         {

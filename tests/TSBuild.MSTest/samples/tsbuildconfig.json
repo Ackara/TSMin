@@ -1,9 +1,0 @@
-{
-  "minify": true,
-  "generateSourceMap": true,
-
-  "js":
-  {
-  
-  }
-}

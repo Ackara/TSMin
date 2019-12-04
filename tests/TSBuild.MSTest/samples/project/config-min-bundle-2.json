@@ -1,0 +1,23 @@
+{
+  "minifierOptions":
+  {
+    "compress":
+    {
+      "drop_console": true
+    }
+  },
+  "compilerOptions":
+  {
+    "sourceMap": true
+  },
+  "sourceFiles":
+  [
+    {
+      "outputFile": "app.ts",
+      "include":
+      [
+        "domain/**/*.ts"
+      ]
+    }
+  ]
+}

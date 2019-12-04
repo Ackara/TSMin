@@ -15,27 +15,15 @@ namespace Acklann.TSBuild.Tests
             // Arrange
             var cwd = Path.Combine(Path.GetTempPath(), "tsbuild-temp");
             if (Directory.Exists(cwd)) Directory.Delete(cwd, recursive: true);
-            Directory.Move(Path.Combine(Sample.DirectoryName, "Modles"), cwd);
+            Helper.CopyFolder(Sample.ProjectFolder, cwd);
 
             var mockEngine = A.Fake<Microsoft.Build.Framework.IBuildEngine>();
-            A.CallTo(() => mockEngine.ProjectFileOfTaskNode).Returns(Path.Combine(cwd, "product.proj"));
-
-            var src = Path.Combine(cwd, Path.GetFileName(Sample.File.CarTS));
-            var sourceFile = A.Fake<Microsoft.Build.Framework.ITaskItem>();
-            A.CallTo(() => sourceFile.GetMetadata(MSBuild.CompileTypescript.FullPath))
-                .Returns(src);
-
-            var outFile = A.Fake<Microsoft.Build.Framework.ITaskItem>();
-            A.CallTo(() => outFile.GetMetadata(MSBuild.CompileTypescript.FullPath))
-                .Returns(Path.ChangeExtension(src, ".js"));
+            A.CallTo(() => mockEngine.ProjectFileOfTaskNode).Returns(Path.Combine(cwd, "app.proj"));
 
             var sut = new MSBuild.CompileTypescript
             {
                 BuildEngine = mockEngine,
-                OutFile = Path.ChangeExtension(src, ".js"),
-                SourceFiles = new Microsoft.Build.Framework.ITaskItem[] { sourceFile },
-                GenerateSourceMap = true,
-                Minify = true
+                ConfigurationFile = null
             };
 
             // Act

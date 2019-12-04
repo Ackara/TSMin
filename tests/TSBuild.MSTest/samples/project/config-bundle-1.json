@@ -1,0 +1,17 @@
+{
+  "minifierOptions":null,
+  "compilerOptions":
+  {
+    "sourceMap": false
+  },
+  "sourceFiles":
+  [
+    {
+      "outputFile": "app.ts",
+      "include":
+      [
+        "models/**/*.ts"
+      ]
+    }
+  ]
+}

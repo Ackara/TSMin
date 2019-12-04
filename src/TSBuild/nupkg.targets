@@ -2,10 +2,19 @@
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <CompileTypescriptOnBuild Condition="$(CompileTypescriptOnBuild)==''">true</CompileTypescriptOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Task Options">
     
   </PropertyGroup>
   
-  <Target Name="CompileTypescriptOnBuild">
+  
+  <Target Name="CompileTypescriptFilesOnBuild">
+    
+  </Target>
+
+  <Target Name="CompileTypescriptFiles">
     
   </Target>
 

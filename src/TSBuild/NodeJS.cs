@@ -20,12 +20,12 @@ namespace Acklann.TSBuild
 
         private static readonly string[] _dependencies = new string[]
         {
-            "typescript@3.7.2", "uglify-js@3.4.9", "multi-stage-sourcemap@0.3.1"
+            "typescript@3.7.2", "uglify-js@3.4.9", "multi-stage-sourcemap@0.3.1", "glob@7.1.6"
         };
 
         public static bool CheckInstallation()
         {
-            Process npm = GetStartInfo("/c npm --version");
+            Process npm = GetStartInfo("/c npm --version", InstallationDirectory);
 
             try
             {
@@ -41,13 +41,13 @@ namespace Acklann.TSBuild
             finally { npm.Dispose(); }
         }
 
-        public static Process Execute(string command, bool doNotWait = false)
+        public static Process Execute(string command, string directory)
         {
             if (string.IsNullOrEmpty(command)) throw new ArgumentNullException(nameof(command));
 
-            Process cmd = GetStartInfo(command);
+            Process cmd = GetStartInfo(command, directory);
             cmd.Start();
-            if (doNotWait == false) cmd.WaitForExit();
+            cmd.WaitForExit();
             return cmd;
         }
 
@@ -76,7 +76,7 @@ namespace Acklann.TSBuild
             return false;
         }
 
-        private static Process GetStartInfo(string command = null)
+        private static Process GetStartInfo(string command, string workingDirectory)
         {
             var info = new ProcessStartInfo
             {
@@ -85,7 +85,8 @@ namespace Acklann.TSBuild
                 CreateNoWindow = true,
                 UseShellExecute = false,
                 RedirectStandardError = true,
-                RedirectStandardOutput = true
+                RedirectStandardOutput = true,
+                WorkingDirectory = (workingDirectory ?? InstallationDirectory)
             };
 
             return new Process() { StartInfo = info };
@@ -97,8 +98,7 @@ namespace Acklann.TSBuild
 
             try
             {
-                npm = GetStartInfo();
-                npm.StartInfo.WorkingDirectory = InstallationDirectory;
+                npm = GetStartInfo(null, InstallationDirectory);
                 if (!Directory.Exists(InstallationDirectory)) Directory.CreateDirectory(InstallationDirectory);
 
                 foreach (string item in _dependencies)

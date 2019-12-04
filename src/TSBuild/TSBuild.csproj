@@ -24,6 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
     <PackageReference Include="Microsoft.Build.Framework" Version="16.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>

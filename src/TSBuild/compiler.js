@@ -1,48 +1,45 @@
 ﻿// Imports
 const os = require("os");
 const fs = require("fs");
+const glob = require("glob");
 const path = require("path");
 const typescript = require("typescript");
 const uglifyJs = require("uglify-js");
 const sourceMapMerger = require("multi-stage-sourcemap").transfer;
 
-function compileTs(args) {
-    let sourceMapA = null;
-    args.typescriptOptions.noEmitOnError = true;
+function compileTs(sourceFiles, outputFile, config, bundle) {
+    let out = { name: path.basename(outputFile) };
+    //console.log("out: " + outputFile);
 
-    let tsc = typescript.createProgram(args.sourceFiles, args.typescriptOptions);
-    let result = tsc.emit(null, function (filePath, content) {
-        console.log("emit: " + filePath);
+    let tsc = typescript.createProgram(sourceFiles, config.compilerOptions);
+    let result = tsc.emit((bundle ? null : tsc.getSourceFile(outputFile)), function (filePath, content) {
+        //console.log("emit: " + filePath);
 
         switch (path.extname(filePath)) {
             case ".map":
-                sourceMapA = JSON.parse(content);
-                if (!args.minify) { createFile(filePath, content, true); }
+                out.sourceMap = (config.compilerOptions.sourceMap ? JSON.parse(content) : null);
                 break;
 
             case ".js":
-                if (args.minify) {
-                    let relativePath = (path.basename(filePath));
-
-                    if (args.shouldGenerateSourceMap) {
-                        args.uglifyJsOptions.sourceMap = {
-                            filename: relativePath,
-                            url: (path.basename(filePath) + ".map")
+                if (config.minifierOptions) {
+                    if (config.compilerOptions.sourceMap) {
+                        config.minifierOptions.sourceMap = {
+                            filename: path.basename(outputFile),
+                            url: (path.basename(outputFile) + ".map")
                         };
                     }
 
-                    let result = uglifyJs.minify(content, args.uglifyJsOptions);
-
-                    if (result.map) {
-                        let finalMap = mergeSourceMaps(result.map, sourceMapA, relativePath);
-                        createFile((filePath + ".map"), JSON.stringify(finalMap, null, 2), true);
-                    }
-
-                    createFile(filePath, result.code, true);
+                    var min = uglifyJs.minify(content, config.minifierOptions);
+                    out.sourceMap = (min.map ? JSON.stringify(mergeSourceMaps(min.map, out.sourceMap, out.name), null, 2) : null);
+                    out.code = min.code;
                 }
                 else {
-                    createFile(filePath, content, true);
+                    out.code = content;
+                    out.sourceMap = (out.sourceMap ? JSON.stringify(out.sourceMap, null, 2) : null);
                 }
+
+                createFile(outputFile, out.code);
+                if (out.sourceMap) { createFile((outputFile + ".map"), out.sourceMap); }
                 break;
         }
     });
@@ -84,10 +81,10 @@ function mergeSourceMaps(mapB, mapA, targetFile) {
     return mapC;
 }
 
-function createFile(absoluePath, content, out) {
+function createFile(absoluePath, content, out = true) {
     fs.writeFile(absoluePath, content, function (ex) {
         if (ex) { console.error(ex.message); }
-        if (out) { console.log("-> " + absoluePath); }
+        if (out) { console.log(">>" + absoluePath); }
     });
 }
 
@@ -110,53 +107,98 @@ function convertToInt(value) {
     return category;
 }
 
-function mergeOptions(args) {
-    var configFile = { ts: null, js: null };
-    if (args.optionsFile) {
-        configFile = JSON.parse(fs.readFileSync(args.optionsFile).toString());
+function convertToBoolean(value) {
+    if (value) {
+        switch (value) {
+            case "true": true;
+            case "false": false;
+            default: return null;
+        }
     }
-
-    if (configFile.hasOwnProperty("minify")) { args.minify = configFile.minify; }
-    if (configFile.hasOwnProperty("outFile")) { args.outFile = configFile.outFile; }
-    if (configFile.hasOwnProperty("generateSourceMaps")) { args.generateSourceMaps = configFile.generateSourceMaps; }
+    return null;
 }
 
-function CompilerOptions() {
+function clone(obj) {
+    return JSON.parse(JSON.stringify(obj));
+}
+
+function readConfigurationFile() {
     let me = this;
-    let bool = /true/i;
+    var minify = convertToBoolean(process.argv[3]);
+    var generateSourceMaps = convertToBoolean(process.argv[4]);
 
-    me.typescriptOptions = JSON.parse("{}");
-    me.uglifyJsOptions = JSON.parse("{}");
+    // Read and validate configuraiton file.
 
-    me.sourceFiles = process.argv[2].split(';');
-    me.optionsFile = process.argv[3];
-    me.outFile = process.argv[4];
+    var fullPath = process.argv[2];
+    var config = (fullPath ? JSON.parse(fs.readFileSync(fullPath)) : {});
 
-    me.minify = bool.test(process.argv[5]);
-    me.shouldGenerateSourceMap = me.typescriptOptions.sourceMap = bool.test(process.argv[6]);
+    // Assigning default values.
 
-    mergeOptions(me);
+    if (!config.hasOwnProperty("compilerOptions")) { config.compilerOptions = {}; }
+    if (!config.compilerOptions.hasOwnProperty("sourceMap")) { config.compilerOptions.sourceMap = true; }
+    if (generateSourceMaps != null) { config.compilerOptions.sourceMap = generateSourceMaps; }
+    config.compilerOptions.noEmitOnError = true;
 
-    me.getOutputPath = function () {
-        let baseName = path.basename(me.sourceFile, path.extname(me.sourceFile));
-        return path.join(me.outputDirectory, (baseName + ".css"));
+    if (!config.hasOwnProperty("minifierOptions")) { config.minifierOptions = {}; }
+    if (minify != null) { config.minifierOptions = (minify ? (config.minifierOptions ? config.compilerOptions : {}) : null); }
+
+    if (!config.sourceFiles) { config.sourceFiles = [{ include: ["**/*.ts"] }]; }
+
+    config.getFileList = function (batch) {
+        var list = [];
+        for (var i = 0; i < batch.include.length; i++) {
+            var result = glob.sync(batch.include[i]);
+            for (var y = 0; y < result.length; y++) {
+                list.push(result[y]);
+                console.log("<<" + result[y]);
+            }
+        }
+        return list;
     }
 
-    me.getSourceMapPath = function () {
-        let baseName = path.basename(me.sourceFile, path.extname(me.sourceFile));
-        return path.join(me.sourceMapDirectory, (baseName + ".css.map"));
+    config.getOutputPath = function (sourceFile) {
+        let folder = path.dirname(sourceFile);
+        let baseName = path.basename(sourceFile, path.extname(sourceFile));
+        return path.join(folder, (baseName + ".js"));
     }
 
     me.log = function () {
-        console.log("src: " + me.sourceFiles);
-        console.log("out: " + me.typescriptOptions.outFile);
-
-        console.log("min: " + me.minify);
-        console.log("map: " + me.shouldGenerateSourceMap);
+        console.log(config);
         console.log("====================");
         console.log("");
     }
-    me.log();
+    //me.log();
+
+    return config;
 }
 
-compileTs(new CompilerOptions());
+// ========== Entry Point ========== //
+
+var config = readConfigurationFile();
+for (var x = 0; x < config.sourceFiles.length; x++) {
+    var batch = config.sourceFiles[x];
+
+    if (batch.outputFile) {
+        var options = clone(config);
+        options.compilerOptions.outFile = config.getOutputPath(path.normalize(batch.outputFile));
+
+        compileTs(
+            config.getFileList(batch),
+            config.getOutputPath(options.compilerOptions.outFile),
+            options,
+            true
+        );
+    }
+    else {
+        var fileList = config.getFileList(batch);
+        for (var y = 0; y < fileList.length; y++) {
+            var sourceFile = fileList[y];
+            compileTs(
+                [sourceFile],
+                config.getOutputPath(sourceFile),
+                clone(config),
+                false
+            );
+        }
+    }
+}

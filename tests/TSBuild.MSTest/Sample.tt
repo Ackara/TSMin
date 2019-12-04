@@ -23,6 +23,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 		public const string FOLDER_NAME = "<#= FolderName #>";
 
 		public static string DirectoryName => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME);
+		public static string ProjectFolder => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME, "project");
 		
 		public static FileInfo GetFile(string fileName, string directory = null)
         {

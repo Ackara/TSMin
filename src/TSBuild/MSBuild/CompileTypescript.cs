@@ -1,6 +1,4 @@
 ﻿using Microsoft.Build.Framework;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -8,49 +6,29 @@ namespace Acklann.TSBuild.MSBuild
 {
     public class CompileTypescript : ITask
     {
-        [Required]
-        public ITaskItem[] SourceFiles { get; set; }
+        public ITaskItem ConfigurationFile { get; set; }
 
-        public string OutFile { get; set; }
+        public bool? Minify { get; set; }
 
-        public bool GenerateSourceMap { get; set; }
-
-        public bool Minify { get; set; }
+        public bool? GenerateSourceMaps { get; set; }
 
         public bool Execute()
         {
             NodeJS.Install((msg, _, __) => { Log(msg); });
 
-            var options = new CompilerOptions
-            {
-                Minify = Minify,
-                GenerateSourceMaps = GenerateSourceMap,
-                OutputFile = GetFullPath(OutFile)
-            };
+            string projectFolder = Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode);
+            string configFilePath = ConfigurationFile?.GetMetadata("FullPath") ?? Compiler.FindConfigurationFile(projectFolder);
 
-            CompilerResult result = Compiler.Compile(options, GetFullPaths(SourceFiles).ToArray());
-            foreach (CompilerError item in result.Errors) Log(item);
-            if (!result.HasErrors) Log(result);
+            var options = new Configuration.CompilerOptions(
+                configFilePath,
+                Minify,
+                GenerateSourceMaps);
+
+            CompilerResult result = Compiler.Run(options, projectFolder);
+            foreach (CompilerError err in result.Errors) Log(err);
+            Log(result);
 
             return result.HasErrors == false;
-        }
-
-        private static IEnumerable<string> GetFullPaths(ITaskItem[] items)
-        {
-            string fullPath;
-            int n = items.Length;
-            for (int i = 0; i < n; i++)
-            {
-                fullPath = items[i].GetMetadata(FullPath);
-                if (string.IsNullOrEmpty(fullPath)) continue;
-                yield return fullPath;
-            }
-        }
-
-        private string GetFullPath(string path)
-        {
-            if (Path.IsPathRooted(path)) return path;
-            else return Path.Combine(Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode), path);
         }
 
         #region ITask
@@ -66,9 +44,11 @@ namespace Acklann.TSBuild.MSBuild
 
         private void Log(CompilerResult result)
         {
+            if (result.Success == false) return;
+
             string cwd = Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode);
             string rel(string x) => (x == null ? null : string.Format("{0}\\{1}", Path.GetDirectoryName(x).Replace(cwd, string.Empty), Path.GetFileName(x)));
-            string merge(string[] l) => l.Length > 1 ? string.Concat('[', string.Join(" + ", l.Select(x => rel(x)).Take(3)), "...]") : string.Join(string.Empty, l.Select(x => rel(x)));
+            string merge(string[] l) => string.Concat('[', string.Join(" + ", l.Take(3).Select(x => rel(x))), ']');
 
             BuildEngine.LogMessageEvent(new BuildMessageEventArgs(
                 string.Format(

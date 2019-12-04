@@ -1,4 +1,5 @@
 using Acklann.Diffa;
+using Acklann.TSBuild.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
@@ -27,25 +28,25 @@ namespace Acklann.TSBuild.Tests
 
         [DataTestMethod]
         [DynamicData(nameof(GetCompilierOptions), DynamicDataSourceType.Method)]
-        public void Can_compile_ts_files(string label, int expectedFiles, CompilerOptions options)
+        public void Can_compile_ts_files(string label, int expectedFiles, string configFile)
         {
             // Arrange
             var cwd = Path.Combine(AppContext.BaseDirectory, "generated", label);
             if (Directory.Exists(cwd)) Directory.Delete(cwd, recursive: true);
             Directory.CreateDirectory(cwd);
-            options.OutputFile = Path.Combine(cwd, "app.js");
-
-            var inputFiles = Directory.EnumerateFiles(Path.Combine(Sample.DirectoryName, "domain"), "*.ts").ToArray();
+            Helper.CopyFolder(Sample.ProjectFolder, cwd);
 
             // Act
-            var result = Compiler.Compile(options, inputFiles);
-            var totalFiles = Directory.GetFiles(cwd, "*").Length;
+            var result = Compiler.Run(new CompilerOptions(Path.Combine(cwd, configFile)));
+            var totalFiles = (from x in Directory.EnumerateFiles(cwd, "*.js*", SearchOption.AllDirectories)
+                              where Path.GetExtension(x) != ".json"
+                              select x).Count();
 
             var builder = new StringBuilder();
             var separator = string.Concat(Enumerable.Repeat('=', 50));
-            foreach (var item in result.GeneratedFiles.OrderBy(x => x.Length))
+            foreach (var item in result.GeneratedFiles.OrderBy(x => Path.GetFileName(x)))
             {
-                builder.AppendLine($"== {Path.GetFileName(item)}")
+                builder.AppendLine($"== {label} ({Path.GetFileName(item)})")
                        .AppendLine(separator)
                        .AppendLine(File.ReadAllText(item))
                        .AppendLine()
@@ -54,6 +55,8 @@ namespace Acklann.TSBuild.Tests
 
             // Assert
             result.Success.ShouldBeTrue();
+            result.SourceFiles.ShouldNotBeEmpty();
+
             totalFiles.ShouldBe(expectedFiles);
             result.GeneratedFiles.Length.ShouldBe(expectedFiles);
 
@@ -62,22 +65,19 @@ namespace Acklann.TSBuild.Tests
 
         [DataTestMethod]
         [DynamicData(nameof(GetInvalidFiles), DynamicDataSourceType.Method)]
-        public void Can_detect_ts_errors(string documentPath, int errorLine)
+        public void Can_detect_ts_errors(string sourceFile, int errorLine)
         {
             // Arrange
-            var cwd = Path.Combine(AppContext.BaseDirectory, "generated", "errors");
-            if (Directory.Exists(cwd)) Directory.Delete(cwd, recursive: true);
-            Directory.CreateDirectory(cwd);
+            var cwd = Path.Combine(Path.GetTempPath(), "tsmin-errors");
+            if (!Directory.Exists(cwd)) Directory.CreateDirectory(cwd);
 
-            var options = new CompilerOptions
-            {
-                OutputFile = Path.Combine(cwd, $"app-{errorLine}.js"),
-                GenerateSourceMaps = true,
-                Minify = true
-            };
+            //sourceFile = Sample.GetFile(sourceFile).FullName;
+            var config = Path.Combine(cwd, (sourceFile + ".config"));
+            File.WriteAllText(config, $"{{ \"sourceFiles\": [ {{ \"include\": [ \"{sourceFile}\" ] }} ] }}");
+            File.Copy(Sample.GetFile(sourceFile).FullName, Path.Combine(cwd, sourceFile), true);
 
             // Act
-            var result = Compiler.Compile(options, documentPath);
+            var result = Compiler.Run(new CompilerOptions(config, false, false));
             var error = result.Errors.FirstOrDefault();
 
             // Assert
@@ -90,38 +90,35 @@ namespace Acklann.TSBuild.Tests
             error.Message.ShouldNotBeNullOrEmpty();
         }
 
-        [TestMethod]
-        public void Can_find_ts_files_within_folder()
-        {
-            // Arrange
-            var folder = Sample.DirectoryName;
-
-            // Act
-            var result = Compiler.FindFiles(folder);
-
-            // Assert
-            result.ShouldNotBeEmpty();
-            result.ShouldAllBe(x => x.EndsWith(".ts"));
-            result.ShouldAllBe(x => Path.GetFileName(x).StartsWith('_') == false);
-        }
-
         // ==================== DATA ==================== //
 
         private static IEnumerable<object[]> GetCompilierOptions()
         {
-            yield return new object[] { "js", 1, new CompilerOptions
+            (string, int) getData(string x)
             {
-                Minify = false,
-                GenerateSourceMaps = false
-            }};
+                string name = Path.GetFileNameWithoutExtension(x);
+                return (
+                    name.Substring(name.IndexOf('-') + 1),
+                    int.Parse(name.Substring((name.LastIndexOf('-') + 1), 1))
+                    );
+            }
+
+            var configuraitonFiles = (from x in Directory.EnumerateFiles(Sample.ProjectFolder, "config-*.json")
+                                      select Path.GetFileName(x));
+
+            foreach (string filePath in configuraitonFiles)
+            {
+                var (label, expectedFileCount) = getData(filePath);
+                yield return new object[] { label, expectedFileCount, filePath, };
+            }
         }
 
         private static IEnumerable<object[]> GetInvalidFiles()
         {
             var pattern = new Regex(@"\d+");
-            foreach (string file in Directory.EnumerateFiles(Sample.DirectoryName, "error-*.ts"))
+            foreach (string file in Directory.EnumerateFiles(Sample.DirectoryName, "error-*.ts").Select(x => Path.GetFileName(x)))
             {
-                Match match = pattern.Match(Path.GetFileNameWithoutExtension(file));
+                Match match = pattern.Match(file);
                 if (match.Success && int.TryParse(match.Value, out int lineNo))
                 {
                     yield return new object[] { file, lineNo };

@@ -9,49 +9,66 @@ namespace Acklann.TSBuild
 {
     public class Compiler
     {
-        public static CompilerResult Compile(CompilerOptions options, params string[] sourceFiles)
+        public static CompilerResult Run(Configuration.CompilerOptions options, string currentDirectory = default)
         {
             string scriptPath = Path.Combine(NodeJS.InstallationDirectory, "compiler.js");
             if (!File.Exists(scriptPath)) throw new FileNotFoundException($"Could not find file at '{scriptPath}'.");
 
             long start = System.DateTime.Now.Ticks;
-            using (Process node = NodeJS.Execute($"/c node \"{scriptPath}\" \"{string.Join(";", sourceFiles)}\" {options.ToArgs()}"))
+            string cwd = (Path.GetDirectoryName(options.ConfigurationFile)?? currentDirectory);
+
+            using (Process node = NodeJS.Execute($"/c node \"{scriptPath}\" {options.ToArgs()}", cwd))
             {
-                return new CompilerResult
-                {
-                    SourceFiles = sourceFiles,
-                    Success = (node.ExitCode == 0),
-                    Errors = GetErrors(node.StandardError).ToArray(),
-                    GeneratedFiles = GetGeneratedFiles(node.StandardOutput).ToArray(),
-                    Elapse = System.TimeSpan.FromTicks(System.DateTime.Now.Ticks - start)
-                };
+                GetOutput(node.StandardOutput, cwd, out string[] sourceFiles, out string[] generatedFiles);
+
+                return new CompilerResult(
+                    (node.ExitCode == 0),
+                    GetErrors(node.StandardError).ToArray(),
+                    sourceFiles,
+                    generatedFiles,
+                    System.TimeSpan.FromTicks(System.DateTime.Now.Ticks - start)
+                    );
             }
         }
 
-        public static Task<CompilerResult> CompilerAsync(CompilerOptions options, params string[] sourceFiles)
-            => Task.Run(() => Compile(options, sourceFiles));
+        public static   Task<CompilerResult> RunAsync(Configuration.CompilerOptions options, string currentDirectory = default)
+            => Task.Run(() => { return Run(options, currentDirectory); });
 
-        public static IEnumerable<string> FindFiles(string directoryPath)
+        public static string FindConfigurationFile(string currentDirectory = default)
         {
-            if (!Directory.Exists(directoryPath)) throw new DirectoryNotFoundException($"Could not find directory at '{directoryPath}'.");
-
-            return from x in Directory.EnumerateFiles(directoryPath, "*.ts", SearchOption.AllDirectories)
-                   where !x.Contains(@"\node_modules\")
-                   select x;
+            return Directory.EnumerateFiles(
+                currentDirectory ?? Directory.GetCurrentDirectory(),
+                Configuration.CompilerOptions.DEFAULT_FILE_NAME,
+                SearchOption.TopDirectoryOnly
+                ).FirstOrDefault();
         }
 
-        private static IEnumerable<string> GetGeneratedFiles(StreamReader reader)
+        private static void GetOutput(StreamReader reader, string cwd, out string[] sourceFiles, out string[] compiledFiles)
         {
-            string line = null;
+            string filePath;
+            var s = new List<string>();
+            var c = new List<string>();
+
             while (!reader.EndOfStream)
             {
-                line = reader.ReadLine();
-#if DEBUG
+                string line = reader.ReadLine();
                 System.Diagnostics.Debug.WriteLine(line);
-#endif
-                if (string.IsNullOrEmpty(line) || !line.StartsWith("-> ")) continue;
-                yield return line.Substring(3).Trim();
+
+                if (!string.IsNullOrEmpty(line) && line.StartsWith("<<"))
+                {
+                    filePath = line.Substring(2).Trim();
+                    s.Add(Path.IsPathRooted(filePath) ? filePath : Path.Combine(cwd, filePath));
+                }
+
+                if (!string.IsNullOrEmpty(line) && line.StartsWith(">>"))
+                {
+                    filePath = line.Substring(2).Trim();
+                    c.Add(Path.IsPathRooted(filePath) ? filePath : Path.Combine(cwd, filePath));
+                }
             }
+
+            sourceFiles = s.Distinct().ToArray();
+            compiledFiles = c.Distinct().ToArray();
         }
 
         private static IEnumerable<CompilerError> GetErrors(StreamReader reader)
