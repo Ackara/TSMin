@@ -14,9 +14,9 @@ namespace Acklann.TSBuild
 {
     [Guid(Symbol.Package.GuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideOptionPage(typeof(ConfigurationPage), Symbol.Name, "General", 0, 0, true)]
-    [InstalledProductRegistration("#110", "#112", Symbol.Version, IconResourceID = 500)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [InstalledProductRegistration("#110", "#112", Symbol.Version, IconResourceID = 500)]
+    [ProvideOptionPage(typeof(ConfigurationPage), Symbol.Name, ConfigurationPage.Category, 0, 0, true)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string, PackageAutoLoadFlags.BackgroundLoad)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class VSPackage : AsyncPackage
@@ -44,11 +44,11 @@ namespace Acklann.TSBuild
                 outputWindow.GetPane(ref guid, out IVsOutputWindowPane pane);
 
                 _watcher = new TypescriptWatcher(this, pane);
-                await NodeJS.InstallAsync((msg, counter, goal) =>
+                await NodeJS.InstallAsync((message, counter, goal) =>
                 {
-                    progress?.Report(new ServiceProgressData(msg, msg, counter, goal));
-                    System.Diagnostics.Debug.WriteLine(msg);
-                    pane.Writeline(msg);
+                    progress?.Report(new ServiceProgressData(message, message, counter, goal));
+                    System.Diagnostics.Debug.WriteLine(message);
+                    pane.Writeline(message);
 
                     if (counter >= goal)
                     {

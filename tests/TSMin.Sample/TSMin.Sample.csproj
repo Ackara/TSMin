@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TestTarget>..\..\artifacts\debug\build\TSBuild.targets</TestTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,13 +10,5 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup>
-    <TSCC Include="wwwroot/**/*.ts" />
-  </ItemGroup>  
-  
-  <Target Name="foo">
-    <CompileTypescript SourceFiles="@(TSCC)" OutputFile="wwwroot/scripts/app.ts" />
-  </Target>
-  
-  <Import Project="C:\Users\abaker\Projects\TSMin\artifacts\debug\build\TSMin.targets" />
+  <Import Project="$(TestTarget)" Condition="Exists($(TestTarget))" />
 </Project>

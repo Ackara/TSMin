@@ -61,7 +61,7 @@ function compileTs(sourceFiles, outputFile, config, bundle) {
             console.error(JSON.stringify({
                 message: message.replace(/\s/, " "),
                 file: path.resolve(item.file.fileName),
-                line: position.line,
+                line: (position.line + 1),
                 column: (position.character + 1),
                 status: item.start,
                 level: convertToInt(item.code)

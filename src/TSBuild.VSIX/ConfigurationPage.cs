@@ -13,9 +13,11 @@ namespace Acklann.TSBuild
             ShouldCompileOnSave = ShouldGenerateSourceMaps = ShouldMinify = ShouldShowCompilerErrors = true;
         }
 
-        public static string ConfigurationFileName = null;
+        public const string Category = "General";
+        public static string ConfigurationFileName;
         public static bool ShouldCompileOnSave, ShouldGenerateSourceMaps, ShouldMinify, ShouldShowCompilerErrors;
 
+        [Category(Category)]
         [DisplayName("Compile On Save")]
         [Description("When enabled the saved Typescript file will be compiled immediately.")]
         public bool CompileOnSave
@@ -24,6 +26,7 @@ namespace Acklann.TSBuild
             set => ShouldCompileOnSave = value;
         }
 
+        [Category(Category)]
         [DisplayName("Generate Source Maps")]
         [Description("When enabled a .map files will be generated for each compiled Typescript file.")]
         public bool GenerateSourceMaps
@@ -32,6 +35,7 @@ namespace Acklann.TSBuild
             set { ShouldGenerateSourceMaps = value; }
         }
 
+        [Category(Category)]
         [DisplayName("Minify Javascript Files")]
         [Description("When enabled the compiled Typescript files will be minified before they are saved to disk.")]
         public bool Minfiy
@@ -40,6 +44,7 @@ namespace Acklann.TSBuild
             set { ShouldMinify = value; }
         }
 
+        [Category(Category)]
         [DisplayName("Show Compilations Errors")]
         [Description("Show compiler errors for Typescript files.")]
         public bool DisplayErrors
@@ -48,6 +53,7 @@ namespace Acklann.TSBuild
             set { ShouldShowCompilerErrors = value; }
         }
 
+        [Category(Category)]
         [DisplayName("Default Configuration File Name")]
         public string DefaultName
         {

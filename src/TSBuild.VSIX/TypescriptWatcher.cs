@@ -51,8 +51,8 @@ namespace Acklann.TSBuild
         {
             if (ConfigurationPage.ShouldShowCompilerErrors == false) return;
 
-            TaskProvider.TaskCollection list = _errorList.Tasks;
             ErrorTask item;
+            TaskProvider.TaskCollection list = _errorList.Tasks;
 
             int nErrors = list.Count;
             for (int i = 0; i < nErrors; i++)
@@ -66,7 +66,6 @@ namespace Acklann.TSBuild
                 }
             }
 
-            CompilerError error;
             nErrors = errors.Length;
             for (int i = 0; i < nErrors; i++)
             {
@@ -77,12 +76,8 @@ namespace Acklann.TSBuild
         private string GetSummary(CompilerResult result, string cwd)
         {
             const int n = 75;
+            string header(string title = "", char c = '-') => string.Concat(Enumerable.Repeat(c, n)).Insert(5, $" {title} ").Remove(n);
             string rel(string x) => (x == null ? null : string.Format("{0}\\{1}", Path.GetDirectoryName(x).Replace(cwd, string.Empty), Path.GetFileName(x)).Trim('\\'));
-            string header(string title = "", char c = '-')
-            {
-                string spacer = string.Concat(Enumerable.Repeat(c, n));
-                return spacer.Insert(5, $" {title} ").Remove(n);
-            }
 
             var builder = new StringBuilder();
             builder.AppendLine(header($"Build started: {Path.GetFileName(cwd)}"));
@@ -95,10 +90,9 @@ namespace Acklann.TSBuild
             for (int i = 0; i < result.GeneratedFiles.Length; i++)
                 builder.AppendLine($"    out: {rel(result.GeneratedFiles[i])}");
 
-            return builder
-                .AppendLine(header($"errors:{result.Errors.Length} elapse:{result.Elapse.ToString("hh\\:mm\\:ss\\.fff")}", '='))
-                .AppendLine()
-                .ToString();
+            return builder.AppendLine(header($"errors:{result.Errors.Length} elapse:{result.Elapse.ToString("hh\\:mm\\:ss\\.fff")}", '='))
+                          .AppendLine()
+                          .ToString();
         }
 
         #region IVsRunningDocTableEvents3
@@ -167,10 +161,10 @@ namespace Acklann.TSBuild
                 CanDelete = true,
                 Text = error.Message,
                 Document = error.File,
-                Line = error.Line,
+                Line = (error.Line - 1),
                 Column = error.Column,
                 HierarchyItem = hierarchy,
-               
+
                 Category = TaskCategory.BuildCompile,
                 ErrorCategory = ToCatetory(error.Severity)
             };

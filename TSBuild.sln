@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".misc", ".misc", "{DB2FA3E2
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSMin.Sample", "tests\TSMin.Sample\TSMin.Sample.csproj", "{EF352AE3-078E-4DB1-A73B-594D88F2FDE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{1D6A88A7-69F3-4B5A-8E30-903F75EE5BA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D6A88A7-69F3-4B5A-8E30-903F75EE5BA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D6A88A7-69F3-4B5A-8E30-903F75EE5BA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF352AE3-078E-4DB1-A73B-594D88F2FDE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF352AE3-078E-4DB1-A73B-594D88F2FDE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF352AE3-078E-4DB1-A73B-594D88F2FDE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF352AE3-078E-4DB1-A73B-594D88F2FDE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

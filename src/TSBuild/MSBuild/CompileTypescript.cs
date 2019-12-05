@@ -1,16 +1,24 @@
 ﻿using Microsoft.Build.Framework;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Acklann.TSBuild.MSBuild
 {
     public class CompileTypescript : ITask
     {
+        #region ITask
+
+        public IBuildEngine BuildEngine { get; set; }
+        public ITaskHost HostObject { get; set; }
+
+        #endregion ITask
+
         public ITaskItem ConfigurationFile { get; set; }
 
-        public bool? Minify { get; set; }
+        public bool Minify { get; set; }
 
-        public bool? GenerateSourceMaps { get; set; }
+        public bool GenerateSourceMaps { get; set; }
 
         public bool Execute()
         {
@@ -31,33 +39,33 @@ namespace Acklann.TSBuild.MSBuild
             return result.HasErrors == false;
         }
 
-        #region ITask
-
-        public IBuildEngine BuildEngine { get; set; }
-        public ITaskHost HostObject { get; set; }
-
-        #endregion ITask
-
         #region Backing Members
-
-        public const string FullPath = "FullPath";
 
         private void Log(CompilerResult result)
         {
             if (result.Success == false) return;
 
+            const int n = 75;
             string cwd = Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode);
-            string rel(string x) => (x == null ? null : string.Format("{0}\\{1}", Path.GetDirectoryName(x).Replace(cwd, string.Empty), Path.GetFileName(x)));
-            string merge(string[] l) => string.Concat('[', string.Join(" + ", l.Take(3).Select(x => rel(x))), ']');
+            string header(string title = "", char c = '-') => string.Concat(Enumerable.Repeat(c, n)).Insert(5, $" {title} ").Remove(n);
+            string rel(string x) => (x == null ? null : string.Format("{0}\\{1}", Path.GetDirectoryName(x).Replace(cwd, string.Empty), Path.GetFileName(x)).Trim('\\'));
+
+            var builder = new StringBuilder();
+            builder.AppendLine(header($"Build started: {Path.GetFileName(cwd)}"));
+            builder.AppendLine("  Source Files:");
+            for (int i = 0; i < result.SourceFiles.Length; i++)
+                builder.AppendLine($"    in: {rel(result.SourceFiles[i])}");
+
+            builder.AppendLine();
+            builder.AppendLine("  Compiled Files:");
+            for (int i = 0; i < result.GeneratedFiles.Length; i++)
+                builder.AppendLine($"    out: {rel(result.GeneratedFiles[i])}");
+
+            builder.AppendLine(header($"errors:{result.Errors.Length} elapse:{result.Elapse.ToString("hh\\:mm\\:ss\\.fff")}", '='))
+                   .AppendLine();
 
             BuildEngine.LogMessageEvent(new BuildMessageEventArgs(
-                string.Format(
-                    "tsc -> in:{0}  out:{1}  elapse:{2}",
-
-                    merge(result.SourceFiles),
-                    merge(result.GeneratedFiles),
-                    result.Elapse.ToString("hh\\:mm\\:ss\\.fff")
-                    ),
+                builder.ToString(),
                 null,
                 nameof(CompileTypescript),
                 MessageImportance.Normal

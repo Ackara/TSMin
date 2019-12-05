@@ -2,21 +2,30 @@
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <CompileTypescriptOnBuild Condition="$(CompileTypescriptOnBuild)==''">true</CompileTypescriptOnBuild>
+    <CompileTypescriptOnBuild Condition="$(CompileTypescriptOnBuild)==''">false</CompileTypescriptOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Label="Task Options">
-    
+    <MinifyTypescript Condition="$(MinifyTypescript)==''">true</MinifyTypescript>
+    <GenerateTypescriptSourceMap Condition="$(GenerateTypescriptSourceMap)==''">true</GenerateTypescriptSourceMap>
+    <TypescriptConfigurationFile Condition="$(TypescriptConfigurationFile)==''">$(MSBuildProjectDirectory)\tsbuildconfig.json</TypescriptConfigurationFile>
   </PropertyGroup>
-  
-  
-  <Target Name="CompileTypescriptFilesOnBuild">
-    
+
+  <Target Name="CompileTypescriptFilesOnBuild"
+          BeforeTargets="PreBuildEvent"
+          Condition="$(CompileTypescriptOnBuild)">
+    <CallTarget Targets="CompileTypescriptFiles" />
   </Target>
 
   <Target Name="CompileTypescriptFiles">
-    
+    <Warning Text="No typescript configuration file found."
+             Condition="!Exists($(TypescriptConfigurationFile))" />
+
+    <CompileTypescript ConfigurationFile="$(TypescriptConfigurationFile)"
+                       GenerateSourceMaps="$(GenerateTypescriptSourceMap)"
+                       Minify="$(MinifyTypescript)"
+                       Condition="Exists($(TypescriptConfigurationFile))" />
   </Target>
 
-  <UsingTask TaskName="CompileTypescript" AssemblyFile="TSMin.dll" />
+  <UsingTask TaskName="CompileTypescript" AssemblyFile="TSBuild.dll" />
 </Project>
