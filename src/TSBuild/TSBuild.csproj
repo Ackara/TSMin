@@ -7,8 +7,8 @@
 
   <PropertyGroup Label="Package">
     <Title>TSBuild</Title>
-    <Version>0.0.24-rc</Version>
-    <AssemblyVersion>0.0.24</AssemblyVersion>
+    <Version>0.0.25-rc</Version>
+    <AssemblyVersion>0.0.25</AssemblyVersion>
     <Description>Helps you compile and minify typescript files on save and on build.</Description>
 
     <Authors>Ackara</Authors>
