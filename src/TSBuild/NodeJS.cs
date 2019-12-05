@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Acklann.TSBuild
 {
@@ -48,6 +49,8 @@ namespace Acklann.TSBuild
             Process cmd = GetStartInfo(command, directory);
             cmd.Start();
             cmd.WaitForExit();
+            System.Diagnostics.Debug.WriteLine($"exit-code: {cmd.ExitCode}");
+
             return cmd;
         }
 
@@ -60,21 +63,10 @@ namespace Acklann.TSBuild
 
             if (!Directory.EnumerateFiles(InstallationDirectory, "*.js").Any())
                 ExtractBinaries(handler, ref progress, goal, overwrite);
-
-            handler?.Invoke("installtion complete", progress, goal);
         }
 
-        public static bool TryInstall(ProgressHandler handler = default, bool overwrite = false)
-        {
-            try
-            {
-                Install(handler, overwrite);
-                return true;
-            }
-            catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }
-
-            return false;
-        }
+        public static Task InstallAsync(ProgressHandler handler = default, bool overwrite = false)
+            => Task.Run(() => { Install(handler, overwrite); });
 
         private static Process GetStartInfo(string command, string workingDirectory)
         {
@@ -88,6 +80,7 @@ namespace Acklann.TSBuild
                 RedirectStandardOutput = true,
                 WorkingDirectory = (workingDirectory ?? InstallationDirectory)
             };
+            System.Diagnostics.Debug.WriteLine($"{info.FileName} {info.WorkingDirectory}> {command}");
 
             return new Process() { StartInfo = info };
         }

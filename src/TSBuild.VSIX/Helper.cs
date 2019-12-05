@@ -41,5 +41,21 @@ namespace Acklann.TSBuild
             project = dte.Solution.FindProjectItem(selectedFile)?.ContainingProject;
             return project != null;
         }
+
+        public static bool AreSame(string pathA, string pathB)
+        {
+            return string.Equals(
+                pathA.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar),
+                pathB.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar),
+                StringComparison.OrdinalIgnoreCase
+                );
+        }
+
+        public static void Writeline(this IVsOutputWindowPane pane, string message, params object[] args)
+        {
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
+            pane?.OutputStringThreadSafe(string.Format((message + '\n'), args));
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
+        }
     }
 }

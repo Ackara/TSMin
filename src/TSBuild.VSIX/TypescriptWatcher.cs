@@ -2,22 +2,18 @@
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace Acklann.TSBuild
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD110:Observe result of async calls", Justification = "<Pending>")]
     public class TypescriptWatcher : IVsRunningDocTableEvents3
     {
         public TypescriptWatcher(VSPackage package, IVsOutputWindowPane pane)
         {
             if (package == null) throw new ArgumentNullException(nameof(package));
-
             _vsOutWindow = pane ?? throw new ArgumentNullException(nameof(pane));
-            _loadedProjects = new Dictionary<string, Microsoft.Build.Evaluation.Project>();
 
             _runningDocumentTable = new RunningDocumentTable(package);
             _runningDocumentTable.Advise(this);
@@ -29,68 +25,92 @@ namespace Acklann.TSBuild
             };
         }
 
-        private async void RunCompiler(string sourceFile, IVsHierarchy hierarchy)
+        public void Start()
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            string projectFolder = Path.GetDirectoryName(hierarchy?.ToProject()?.FullName);
+            _stillLoading = false;
+        }
+
+        private async void RunCompiler(string activeFile, IVsHierarchy hierarchy)
+        {
+            string projectFolder = Path.GetDirectoryName(hierarchy.ToProject()?.FullName);
 
             var options = new Configuration.CompilerOptions(
-                Compiler.FindConfigurationFile(Path.GetDirectoryName(projectFolder)),
+                Compiler.FindConfigurationFile(projectFolder),
                 ConfigurationPage.ShouldMinify,
                 ConfigurationPage.ShouldGenerateSourceMaps
                 );
 
-            CompilerResult result = await Compiler.RunAsync(options);
-            string summary = GetSummary(result, projectFolder);
+            CompilerResult result = await Compiler.RunAsync(options, projectFolder);
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            _vsOutWindow.OutputStringThreadSafe(summary);
-            foreach (CompilerError error in result.Errors) HandleError(error, hierarchy);
+            ShowErrors(activeFile, hierarchy, result.Errors);
+            _vsOutWindow.Writeline(GetSummary(result, projectFolder));
         }
 
-        private void HandleError(CompilerError error, IVsHierarchy hierarchy)
+        private void ShowErrors(string activeFile, IVsHierarchy hierarchy, CompilerError[] errors)
         {
-            ErrorTask task;
-            bool shouldAdd = true;
-            int n = _errorList.Tasks.Count;
+            if (ConfigurationPage.ShouldShowCompilerErrors == false) return;
 
-            for (int i = 0; i < n; i++)
+            TaskProvider.TaskCollection list = _errorList.Tasks;
+            ErrorTask item;
+
+            int nErrors = list.Count;
+            for (int i = 0; i < nErrors; i++)
             {
-                task = (ErrorTask)_errorList.Tasks[i];
-
-                if (task.Document == error.File)
+                item = (ErrorTask)list[i];
+                if (Helper.AreSame(item.Document, activeFile))
                 {
-                    _errorList.Tasks.RemoveAt(i);
-                    n--;
-                }
-
-                if (task.Text == error.Message && task.Document == error.File && task.Line == error.Line && task.Column == error.Column)
-                {
-                    shouldAdd = false;
+                    item.Navigate -= GotoLine;
+                    list.RemoveAt(i);
+                    nErrors--; i--;
                 }
             }
 
-            if (shouldAdd) _errorList.Tasks.Add(new ErrorTask
+            CompilerError error;
+            nErrors = errors.Length;
+            for (int i = 0; i < nErrors; i++)
             {
-                Text = error.Message,
-                HierarchyItem = hierarchy,
-                Document = error.File,
-                Line = (error.Line - 1),
-                Column = error.Column,
-                Category = TaskCategory.BuildCompile,
-                ErrorCategory = ToCatetory(error.Severity)
-            });
+                list.Add(ToTask(errors[i], hierarchy));
+            }
+        }
+
+        private string GetSummary(CompilerResult result, string cwd)
+        {
+            const int n = 75;
+            string rel(string x) => (x == null ? null : string.Format("{0}\\{1}", Path.GetDirectoryName(x).Replace(cwd, string.Empty), Path.GetFileName(x)).Trim('\\'));
+            string header(string title = "", char c = '-')
+            {
+                string spacer = string.Concat(Enumerable.Repeat(c, n));
+                return spacer.Insert(5, $" {title} ").Remove(n);
+            }
+
+            var builder = new StringBuilder();
+            builder.AppendLine(header($"Build started: {Path.GetFileName(cwd)}"));
+            builder.AppendLine("  Source Files:");
+            for (int i = 0; i < result.SourceFiles.Length; i++)
+                builder.AppendLine($"    in: {rel(result.SourceFiles[i])}");
+
+            builder.AppendLine();
+            builder.AppendLine("  Compiled Files:");
+            for (int i = 0; i < result.GeneratedFiles.Length; i++)
+                builder.AppendLine($"    out: {rel(result.GeneratedFiles[i])}");
+
+            return builder
+                .AppendLine(header($"errors:{result.Errors.Length} elapse:{result.Elapse.ToString("hh\\:mm\\:ss\\.fff")}", '='))
+                .AppendLine()
+                .ToString();
         }
 
         #region IVsRunningDocTableEvents3
 
         public int OnAfterSave(uint docCookie)
         {
+            if (_stillLoading) return VSConstants.S_OK;
             if (!ConfigurationPage.ShouldCompileOnSave) return VSConstants.S_OK;
-
             ThreadHelper.ThrowIfNotOnUIThread();
-            RunningDocumentInfo document = _runningDocumentTable.GetDocumentInfo(docCookie);
 
+            _vsOutWindow?.Clear();
+            RunningDocumentInfo document = _runningDocumentTable.GetDocumentInfo(docCookie);
             if (string.Equals(Path.GetExtension(document.Moniker), ".ts", StringComparison.OrdinalIgnoreCase) && document.Hierarchy != null)
             {
                 RunCompiler(document.Moniker, document.Hierarchy);
@@ -118,10 +138,11 @@ namespace Acklann.TSBuild
 
         #region Backing Members
 
-        private readonly IDictionary<string, Microsoft.Build.Evaluation.Project> _loadedProjects;
+        private readonly Guid _textViewGuid = new Guid("{7651A703-06E5-11D1-8EBD-00A0C90F26EA}");
         private readonly RunningDocumentTable _runningDocumentTable;
-        private readonly ErrorListProvider _errorList;
         private readonly IVsOutputWindowPane _vsOutWindow;
+        private readonly ErrorListProvider _errorList;
+        private bool _stillLoading = true;
 
         private static TaskErrorCategory ToCatetory(ErrorSeverity severity)
         {
@@ -139,29 +160,32 @@ namespace Acklann.TSBuild
             }
         }
 
-        private string GetSummary(CompilerResult result, string cwd)
+        private ErrorTask ToTask(CompilerError error, IVsHierarchy hierarchy)
         {
-            const int n = 75;
-            string rel(string x) => (x == null ? null : string.Format("{0}\\{1}", Path.GetDirectoryName(x).Replace(cwd, string.Empty), Path.GetFileName(x)).Trim('\\'));
-            string header(string title = "", char c = '=')
+            var task = new ErrorTask
             {
-                string spacer = string.Concat(Enumerable.Repeat(c, n));
-                return spacer.Insert(5, $" {title} ").Remove(n);
+                CanDelete = true,
+                Text = error.Message,
+                Document = error.File,
+                Line = error.Line,
+                Column = error.Column,
+                HierarchyItem = hierarchy,
+               
+                Category = TaskCategory.BuildCompile,
+                ErrorCategory = ToCatetory(error.Severity)
+            };
+            task.Navigate += GotoLine;
+            return task;
+        }
+
+        private void GotoLine(object sender, EventArgs e)
+        {
+            if (sender is ErrorTask task)
+            {
+                task.Line++;
+                _errorList.Navigate(task, _textViewGuid);
+                task.Line--;
             }
-
-            var builder = new StringBuilder();
-            builder.AppendLine(header($"Build started: {Path.GetFileName(cwd)}"));
-            builder.AppendLine("Source Files:\n");
-            for (int i = 0; i < result.SourceFiles.Length; i++)
-                builder.AppendLine($"  in: {rel(result.SourceFiles[i])}");
-
-            builder.AppendLine("Ouput:");
-            for (int i = 0; i < result.GeneratedFiles.Length; i++)
-                builder.AppendLine($"  out: {rel(result.GeneratedFiles[i])}");
-
-            builder.AppendLine(header($"errors:{result.Errors.Length} elapse:{result.Elapse.ToString("hh\\:mm\\:ss\\.fff")}"));
-
-            return builder.ToString();
         }
 
         #endregion Backing Members

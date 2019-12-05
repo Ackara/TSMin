@@ -9,15 +9,15 @@ namespace Acklann.TSBuild
     {
         public ConfigurationPage()
         {
-            ShouldCompileOnSave = ShouldGenerateSourceMaps = ShouldMinify = true;
             ConfigurationFileName = Configuration.CompilerOptions.DEFAULT_FILE_NAME;
+            ShouldCompileOnSave = ShouldGenerateSourceMaps = ShouldMinify = ShouldShowCompilerErrors = true;
         }
 
         public static string ConfigurationFileName = null;
-        public static bool ShouldCompileOnSave, ShouldGenerateSourceMaps, ShouldMinify;
+        public static bool ShouldCompileOnSave, ShouldGenerateSourceMaps, ShouldMinify, ShouldShowCompilerErrors;
 
         [DisplayName("Compile On Save")]
-        [Description("When enabled the saved .ts file will be compiled immediately.")]
+        [Description("When enabled the saved Typescript file will be compiled immediately.")]
         public bool CompileOnSave
         {
             get => ShouldCompileOnSave;
@@ -25,7 +25,7 @@ namespace Acklann.TSBuild
         }
 
         [DisplayName("Generate Source Maps")]
-        [Description("When enabled a .map files will be generated for each compiled .ts file.")]
+        [Description("When enabled a .map files will be generated for each compiled Typescript file.")]
         public bool GenerateSourceMaps
         {
             get => ShouldGenerateSourceMaps;
@@ -33,11 +33,19 @@ namespace Acklann.TSBuild
         }
 
         [DisplayName("Minify Javascript Files")]
-        [Description("When enabled the compiled .ts files will be minified before they are saved to disk.")]
+        [Description("When enabled the compiled Typescript files will be minified before they are saved to disk.")]
         public bool Minfiy
         {
             get => ShouldMinify;
             set { ShouldMinify = value; }
+        }
+
+        [DisplayName("Show Compilations Errors")]
+        [Description("Show compiler errors for Typescript files.")]
+        public bool DisplayErrors
+        {
+            get => ShouldShowCompilerErrors;
+            set { ShouldShowCompilerErrors = value; }
         }
 
         [DisplayName("Default Configuration File Name")]

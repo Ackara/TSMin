@@ -1,5 +1,4 @@
-﻿using Microsoft;
-using Microsoft.VisualStudio;
+﻿using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -24,15 +23,18 @@ namespace Acklann.TSBuild
     {
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            NodeJS.Install((msg, _, __) => { System.Diagnostics.Debug.WriteLine(msg); });
+            _stillLoading = true;
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             vs = (EnvDTE.DTE)await GetServiceAsync(typeof(EnvDTE.DTE));
-            Assumes.Present(vs);
+            GetDialogPage(typeof(ConfigurationPage));
 
-            var commandService = (await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService);
-            commandService.AddCommand(new OleMenuCommand(OnGotoConfigurationPageCommandInvoked, new CommandID(Symbol.CmdSet.Guid, Symbol.CmdSet.GotoConfigurationPageCommandId)));
-            commandService.AddCommand(new OleMenuCommand(OnConfigureCompileOnBuildCommandInvoked, new CommandID(Symbol.CmdSet.Guid, Symbol.CmdSet.ConfigureCompileOnBuildCommandId)));
+            var commandService = (OleMenuCommandService)await GetServiceAsync(typeof(IMenuCommandService));
+            if (commandService != null)
+            {
+                commandService.AddCommand(new OleMenuCommand(OnGotoConfigurationPageCommandInvoked, new CommandID(Symbol.CmdSet.Guid, Symbol.CmdSet.GotoConfigurationPageCommandId)));
+                commandService.AddCommand(new OleMenuCommand(OnConfigureCompileOnBuildCommandInvoked, new CommandID(Symbol.CmdSet.Guid, Symbol.CmdSet.ConfigureCompileOnBuildCommandId)));
+            }
 
             var outputWindow = (IVsOutputWindow)await GetServiceAsync(typeof(SVsOutputWindow));
             if (outputWindow != null)
@@ -42,9 +44,19 @@ namespace Acklann.TSBuild
                 outputWindow.GetPane(ref guid, out IVsOutputWindowPane pane);
 
                 _watcher = new TypescriptWatcher(this, pane);
-            }
+                await NodeJS.InstallAsync((msg, counter, goal) =>
+                {
+                    progress?.Report(new ServiceProgressData(msg, msg, counter, goal));
+                    System.Diagnostics.Debug.WriteLine(msg);
+                    pane.Writeline(msg);
 
-            vs.StatusBar.Text = $"{Symbol.Name}: installation completed.";
+                    if (counter >= goal)
+                    {
+                        _watcher.Start();
+                        _stillLoading = false;
+                    }
+                });
+            }
         }
 
         private void OnConfigureCompileOnBuildCommandInvoked(object sender, EventArgs e)
@@ -79,6 +91,7 @@ namespace Acklann.TSBuild
         #region Backing Members
 
         private EnvDTE.DTE vs;
+        private bool _stillLoading = true;
         private TypescriptWatcher _watcher;
 
         #endregion Backing Members

@@ -15,7 +15,7 @@ namespace Acklann.TSBuild
             if (!File.Exists(scriptPath)) throw new FileNotFoundException($"Could not find file at '{scriptPath}'.");
 
             long start = System.DateTime.Now.Ticks;
-            string cwd = (Path.GetDirectoryName(options.ConfigurationFile)?? currentDirectory);
+            string cwd = (Path.GetDirectoryName(options.ConfigurationFile) ?? currentDirectory);
 
             using (Process node = NodeJS.Execute($"/c node \"{scriptPath}\" {options.ToArgs()}", cwd))
             {
@@ -31,7 +31,7 @@ namespace Acklann.TSBuild
             }
         }
 
-        public static   Task<CompilerResult> RunAsync(Configuration.CompilerOptions options, string currentDirectory = default)
+        public static Task<CompilerResult> RunAsync(Configuration.CompilerOptions options, string currentDirectory = default)
             => Task.Run(() => { return Run(options, currentDirectory); });
 
         public static string FindConfigurationFile(string currentDirectory = default)
@@ -79,9 +79,8 @@ namespace Acklann.TSBuild
             while (!reader.EndOfStream)
             {
                 line = reader.ReadLine();
-#if DEBUG
                 System.Diagnostics.Debug.WriteLine(line);
-#endif
+
                 if (string.IsNullOrEmpty(line) || !line.StartsWith("{")) continue;
 
                 json = JObject.Parse(line);

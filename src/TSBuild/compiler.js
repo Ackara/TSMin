@@ -60,8 +60,8 @@ function compileTs(sourceFiles, outputFile, config, bundle) {
 
             console.error(JSON.stringify({
                 message: message.replace(/\s/, " "),
-                file: item.file.fileName,
-                line: (position.line + 1),
+                file: path.resolve(item.file.fileName),
+                line: position.line,
                 column: (position.character + 1),
                 status: item.start,
                 level: convertToInt(item.code)
@@ -150,7 +150,7 @@ function readConfigurationFile() {
             var result = glob.sync(batch.include[i]);
             for (var y = 0; y < result.length; y++) {
                 list.push(result[y]);
-                console.log("<<" + result[y]);
+                console.log("<<" + path.resolve(result[y]));
             }
         }
         return list;
@@ -159,7 +159,7 @@ function readConfigurationFile() {
     config.getOutputPath = function (sourceFile) {
         let folder = path.dirname(sourceFile);
         let baseName = path.basename(sourceFile, path.extname(sourceFile));
-        return path.join(folder, (baseName + ".js"));
+        return path.resolve(path.join(folder, (baseName + ".js")));
     }
 
     me.log = function () {
