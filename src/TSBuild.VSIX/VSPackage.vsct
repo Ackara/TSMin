@@ -41,8 +41,12 @@
   </Commands>
 
   <CommandPlacements>
-    <CommandPlacement guid="CmdSet" id="VSToolsMenuGroup" priority="500">
+    <CommandPlacement guid="CmdSet" id="VSToolsMenuGroup" priority="250">
       <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+    </CommandPlacement>
+
+    <CommandPlacement guid="CmdSet" id="MainMenu" priority="1">
+      <Parent guid="CmdSet" id="VSToolsMenuGroup" />
     </CommandPlacement>
 
     <CommandPlacement guid="CmdSet" id="FileCommandGroup" priority="1">

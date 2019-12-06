@@ -49,7 +49,7 @@ namespace Acklann.TSBuild
             Process cmd = GetStartInfo(command, directory);
             cmd.Start();
             cmd.WaitForExit();
-            System.Diagnostics.Debug.WriteLine($"exit-code: {cmd.ExitCode}");
+            System.Diagnostics.Debug.WriteLine($"exit: {cmd.ExitCode}");
 
             return cmd;
         }
@@ -63,6 +63,8 @@ namespace Acklann.TSBuild
 
             if (!Directory.EnumerateFiles(InstallationDirectory, "*.js").Any())
                 ExtractBinaries(handler, ref progress, goal, overwrite);
+
+            handler?.Invoke(string.Empty, goal, goal);
         }
 
         public static Task InstallAsync(ProgressHandler handler = default, bool overwrite = false)
