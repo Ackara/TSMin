@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/Ackara/TSBuild/master/src/TSBuild/schema.json",
+  "type": "object",
+  "properties":
+  {
+    "sourceFiles":
+    {
+      "type": "array",
+      "items":
+      {
+        "$ref": "#/definitions/batch"
+      }
+    },
+    "compilerOptions":
+    {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "minifierOptions":
+    {
+      "type": "object",
+      "properties":
+      {
+        "ie8":
+        {
+          "type": "boolean"
+        },
+        "compress":
+        {
+          "$ref": "#/definitions/uglifyjsCompressOptions"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "definitions":
+  {
+    "batch":
+    {
+      "type": "object",
+      "properties":
+      {
+        "outputFile":
+        {
+          "type": "string"
+        },
+        "include":
+        {
+          "type": "array",
+          "items":
+          {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "uglifyjsCompressOptions":
+    {
+      "type": "object",
+      "properties":
+      {
+        "drop_console":
+        {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

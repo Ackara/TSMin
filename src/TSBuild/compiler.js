@@ -131,6 +131,7 @@ function readConfigurationFile() {
 
     var fullPath = process.argv[2];
     var config = (fullPath ? JSON.parse(fs.readFileSync(fullPath)) : {});
+    if (config.hasOwnProperty("typescript")) { config = config.typescript; }
 
     // Assigning default values.
 
@@ -172,7 +173,7 @@ function readConfigurationFile() {
     return config;
 }
 
-// ========== Entry Point ========== //
+// ========== Main ========== //
 
 var config = readConfigurationFile();
 for (var x = 0; x < config.sourceFiles.length; x++) {
