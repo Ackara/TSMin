@@ -1,6 +1,21 @@
 {
-  "devDependencies":
-  {
+  "devDependencies": {
     "typescript": "3.7.2"
-  }
+  },
+  "name": "foo",
+  "description": "Helps you compile and minify typescript files on save and on build.",
+  "version": "0.0.34-beta",
+  "author": "Ackara",
+  "license": "license.txt",
+  "homepage": "https://github.com/Ackara/TSBuild",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ackara/TSBuild.git"
+  },
+  "keywords": [
+    "typescript",
+    "compiler",
+    "bundle",
+    "msbuild"
+  ]
 }

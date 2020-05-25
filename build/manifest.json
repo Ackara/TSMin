@@ -4,7 +4,7 @@
   "version": {
     "major": 0,
     "minor": 0,
-    "patch": 26
+    "patch": 48
   },
   "authors": "Ackara",
   "company": "Ackara",
@@ -16,7 +16,7 @@
   "icon": "icon.png",
   "tags": "typescript compiler bundle msbuild",
   "branchVersionMap": {
-    "master": "x.y.z-\\rc",
+    "production": "x.y.z-\\rc",
     "default": "x.y.z-\\beta"
   }
 }

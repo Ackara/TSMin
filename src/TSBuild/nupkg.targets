@@ -2,30 +2,34 @@
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <CompileTypescriptOnBuild Condition="$(CompileTypescriptOnBuild)==''">false</CompileTypescriptOnBuild>
+    <ShouldCompileTypescriptOnBuild Condition="$(ShouldCompileTypescriptOnBuild)==''">false</ShouldCompileTypescriptOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Label="Task Options">
     <MinifyTypescript Condition="$(MinifyTypescript)==''">true</MinifyTypescript>
     <GenerateTypescriptSourceMap Condition="$(GenerateTypescriptSourceMap)==''">true</GenerateTypescriptSourceMap>
-    <TypescriptConfigurationFile Condition="$(TypescriptConfigurationFile)==''">$(MSBuildProjectDirectory)\tsbuildconfig.json</TypescriptConfigurationFile>
+    <TSBuildConfigurationFile Condition="$(TSBuildConfigurationFile)==''">$(MSBuildProjectDirectory)\transpiler.json</TSBuildConfigurationFile>
   </PropertyGroup>
 
   <Target Name="CompileTypescriptFilesOnBuild"
           BeforeTargets="PreBuildEvent"
-          Condition="$(CompileTypescriptOnBuild)">
+          Condition="$(ShouldCompileTypescriptOnBuild)">
     <CallTarget Targets="CompileTypescriptFiles" />
   </Target>
 
   <Target Name="CompileTypescriptFiles">
     <Warning Text="No typescript configuration file found."
-             Condition="!Exists($(TypescriptConfigurationFile))" />
+             Condition="!Exists($(TSBuildConfigurationFile))" />
 
-    <CompileTypescript ConfigurationFile="$(TypescriptConfigurationFile)"
+    <CompileTypescript ConfigurationFile="$(TSBuildConfigurationFile)"
                        GenerateSourceMaps="$(GenerateTypescriptSourceMap)"
                        Minify="$(MinifyTypescript)"
-                       Condition="Exists($(TypescriptConfigurationFile))" />
+                       Condition="Exists($(TSBuildConfigurationFile))" />
   </Target>
 
-  <UsingTask TaskName="CompileTypescript" AssemblyFile="TSBuild.dll" />
+  <UsingTask TaskName="CompileTypescript"
+             AssemblyFile="..\tools\TSBuild.MSBuild.dll" />
+
+  <UsingTask TaskName="CopyJsonProperty"
+             AssemblyFile="..\tools\TSBuild.MSBuild.dll" />
 </Project>

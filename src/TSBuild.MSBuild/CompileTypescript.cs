@@ -1,19 +1,16 @@
-﻿using Microsoft.Build.Framework;
+using Microsoft.Build.Framework;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Acklann.TSBuild.MSBuild
 {
     public class CompileTypescript : ITask
     {
-        #region ITask
-
-        public IBuildEngine BuildEngine { get; set; }
-        public ITaskHost HostObject { get; set; }
-
-        #endregion ITask
-
         public ITaskItem ConfigurationFile { get; set; }
 
         public bool Minify { get; set; }
@@ -38,6 +35,13 @@ namespace Acklann.TSBuild.MSBuild
 
             return result.HasErrors == false;
         }
+
+        #region ITask
+
+        public IBuildEngine BuildEngine { get; set; }
+        public ITaskHost HostObject { get; set; }
+
+        #endregion ITask
 
         #region Backing Members
 

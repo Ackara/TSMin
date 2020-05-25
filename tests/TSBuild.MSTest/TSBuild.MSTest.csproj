@@ -1,10 +1,25 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <RootNamespace>Acklann.TSBuild</RootNamespace>
-  </PropertyGroup>
+  
+<Title>TSBuild</Title>
+<Description>Helps you compile and minify typescript files on save and on build.</Description>
+<Version>0.0.48</Version>
+<AssemblyVersion>0.0.48</AssemblyVersion>
+<AssemblyFileVersion>0.0.48</AssemblyFileVersion>
+<PackageIcon>icon.png</PackageIcon>
+<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
+<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
+<PackageReleaseNotes>https://github.com/Ackara/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
+<PackageTags>typescript compiler bundle msbuild</PackageTags>
+<Authors>Ackara</Authors>
+<Company>Ackara</Company>
+<Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
+<PackageLicenseFile>license.txt</PackageLicenseFile>
+</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Acklann.Diffa" Version="1.0.3" />
@@ -16,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\TSBuild.MSBuild\TSBuild.MSBuild.csproj" />
     <ProjectReference Include="..\..\src\TSBuild\TSBuild.csproj" />
   </ItemGroup>
 
@@ -67,4 +83,6 @@
       <DependentUpon>Sample.tt</DependentUpon>
     </Compile>
   </ItemGroup>
+
+
 </Project>

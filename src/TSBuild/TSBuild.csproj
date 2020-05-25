@@ -1,18 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Acklann.TSBuild</RootNamespace>
+    <AssemblyFileVersion>0.0.48</AssemblyFileVersion>
+    <AssemblyVersion>0.0.48</AssemblyVersion>
+    <Version>0.0.48</Version>
   </PropertyGroup>
 
   <PropertyGroup Label="Package">
     <Title>TSBuild</Title>
-    <Version>0.0.26-rc</Version>
-    <AssemblyVersion>0.0.26</AssemblyVersion>
     <Description>Helps you compile and minify typescript files on save and on build.</Description>
 
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
-    <Copyright>Copyright 2019 Ackara, All Rights Reserved.</Copyright>
+    <Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
 
     <PackageIcon>icon.png</PackageIcon>
@@ -20,11 +21,11 @@
     <PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/Ackara/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
     <PackageTags>typescript compiler bundle msbuild</PackageTags>
+
+    <IsTool>true</IsTool>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="16.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 
@@ -45,14 +46,10 @@
       <Visible>false</Visible>
     </Content>
 
-    <Content Include="$(OutputPath)publish\*">
-      <PackagePath>build</PackagePath>
-      <Visible>true</Visible>
+    <Content Include="bin\tools\*">
+      <PackagePath>tools\</PackagePath>
+      <Visible>false</Visible>
     </Content>
-
-    <Compile Remove="node_modules\**" />
-    <EmbeddedResource Remove="node_modules\**" />
-    <None Remove="node_modules\**" />
 
     <Content Include="nupkg.targets">
       <PackagePath>build\$(AssemblyName).targets</PackagePath>
