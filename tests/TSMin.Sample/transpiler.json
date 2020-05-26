@@ -1,0 +1,22 @@
+{
+  "typescript":
+  {
+    "minifierOptions":
+    {
+      "compress":
+      {
+        "drop_console": true
+      }
+    },
+    "sourceFiles":
+    [
+      {
+        "outputFile": "wwwroot/scripts/app.ts",
+        "include":
+        [
+          "**/*.ts"
+        ]
+      }
+    ]
+  }
+}

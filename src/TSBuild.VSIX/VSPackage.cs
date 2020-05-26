@@ -23,7 +23,6 @@ namespace Acklann.TSBuild
     {
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            _stillLoading = true;
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             vs = (EnvDTE.DTE)await GetServiceAsync(typeof(EnvDTE.DTE));
@@ -50,11 +49,7 @@ namespace Acklann.TSBuild
                     System.Diagnostics.Debug.WriteLine(message);
                     pane.Writeline(message);
 
-                    if (counter >= goal)
-                    {
-                        _watcher.Start();
-                        _stillLoading = false;
-                    }
+                    if (counter >= goal) _watcher.Start();
                 });
             }
         }
@@ -91,7 +86,6 @@ namespace Acklann.TSBuild
         #region Backing Members
 
         private EnvDTE.DTE vs;
-        private bool _stillLoading = true;
         private TypescriptWatcher _watcher;
 
         #endregion Backing Members

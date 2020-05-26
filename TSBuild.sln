@@ -14,12 +14,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".misc", ".misc", "{DB2FA3E2-1237-449A-B8EB-227188AB56BF}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		changelog.md = changelog.md
+		license.txt = license.txt
 		README.md = README.md
+		secrets.json = secrets.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSMin.Sample", "tests\TSMin.Sample\TSMin.Sample.csproj", "{EF352AE3-078E-4DB1-A73B-594D88F2FDE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.Sample", "tests\TSMin.Sample\TSBuild.Sample.csproj", "{EF352AE3-078E-4DB1-A73B-594D88F2FDE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSBuild.MSBuild", "src\TSBuild.MSBuild\TSBuild.MSBuild.csproj", "{CBD38EAD-25CE-4D52-BFC0-CC4338348E4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.MSBuild", "src\TSBuild.MSBuild\TSBuild.MSBuild.csproj", "{CBD38EAD-25CE-4D52-BFC0-CC4338348E4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E4A8EE8B-63E6-40E9-BC71-20A4AEFF0159}"
 EndProject

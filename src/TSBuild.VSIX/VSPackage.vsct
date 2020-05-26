@@ -6,7 +6,6 @@
 
   <Commands package="Package">
     <Groups>
-      <Group guid="CmdSet" id="VSToolsMenuGroup" />
       <Group guid="CmdSet" id="FileCommandGroup" />
       <Group guid="CmdSet" id="MiscellaneousGroup" />
     </Groups>
@@ -14,7 +13,7 @@
     <Menus>
       <Menu guid="CmdSet" id="MainMenu">
         <Strings>
-          <ButtonText>Typescript Compiler</ButtonText>
+          <ButtonText>TSBuild</ButtonText>
         </Strings>
       </Menu>
     </Menus>
@@ -41,12 +40,8 @@
   </Commands>
 
   <CommandPlacements>
-    <CommandPlacement guid="CmdSet" id="VSToolsMenuGroup" priority="250">
-      <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
-    </CommandPlacement>
-
     <CommandPlacement guid="CmdSet" id="MainMenu" priority="1">
-      <Parent guid="CmdSet" id="VSToolsMenuGroup" />
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
     </CommandPlacement>
 
     <CommandPlacement guid="CmdSet" id="FileCommandGroup" priority="1">
@@ -75,7 +70,6 @@
 
     <GuidSymbol name="CmdSet" value="{979e0666-7021-4ff9-8026-8fda4bb84e0f}">
       <!-- Groups -->
-      <IDSymbol name="VSToolsMenuGroup" value="0x0100" />
       <IDSymbol name="FileCommandGroup" value="0x0101" />
       <IDSymbol name="MiscellaneousGroup" value="0x0102" />
 

@@ -9,7 +9,7 @@ namespace Acklann.TSBuild.Configuration
             GenerateSourceMaps = generateSourceMaps;
         }
 
-        public const string DEFAULT_FILE_NAME = "tsminconfig.json";
+        public const string DEFAULT_FILE_NAME = "transpiler.json";
 
         public bool? Minify { get; }
 

@@ -24,7 +24,7 @@ namespace Acklann.TSBuild.MSBuild
             for (int i = 0; i < paths.Length; i++)
             {
                 Json.CopyJsonProperty(src, dest, paths[i]);
-                BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Copied {JPath} property to {Path.GetFileName(dest)}", null, nameof(CopyJsonProperty), MessageImportance.Normal));
+                BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Copied '{JPath}' property to '{Path.GetFileName(dest)}'", null, nameof(CopyJsonProperty), MessageImportance.Normal));
             }
 
             return true;
