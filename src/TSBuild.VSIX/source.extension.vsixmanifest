@@ -1,24 +1,24 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="TSBuild.VSIX.7574b707-62d9-4b69-94f6-82db1dab34c0" Version="0.0.48" Language="en-US" Publisher="Ackara" />
-    <DisplayName>TSBuild</DisplayName>
-    <Description xml:space="preserve">Helps you compile and minify typescript files on save and on build.</Description>
-    <MoreInfo>https://github.com/Ackara/TSBuild</MoreInfo>
-    <License>Resources\license.txt</License>
-    <ReleaseNotes>Resources\changelog.txt</ReleaseNotes>
-    <Icon>Resources\icon.ico</Icon>
-    <Tags>typescript compiler bundle msbuild</Tags>
-    <Preview>true</Preview>
-  </Metadata>
-  <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0, 17.0)" />
-  </Installation>
-  <Dependencies>
-  </Dependencies>
-  <Prerequisites>
-    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
-  </Prerequisites>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-  </Assets>
+    <Metadata>
+        <Identity Id="TSBuild.VSIX.7574b707-62d9-4b69-94f6-82db1dab34c0" Version="0.0.49" Language="en-US" Publisher="Ackara Acklann" />
+        <DisplayName>TSBuild</DisplayName>
+        <Description xml:space="preserve">Helps you compile and minify typescript files on save and on build.</Description>
+        <MoreInfo>https://github.com/Ackara/TSBuild</MoreInfo>
+        <License>Resources\license.txt</License>
+        <ReleaseNotes>Resources\changelog.txt</ReleaseNotes>
+        <Icon>Resources\icon.ico</Icon>
+        <Tags>typescript compiler bundle msbuild</Tags>
+        <Preview>true</Preview>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0, 17.0)" />
+    </Installation>
+    <Dependencies>
+    </Dependencies>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
+    </Prerequisites>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    </Assets>
 </PackageManifest>

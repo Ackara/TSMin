@@ -24,9 +24,9 @@ Properties {
 	$ManifestFilePath = (Join-Path $PSScriptRoot  "manifest.json");
 }
 
-Task "Default" -depends @("configure", "test", "pack");
+Task "Default" -depends @("test", "pack");
 
-Task "Publish" -depends @("clean", "version", "test", "pack", "push-nuget", "tag") `
+Task "Publish" -depends @("clean", "test", "pack", "push-nuget", "tag") `
 -description "This task compiles, test then publish all packages to their respective destination.";
 
 # ======================================================================
@@ -101,9 +101,29 @@ Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publis
 -precondition { return ($InProduction -or $InPreview ) -and (Test-Path $ArtifactsFolder -PathType Container) } `
 -action { }
 
+Task "Publish-VSIX-Package" -alias "push-vsix" -description "This task publish all VSIX packages to https://marketplace.visualstudio.com/" `
+-precondition { return (Test-Path $ArtifactsFolder -PathType Container) } `
+-action {
+	[string]$vsixPublisher = Join-Path "$($env:ProgramFiles)*" "Microsoft Visual Studio\*\*\VSSDK\VisualStudioIntegration\Tools\Bin\VsixPublisher.exe" | Resolve-Path -ErrorAction Stop; 
+	$package = Join-Path $ArtifactsFolder "*.vsix" | Get-Item;
+	$manifest = Join-Path $PSScriptRoot "publishing/visual-studio-marketplace.json" | Get-Item;
+	$pat = Get-Secret "VISUAL_STUDIO_MARKETPLACE_PAT" "vsixMarketplace";
+
+	Write-Separator "VsixPublish publish -payload '$($package.Name)'";
+	Exec { &$vsixPublisher publish -payload $package.FullName -publishManifest $manifest.FullName -personalAccessToken $pat -ignoreWarnings "VSIXValidatorWarning01,VSIXValidatorWarning02"; }
+}
+
+#-precondition { return ($InProduction -or $InPreview ) } `
 Task "Add-GitReleaseTag" -alias "tag" -description "This task tags the lastest commit with the version number." `
--precondition { return ($InProduction -or $InPreview ) } `
--depends @("restore") -action { }
+-depends @("restore") -action { 
+	$newVersion = $ManifestFilePath | Select-NcrementVersionNumber $EnvironmentName -Format "C";
+	
+	if (-not ((&git status | Out-String) -match 'nothing to commit'))
+	{
+		Write-Host "should git commit";
+	}
+	else { Write-Host "should only tag";}
+}
 
 #endregion
 
@@ -198,5 +218,28 @@ function Write-Separator ([string]$Title = "", [int]$length = 70)
 	}
 	Write-Host "`r`n$header`r`n" -ForegroundColor DarkGray;
 }
+
+function Get-Secret
+{
+	Param(
+		[Parameter(Mandatory)]
+		[string]$EnvironmentVariable,
+		[Parameter(Mandatory)]
+		[string]$JPath
+	)
+
+	$result = [Environment]::ExpandEnvironmentVariables("%$EnvironmentVariable%");
+	if ([string]::IsNullOrEmpty($result) -or ($result -eq "%$EnvironmentVariable%"))
+	{
+		$secrets = Get-Content $SecretsFilePath | ConvertFrom-Json;
+		$properties = $JPath.Split(@('.', '/'));
+		foreach($prop in $properties)
+		{
+			$result = $secrets.$prop;
+		}
+	}
+	return $result;
+}
+
 
 #endregion

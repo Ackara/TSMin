@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>TSBuild.Tranformation</AssemblyName>
+    <RootNamespace>Acklann.TSBuild.Tranformation</RootNamespace>
+  </PropertyGroup>
+
+</Project>

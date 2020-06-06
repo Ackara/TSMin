@@ -26,6 +26,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.MSBuild", "src\TSBu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E4A8EE8B-63E6-40E9-BC71-20A4AEFF0159}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSBuild.Tranformation", "src\TSBuild.Tranformation\TSBuild.Tranformation.csproj", "{686DD978-E277-4430-878C-6A07FA9E253F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{CBD38EAD-25CE-4D52-BFC0-CC4338348E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBD38EAD-25CE-4D52-BFC0-CC4338348E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBD38EAD-25CE-4D52-BFC0-CC4338348E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{686DD978-E277-4430-878C-6A07FA9E253F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{686DD978-E277-4430-878C-6A07FA9E253F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{686DD978-E277-4430-878C-6A07FA9E253F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{686DD978-E277-4430-878C-6A07FA9E253F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

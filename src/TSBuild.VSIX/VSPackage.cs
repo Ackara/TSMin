@@ -70,8 +70,8 @@ namespace Acklann.TSBuild
                     {
                         status.Text = $"{Symbol.Name}: installing {nameof(TSBuild)} package...";
                         status.Animate(true, EnvDTE.vsStatusAnimation.vsStatusAnimationBuild);
-
-                        installer.InstallPackage(null, project, nameof(TSBuild), Convert.ToString(null), false);
+                        
+                        installer.InstallPackage(null, project, nameof(TSBuild), Symbol.Version, false);
                     }
                     catch { status.Text = $"{Symbol.Name}: failed to install {nameof(TSBuild)}."; }
                     finally { status.Animate(false, EnvDTE.vsStatusAnimation.vsStatusAnimationBuild); }
