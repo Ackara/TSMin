@@ -116,13 +116,17 @@ Task "Publish-VSIX-Package" -alias "push-vsix" -description "This task publish a
 #-precondition { return ($InProduction -or $InPreview ) } `
 Task "Add-GitReleaseTag" -alias "tag" -description "This task tags the lastest commit with the version number." `
 -depends @("restore") -action { 
-	$newVersion = $ManifestFilePath | Select-NcrementVersionNumber $EnvironmentName -Format "C";
+	$version = $ManifestFilePath | Select-NcrementVersionNumber $EnvironmentName -Format "C";
 	
 	if (-not ((&git status | Out-String) -match 'nothing to commit'))
 	{
-		Write-Host "should git commit";
+		Write-Separator "git commit";
+		Exec { &git add .; }
+		Exec { &git commit -m "Increment version number to '$version'."; }
 	}
-	else { Write-Host "should only tag";}
+
+	Write-Separator "git tag '$version'";
+	Exec { &git -annotate "v$version" --message "Version $version"; }
 }
 
 #endregion
