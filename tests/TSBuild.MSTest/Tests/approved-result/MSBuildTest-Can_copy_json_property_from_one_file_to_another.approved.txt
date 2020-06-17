@@ -1,0 +1,18 @@
+-- Case 1: literal
+--------------------------------------------------
+{
+  "name": "conkit",
+  "database": "secret"
+}
+
+-- Case 2: object
+--------------------------------------------------
+{
+  "name": "conkit",
+  "database": "secret",
+  "preview": {
+    "database": "secret",
+    "webhost": "secret"
+  }
+}
+

@@ -6,7 +6,7 @@ namespace Acklann.TSBuild
 {
 	internal static partial class Sample
 	{
-		public const string FOLDER_NAME = "samples";
+		public const string FOLDER_NAME = "test-data";
 
 		public static string DirectoryName => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME);
 		public static string ProjectFolder => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME, "project");
@@ -21,6 +21,7 @@ namespace Acklann.TSBuild
                 .First(x => x.Name.Equals(fileName, StringComparison.CurrentCultureIgnoreCase));
         }
 
+		public static FileInfo GetCopyPropertyJSON() => GetFile(@"copy-property.json");
 		public static FileInfo GetError5TS() => GetFile(@"error-5.ts");
 		public static FileInfo GetIndexHTML() => GetFile(@"index.html");
 		public static FileInfo GetProjXML() => GetFile(@"proj.xml");
@@ -35,6 +36,7 @@ namespace Acklann.TSBuild
 
 		public struct File
 		{
+			public const string CopyPropertyJSON = @"copy-property.json";
 			public const string Error5TS = @"error-5.ts";
 			public const string IndexHTML = @"index.html";
 			public const string ProjXML = @"proj.xml";

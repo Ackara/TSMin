@@ -6,4 +6,8 @@
     <RootNamespace>Acklann.TSBuild.Tranformation</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TSBuild\TSBuild.csproj" />
+  </ItemGroup>
+
 </Project>

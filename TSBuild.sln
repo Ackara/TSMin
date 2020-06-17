@@ -13,6 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSBuild.VSIX", "src\TSBuild
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".misc", ".misc", "{DB2FA3E2-1237-449A-B8EB-227188AB56BF}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		changelog.md = changelog.md
 		license.txt = license.txt
@@ -26,7 +27,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.MSBuild", "src\TSBu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E4A8EE8B-63E6-40E9-BC71-20A4AEFF0159}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSBuild.Tranformation", "src\TSBuild.Tranformation\TSBuild.Tranformation.csproj", "{686DD978-E277-4430-878C-6A07FA9E253F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.Tranformation", "src\TSBuild.Tranformation\TSBuild.Tranformation.csproj", "{686DD978-E277-4430-878C-6A07FA9E253F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TSBuild.MSTest", "TSBuild.MSTest", "{847AEED9-817B-4454-AEAB-B6ACCF12BD4F}"
+	ProjectSection(SolutionItems) = preProject
+		tests\TSBuild.MSTest\test-data\copy-property.json = tests\TSBuild.MSTest\test-data\copy-property.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

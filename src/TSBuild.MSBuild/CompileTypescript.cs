@@ -1,11 +1,7 @@
 using Microsoft.Build.Framework;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Acklann.TSBuild.MSBuild
 {
@@ -22,7 +18,7 @@ namespace Acklann.TSBuild.MSBuild
             NodeJS.Install((msg, _, __) => { Log(msg); });
 
             string projectFolder = Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode);
-            string configFilePath = ConfigurationFile?.GetMetadata("FullPath") ?? Compiler.FindConfigurationFile(projectFolder);
+            string configFilePath = (ConfigurationFile?.GetMetadata("FullPath") ?? Compiler.FindConfigurationFile(projectFolder));
 
             var options = new Configuration.CompilerOptions(
                 configFilePath,

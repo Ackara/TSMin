@@ -1,0 +1,28 @@
+# To learn more about .editorconfig see https://editorconfig.org/
+
+################################
+# Core .editorconfig Options   #
+################################
+root = true
+
+# All files
+[*]
+end_of_line = crlf
+indent_style = tab
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+################################
+# .NET Conventions             #
+################################
+# To learn more see https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
+
+[*.cs]
+
+# var preferences
+csharp_style_var_when_type_is_apparent = true:silent
+
+# Naming rules
+dotnet_naming_rule.interface_should_be_begins_with_i.severity = warning
+dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface
+dotnet_naming_rule.interface_should_be_begins_with_i.style = begins_with_i

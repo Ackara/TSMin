@@ -10,17 +10,13 @@ namespace Acklann.TSBuild.Tests
         [TestMethod]
         public void Can_load_modules()
         {
-            // Arrange
-            var node_modules = Path.Combine(NodeJS.InstallationDirectory, "node_modules");
-            //if (Directory.Exists(node_modules)) Directory.Delete(node_modules, recursive: true);
-
             // Act
             NodeJS.Install();
-            var installed = NodeJS.CheckInstallation();
-            var modulesExist = Directory.Exists(node_modules);
+            var wasInstalled = NodeJS.CheckInstallation();
+            var modulesExist = Directory.Exists(NodeJS.PackageDirectory);
 
             // Assert
-            installed.ShouldBeTrue();
+            wasInstalled.ShouldBeTrue();
             modulesExist.ShouldBeTrue();
         }
     }

@@ -1,0 +1,14 @@
+{
+	"name": "conkit",
+	"nugetKey": "secret_key",
+	"master":
+	{
+		"database": "secret",
+		"webhost": "secret"
+	},
+	"preview":
+	{
+		"database": "secret",
+		"webhost": "secret"
+	}
+}

@@ -15,9 +15,10 @@ namespace Acklann.TSBuild
         {
             Assembly assembly = typeof(NodeJS).Assembly;
             InstallationDirectory = Path.Combine(Path.GetDirectoryName(assembly.Location), "tools", assembly.GetName().Version.ToString());
+            PackageDirectory = Path.Combine(InstallationDirectory, "node_modules");
         }
 
-        public static readonly string InstallationDirectory;
+        public static readonly string InstallationDirectory, PackageDirectory;
 
         private static readonly string[] _dependencies = new string[]
         {
@@ -58,7 +59,7 @@ namespace Acklann.TSBuild
         {
             int progress = 1, goal = (_dependencies.Length + 1);
 
-            if (!Directory.Exists(Path.Combine(InstallationDirectory, "node_modules")))
+            if (!Directory.Exists(PackageDirectory))
                 InstallModules(handler, ref progress, goal);
 
             if (!Directory.EnumerateFiles(InstallationDirectory, "*.js").Any())

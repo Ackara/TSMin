@@ -3,38 +3,35 @@ using System.IO;
 
 namespace Acklann.TSBuild.MSBuild
 {
-    public class CopyJsonProperty : ITask
-    {
-        [Required]
-        public ITaskItem SourceFile { get; set; }
+	public class CopyJsonProperty : ITask
+	{
+		[Required]
+		public ITaskItem SourceFile { get; set; }
 
-        [Required]
-        public ITaskItem DestinationFile { get; set; }
+		public ITaskItem DestinationFile { get; set; }
 
-        [Required]
-        public string JPath { get; set; }
+		[Required]
+		public string JPath { get; set; }
 
-        public bool Execute()
-        {
-            string src = SourceFile.GetMetadata("FullPath");
-            string dest = DestinationFile.GetMetadata("FullPath");
+		public bool Execute()
+		{
+			string src = SourceFile.GetMetadata("FullPath");
+			string dest = (DestinationFile?.GetMetadata("FullPath") ?? Path.Combine(Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode), "appsettings.json"));
 
-            string[] paths = JPath.Split(';', ',');
+			foreach (string path in JPath.Split(new char[] { ';', ',' }, System.StringSplitOptions.RemoveEmptyEntries))
+			{
+				Json.CopyJsonProperty(src, dest, path);
+				BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Copied '{path}' property to '{Path.GetFileName(dest)}'", null, nameof(CopyJsonProperty), MessageImportance.Normal));
+			}
 
-            for (int i = 0; i < paths.Length; i++)
-            {
-                Json.CopyJsonProperty(src, dest, paths[i]);
-                BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Copied '{JPath}' property to '{Path.GetFileName(dest)}'", null, nameof(CopyJsonProperty), MessageImportance.Normal));
-            }
+			return true;
+		}
 
-            return true;
-        }
+		#region ITask
 
-        #region ITask
+		public IBuildEngine BuildEngine { get; set; }
+		public ITaskHost HostObject { get; set; }
 
-        public IBuildEngine BuildEngine { get; set; }
-        public ITaskHost HostObject { get; set; }
-
-        #endregion ITask
-    }
+		#endregion ITask
+	}
 }
