@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TSBuild.MSBuild\TSBuild.MSBuild.csproj" />
+    <ProjectReference Include="..\..\src\TSBuild.CodeGeneration\TSBuild.CodeGeneration.csproj" />
     <ProjectReference Include="..\..\src\TSBuild\TSBuild.csproj" />
   </ItemGroup>
 

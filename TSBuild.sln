@@ -21,13 +21,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".misc", ".misc", "{DB2FA3E2
 		secrets.json = secrets.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.Sample", "tests\TSMin.Sample\TSBuild.Sample.csproj", "{EF352AE3-078E-4DB1-A73B-594D88F2FDE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.Sample", "tests\TSBuild.Sample\TSBuild.Sample.csproj", "{EF352AE3-078E-4DB1-A73B-594D88F2FDE2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.MSBuild", "src\TSBuild.MSBuild\TSBuild.MSBuild.csproj", "{CBD38EAD-25CE-4D52-BFC0-CC4338348E4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E4A8EE8B-63E6-40E9-BC71-20A4AEFF0159}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.Tranformation", "src\TSBuild.Tranformation\TSBuild.Tranformation.csproj", "{686DD978-E277-4430-878C-6A07FA9E253F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.CodeGeneration", "src\TSBuild.CodeGeneration\TSBuild.CodeGeneration.csproj", "{686DD978-E277-4430-878C-6A07FA9E253F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TSBuild.MSTest", "TSBuild.MSTest", "{3797B5C0-F009-429C-AC14-8D2E33866392}"
+	ProjectSection(SolutionItems) = preProject
+		tests\TSBuild.MSTest\test-data\scrap2.ts = tests\TSBuild.MSTest\test-data\scrap2.ts
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

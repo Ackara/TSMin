@@ -1,34 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>TSBuild.MSBuild</AssemblyName>
-    <RootNamespace>Acklann.TSBuild.MSBuild</RootNamespace>
-  
-<Title>TSBuild</Title>
-<Description>Helps you compile and minify typescript files on save and on build.</Description>
-<Version>0.0.49</Version>
-<AssemblyVersion>0.0.49</AssemblyVersion>
-<AssemblyFileVersion>0.0.49</AssemblyFileVersion>
-<PackageIcon>icon.png</PackageIcon>
-<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
-<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
-<PackageReleaseNotes>https://github.com/Ackara/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
-<PackageTags>typescript compiler bundle msbuild</PackageTags>
-<Authors>Ackara</Authors>
-<Company>Ackara</Company>
-<Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
-<PackageLicenseFile>license.txt</PackageLicenseFile>
-</PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>TSBuild.MSBuild</AssemblyName>
+		<RootNamespace>Acklann.TSBuild.MSBuild</RootNamespace>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TSBuild.Tranformation\TSBuild.Tranformation.csproj" />
-    <ProjectReference Include="..\TSBuild\TSBuild.csproj" />
-  </ItemGroup>
+		<Title>TSBuild</Title>
+		<Description>Helps you compile and minify typescript files on save and on build.</Description>
+		<Version>0.0.49</Version>
+		<AssemblyVersion>0.0.49</AssemblyVersion>
+		<AssemblyFileVersion>0.0.49</AssemblyFileVersion>
+		<PackageIcon>icon.png</PackageIcon>
+		<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
+		<PackageReleaseNotes>https://github.com/Ackara/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
+		<PackageTags>typescript compiler bundle msbuild</PackageTags>
+		<Authors>Ackara</Authors>
+		<Company>Ackara</Company>
+		<Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
+		<PackageLicenseFile>license.txt</PackageLicenseFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" Version="16.3.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\TSBuild.CodeGeneration\TSBuild.CodeGeneration.csproj" />
+		<ProjectReference Include="..\TSBuild\TSBuild.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Build.Framework" Version="16.3.0" />
+	</ItemGroup>
 
 
 </Project>

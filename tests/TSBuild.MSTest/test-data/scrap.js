@@ -1,0 +1,2 @@
+var TSBuild;!function(t){var n,o=function(){function t(){}return t.prototype.func=function(){(void 0).status===Foo.Status.Endangered&&console.debug("foo")},t}();t.scrap=o,(n=t.Island||(t.Island={}))[n.Stt=0]="Stt",n[n.Stx=1]="Stx",n[n.Stj=2]="Stj";var u=function(){};t.PersonBase=u}(TSBuild||(TSBuild={}));
+//# sourceMappingURL=scrap.js.map

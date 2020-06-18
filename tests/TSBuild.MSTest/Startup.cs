@@ -5,8 +5,12 @@
 
 namespace Tees.MSTest
 {
-    [TestClass]
-    public class Startup
-    {
-    }
+	[TestClass]
+	public class Startup
+	{
+		//[AssemblyInitialize]
+		public static void Setup(TestContext _)
+		{
+		}
+	}
 }
