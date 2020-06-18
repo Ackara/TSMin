@@ -50,8 +50,8 @@ namespace Acklann.TSBuild
                 StringComparison.OrdinalIgnoreCase
                 );
         }
-
-        public static void Writeline(this IVsOutputWindowPane pane, string message, params object[] args)
+		
+		public static void Writeline(this IVsOutputWindowPane pane, string message, params object[] args)
         {
 #pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
             pane?.OutputStringThreadSafe(string.Format((message + '\n'), args));
