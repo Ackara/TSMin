@@ -2,23 +2,21 @@ using System.Collections.Generic;
 
 namespace Acklann.TSBuild.CodeGeneration
 {
-	[System.Diagnostics.DebuggerDisplay("{" + nameof(FullName) + "(),nq}")]
-	public partial class TypeDeclaration : DeclarationBase
+	[System.Diagnostics.DebuggerDisplay("{" + nameof(FullName) + ",nq}")]
+	public partial class TypeDefinition : DeclarationBase
 	{
-		public TypeDeclaration() : this(null)
+		public TypeDefinition() : this(null)
 		{
 		}
 
-		
-
-		public TypeDeclaration(string name, Trait traits = Trait.None)
+		public TypeDefinition(string name, Trait traits = Trait.None)
 		{
 			Name = name;
 			Traits = traits;
 			ArrayRankSpecifiers = 0;
-			BaseList = new List<TypeDeclaration>();
+			BaseList = new List<TypeDefinition>();
 			Members = new List<MemberDeclaration>();
-			ParameterList = new List<TypeDeclaration>();
+			ParameterList = new List<TypeDefinition>();
 		}
 
 		public string Namespace { get; set; }
@@ -29,8 +27,8 @@ namespace Acklann.TSBuild.CodeGeneration
 		{
 			get => string.Concat(
 				Namespace,
-				(string.IsNullOrEmpty(Namespace) ? '\0' : '.'),
-				Name).Trim();
+				'.',
+				Name).Trim('.', ' ', '\r', '\n');
 		}
 
 		public bool HasBaseType
@@ -38,7 +36,12 @@ namespace Acklann.TSBuild.CodeGeneration
 			get => BaseType != null;
 		}
 
-		public TypeDeclaration BaseType
+		public bool HasParameters
+		{
+			get => (ParameterList != null && ParameterList.Count > 0);
+		}
+
+		public TypeDefinition BaseType
 		{
 			get
 			{
@@ -49,13 +52,13 @@ namespace Acklann.TSBuild.CodeGeneration
 			}
 		}
 
-		public List<TypeDeclaration> BaseList { get; set; }
+		public List<TypeDefinition> BaseList { get; set; }
 
-		public List<TypeDeclaration> ParameterList { get; set; }
+		public List<TypeDefinition> ParameterList { get; set; }
 
 		public List<MemberDeclaration> Members { get; set; }
 
-		public TypeDeclaration Add(MemberDeclaration member)
+		public TypeDefinition Add(MemberDeclaration member)
 		{
 			member.Owner = this;
 			Members.Add(member);
@@ -64,7 +67,19 @@ namespace Acklann.TSBuild.CodeGeneration
 			return this;
 		}
 
-		public IEnumerable<TypeDeclaration> EnumerateBaseList()
+		public TypeDefinition Add(TypeDefinition definition)
+		{
+			ParameterList.Add(definition);
+			return this;
+		}
+
+		public TypeDefinition Inherit(TypeDefinition definition)
+		{
+			BaseList.Add(definition);
+			return this;
+		}
+
+		public IEnumerable<TypeDefinition> EnumerateBaseList()
 		{
 			if (BaseList == null || BaseList.Count < 1) yield break;
 
@@ -81,21 +96,21 @@ namespace Acklann.TSBuild.CodeGeneration
 				}
 		}
 
-		public static IEnumerable<TypeDeclaration> ResolveDependencies(TypeDeclaration[] declarations)
+		public static IEnumerable<TypeDefinition> ResolveDependencies(TypeDefinition[] definitions)
 		{
-			foreach (TypeDeclaration item in declarations)
+			foreach (TypeDefinition def in definitions)
 			{
-				item.InScope = true;
-				FindReferences(item, declarations);
+				def.InScope = true;
+				FindReferences(def, definitions);
 			}
 
-			return new Enumerable(declarations);
+			return new Enumerable(definitions);
 		}
 
-		private static void FindReferences(TypeDeclaration type, TypeDeclaration[] declarations)
+		private static void FindReferences(TypeDefinition type, TypeDefinition[] definitions)
 		{
-			TypeDeclaration item;
-			foreach (TypeDeclaration reference in declarations)
+			TypeDefinition item;
+			foreach (TypeDefinition reference in definitions)
 			{
 				if (type.BaseList?.Count > 0)
 					for (int i = 0; i < type.BaseList.Count; i++)

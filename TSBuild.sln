@@ -29,11 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E4A8EE8B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.CodeGeneration", "src\TSBuild.CodeGeneration\TSBuild.CodeGeneration.csproj", "{686DD978-E277-4430-878C-6A07FA9E253F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TSBuild.MSTest", "TSBuild.MSTest", "{3797B5C0-F009-429C-AC14-8D2E33866392}"
-	ProjectSection(SolutionItems) = preProject
-		tests\TSBuild.MSTest\test-data\scrap2.ts = tests\TSBuild.MSTest\test-data\scrap2.ts
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

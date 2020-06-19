@@ -3,31 +3,31 @@ using System.Collections.Generic;
 
 namespace Acklann.TSBuild.CodeGeneration
 {
-	partial class TypeDeclaration
+	partial class TypeDefinition
 	{
-		internal class Enumerator : IEnumerator<TypeDeclaration>
+		internal class Enumerator : IEnumerator<TypeDefinition>
 		{
-			public Enumerator(TypeDeclaration[] declarations)
+			public Enumerator(TypeDefinition[] definitions)
 			{
-				n = declarations.Length;
+				n = definitions.Length;
 				_visited = new string[n];
-				_declarations = declarations;
+				_definitions = definitions;
 			}
 
-			private readonly TypeDeclaration[] _declarations;
+			private readonly TypeDefinition[] _definitions;
 			private string[] _visited;
 			private int v = 0, n = 0, a = 0;
-			private TypeDeclaration _current, _anchor;
+			private TypeDefinition _current, _anchor;
 
 			object IEnumerator.Current => _current;
-			public TypeDeclaration Current => _current;
+			public TypeDefinition Current => _current;
 
 			public bool MoveNext()
 			{
 				if (v < n && a < n)
 				{
 				top:
-					_anchor = _declarations[a];
+					_anchor = _definitions[a];
 					_current = GetDependency(_anchor);
 
 					if (_current == _anchor)
@@ -35,7 +35,7 @@ namespace Acklann.TSBuild.CodeGeneration
 						while ((v < n && a < n) && WasVisited(_current.FullName))
 						{
 							a++;
-							_current = _declarations[a];
+							_current = _definitions[a];
 						}
 						if (_current != _anchor) goto top;
 					}
@@ -50,7 +50,7 @@ namespace Acklann.TSBuild.CodeGeneration
 			public void Reset()
 			{
 				a = v = 0;
-				n = _declarations.Length;
+				n = _definitions.Length;
 				_visited = new string[n];
 			}
 
@@ -58,7 +58,7 @@ namespace Acklann.TSBuild.CodeGeneration
 			{
 			}
 
-			private TypeDeclaration GetDependency(TypeDeclaration type, TypeDeclaration caller = null)
+			private TypeDefinition GetDependency(TypeDefinition type, TypeDefinition caller = null)
 			{
 				foreach (var item in type.BaseList)
 				{
@@ -93,16 +93,16 @@ namespace Acklann.TSBuild.CodeGeneration
 			}
 		}
 
-		internal class Enumerable : IEnumerable<TypeDeclaration>
+		internal class Enumerable : IEnumerable<TypeDefinition>
 		{
-			public Enumerable(TypeDeclaration[] declarations)
+			public Enumerable(TypeDefinition[] declarations)
 			{
 				_instance = new Enumerator(declarations);
 			}
 
 			private readonly Enumerator _instance;
 
-			public IEnumerator<TypeDeclaration> GetEnumerator() => _instance;
+			public IEnumerator<TypeDefinition> GetEnumerator() => _instance;
 
 			IEnumerator IEnumerable.GetEnumerator() => _instance;
 		}

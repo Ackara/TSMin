@@ -9,7 +9,7 @@ namespace Acklann.TSBuild.CodeGeneration
 {
 	public class ILAdapter
 	{
-		public static IEnumerable<TypeDeclaration> Parse(string assemblyFile)
+		public static IEnumerable<TypeDefinition> Parse(string assemblyFile)
 		{
 			if (!File.Exists(assemblyFile)) throw new FileNotFoundException($"Could not find file at '{assemblyFile}'.");
 
@@ -21,24 +21,24 @@ namespace Acklann.TSBuild.CodeGeneration
 				}
 		}
 
-		internal static TypeDeclaration AsTypeDeclaration(TypeDefinition definition)
+		internal static TypeDefinition AsTypeDeclaration(Mono.Cecil.TypeDefinition definition)
 		{
-			var declaration = new TypeDeclaration
+			var declaration = new TypeDefinition
 			{
 				Name = Regex.Replace(definition.Name, @"`\d+", string.Empty),
-				BaseList = new List<TypeDeclaration>(),
+				BaseList = new List<TypeDefinition>(),
 				Namespace = definition.Namespace
 			};
 
 			if (definition.HasGenericParameters)
 				foreach (GenericParameter item in definition.GenericParameters)
 				{
-					declaration.ParameterList.Add(new TypeDeclaration { Namespace = item.Namespace, Name = item.Name });
+					declaration.ParameterList.Add(new TypeDefinition { Namespace = item.Namespace, Name = item.Name });
 				}
 
 			if (definition?.BaseType != null && definition.BaseType.Name != nameof(Object) && definition.BaseType.Name != nameof(Enum))
 			{
-				declaration.BaseList.Add(new TypeDeclaration()
+				declaration.BaseList.Add(new TypeDefinition()
 				{
 					Namespace = definition.BaseType.Namespace,
 					Name = definition.BaseType.Name
@@ -48,7 +48,7 @@ namespace Acklann.TSBuild.CodeGeneration
 			if (definition.HasInterfaces)
 				foreach (InterfaceImplementation item in definition.Interfaces)
 				{
-					declaration.BaseList.Add(new TypeDeclaration
+					declaration.BaseList.Add(new TypeDefinition
 					{
 						Namespace = item.InterfaceType.Namespace,
 						Name = item.InterfaceType.Name
@@ -73,7 +73,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		internal static MemberDeclaration AsMemberDeclaration(FieldDefinition definition)
 		{
-			var declaration = new MemberDeclaration(definition.Name, new TypeDeclaration());
+			var declaration = new MemberDeclaration(definition.Name, new TypeDefinition());
 			declaration.Type.Namespace = definition.FieldType.Namespace;
 			declaration.Type.Name = definition.FieldType.FullName.Replace(definition.FieldType.Namespace, string.Empty).Trim('.', ' ');
 			declaration.DefaultValue = definition.Constant;
@@ -88,7 +88,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		internal static MemberDeclaration AsMemberDeclaration(PropertyDefinition definition)
 		{
-			var declaration = new MemberDeclaration(definition.Name, new TypeDeclaration());
+			var declaration = new MemberDeclaration(definition.Name, new TypeDefinition());
 			declaration.Type.Namespace = definition.PropertyType.Namespace;
 			declaration.Type.Name = definition.PropertyType.FullName;
 			if (!string.IsNullOrEmpty(declaration.Type.Namespace)) declaration.Type.Name = definition.PropertyType.Name.Replace(definition.PropertyType.Namespace, string.Empty).Trim('.', ' ');

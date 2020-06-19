@@ -7,15 +7,16 @@ namespace Acklann.TSBuild.CodeGeneration
 		{
 		}
 
-		public MemberDeclaration(string name, TypeDeclaration type) : base()
+		public MemberDeclaration(string name, TypeDefinition type, object defaultValue = default) : base()
 		{
 			Name = name;
 			Type = type;
+			DefaultValue = defaultValue;
 		}
 
-		public TypeDeclaration Owner;
+		public TypeDefinition Owner;
 
-		public TypeDeclaration Type { get; set; }
+		public TypeDefinition Type { get; set; }
 
 		public object DefaultValue { get; set; }
 

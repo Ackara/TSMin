@@ -8,25 +8,25 @@ namespace Acklann.TSBuild.CodeGeneration
 {
 	public class Adapter
 	{
-		public static IEnumerable<TypeDeclaration> ParseFiles(params string[] sourceFiles)
+		public static IEnumerable<TypeDefinition> ParseFiles(params string[] sourceFiles)
 		{
-			TypeDeclaration[] declarations = ReadAll(sourceFiles).ToArray();
-			return TypeDeclaration.ResolveDependencies(declarations);
+			TypeDefinition[] declarations = ReadAll(sourceFiles).ToArray();
+			return TypeDefinition.ResolveDependencies(declarations);
 		}
 
-		private static IEnumerable<TypeDeclaration> ReadAll(string[] sourceFiles)
+		private static IEnumerable<TypeDefinition> ReadAll(string[] sourceFiles)
 		{
 			foreach (string sourceFile in sourceFiles)
 				if (File.Exists(sourceFile))
 				{
 					if (sourceFile.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
 					{
-						foreach (TypeDeclaration item in CSharpAdapter.ReadFile(sourceFile))
+						foreach (TypeDefinition item in CSharpAdapter.ReadFile(sourceFile))
 							yield return item;
 					}
 					else if (sourceFile.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
 					{
-						foreach (TypeDefinition item in ModuleDefinition.ReadModule(sourceFile).Types.Where(x => x.IsPublic))
+						foreach (Mono.Cecil.TypeDefinition item in ModuleDefinition.ReadModule(sourceFile).Types.Where(x => x.IsPublic))
 							yield return ILAdapter.AsTypeDeclaration(item);
 					}
 					else throw new NotSupportedException($"'{Path.GetExtension(sourceFile)}' files are not supported yet.");

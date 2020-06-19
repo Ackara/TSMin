@@ -64,7 +64,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			return (index >= 0 ? text.Substring(index + 1) : text).Trim();
 		}
 
-		internal static string ToDataType(TypeDeclaration definition, TypescriptGeneratorSettings settings)
+		internal static string ToTypeName(this TypeDefinition definition, TypescriptGeneratorSettings settings)
 		{
 			bool isPrimitive = true;
 
@@ -104,21 +104,22 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 					break;
 
 				default:
-					name = (definition.InScope ? definition.GetName(settings) : "any");
+					name = (definition.InScope ? GetName(definition, settings) : "any");
 					isPrimitive = false;
 					break;
 			}
 
 			if (settings.UseKnockoutJs)
+			{
 				if (isPrimitive || definition.IsEnum)
 					return (definition.IsCollection ? $"KnockoutObservableArray<{name}>" : $"KnockoutObservable<{name}>");
 				else
 					return (definition.IsCollection ? $"KnockoutObservableArray<{name}>" : name);
-			else
-				return (definition.IsCollection ? $"Array<{name}>" : name);
+			}
+			else return (definition.IsCollection ? $"Array<{name}>" : name);
 		}
 
-		internal static string GetName(this TypeDeclaration definition, TypescriptGeneratorSettings settings)
+		internal static string GetName(this TypeDefinition definition, TypescriptGeneratorSettings settings)
 		{
 			string prefix = (!definition.IsEnum && !string.IsNullOrEmpty(settings.Prefix) ? settings.Prefix : string.Empty);
 			string suffix = (!definition.IsEnum && !string.IsNullOrEmpty(settings.Suffix) ? settings.Suffix : string.Empty);

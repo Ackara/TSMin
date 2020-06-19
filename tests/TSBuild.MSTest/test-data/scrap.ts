@@ -23,6 +23,10 @@ namespace TSBuild {
 		Stj
 	}
 
+	export interface ICommand<T> {
+		execute(): T;
+	}
+
 	export abstract class PersonBase {
 		constructor() {
 		}
@@ -30,4 +34,29 @@ namespace TSBuild {
 		public id: number;
 		public name: string;
 	}
+
+	
+
+	class Jeff extends PersonBase implements ICommand<any> {
+		constructor() {
+			super();
+		}
+
+		execute(): any {
+
+		}
+	}
+
+	interface Foo extends PersonBase {
+
+	}
+
+	class Dale implements Foo {
+		constructor() {
+			
+		}
+        public id: number;
+        public name: string;
+	}
+
 }

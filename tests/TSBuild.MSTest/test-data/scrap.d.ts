@@ -21,11 +21,23 @@ declare namespace Foo {
 		whiskers: number;
 	}
 
-	class Lion implements Feline {
-		whiskers: number;
-		name: string;
-		legs: number;
-		status: Status;
-		kills: number;
+	interface Pathera extends Animal {
+		stealth: number;
+	}
+
+	interface Lion extends Feline, Pathera {
+	}
+
+
+	interface Skill<T, Animal> {
+		perform(arg: Animal): T;
+	}
+
+
+	interface AfricanLion extends Lion, Skill<any, Lion> {
+
 	}
 }
+
+
+

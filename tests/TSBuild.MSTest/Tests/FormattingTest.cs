@@ -17,7 +17,7 @@ namespace Acklann.TSBuild.Tests
 		[DataRow("PascalCase", "pascalCase")]
 		public void Can_convert_text_to_camel_case(string text, string expected)
 		{
-			var result = CodeGeneration.FormatExtensions.ToCamel(text);
+			var result = CodeGeneration.Generators.FormatExtensions.ToCamel(text);
 			ShouldBeStringTestExtensions.ShouldBe(result, expected);
 		}
 
@@ -32,7 +32,7 @@ namespace Acklann.TSBuild.Tests
 		[DataRow("PascalCase", "PascalCase")]
 		public void Can_convert_text_to_pascal_case(string text, string expected)
 		{
-			var result = CodeGeneration.FormatExtensions.ToPascal(text);
+			var result = CodeGeneration.Generators.FormatExtensions.ToPascal(text);
 			ShouldBeStringTestExtensions.ShouldBe(result, expected);
 		}
 	}

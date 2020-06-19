@@ -13,7 +13,7 @@ namespace Acklann.TSBuild.Tests
 		[TestMethod]
 		public void Can_parse_csharp_enum()
 		{
-			TypeDeclaration result;
+			TypeDefinition result;
 
 			result = CreateTypeFromSnippet("[ATTR]enum Foo { [Col]A, [Col]B }");
 			result.Name.ShouldBe("Foo");
@@ -33,7 +33,7 @@ namespace Acklann.TSBuild.Tests
 		[TestMethod]
 		public void Can_parse_csharp_type()
 		{
-			TypeDeclaration result;
+			TypeDefinition result;
 
 			result = CreateTypeFromSnippet("class Foo<T> {}");
 			result.ParameterList[0].Name.ShouldBe("T");
@@ -133,7 +133,7 @@ namespace Acklann.TSBuild.Tests
 			return sut.Definition.Members[0];
 		}
 
-		private static TypeDeclaration CreateTypeFromSnippet(string snippet)
+		private static TypeDefinition CreateTypeFromSnippet(string snippet)
 		{
 			if (string.IsNullOrEmpty(snippet)) throw new ArgumentNullException(nameof(snippet));
 

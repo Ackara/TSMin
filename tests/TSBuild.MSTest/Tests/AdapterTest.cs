@@ -26,15 +26,15 @@ namespace Acklann.TSBuild.Tests
 
 			// Assert
 			results.ToString().ShouldNotBeNullOrEmpty();
-			Diff.Approve(results, ".txt", label);
+			Diff.Approve(results, ".txt", null, label);
 		}
 
 		[DataTestMethod]
 		[DynamicData(nameof(GetUnorderedTypes), DynamicDataSourceType.Method)]
-		public void Can_resolve_type_dependencies(TypeDeclaration[] declarations, string expected)
+		public void Can_resolve_type_dependencies(TypeDefinition[] declarations, string expected)
 		{
 			// Arrange + Act
-			var types = TypeDeclaration.ResolveDependencies(declarations).Select(x => x.Name);
+			var types = TypeDefinition.ResolveDependencies(declarations).Select(x => x.Name);
 			var results = string.Join(" ", types);
 
 			// Assert
@@ -45,35 +45,35 @@ namespace Acklann.TSBuild.Tests
 
 		private static IEnumerable<object[]> GetUnorderedTypes()
 		{
-			var a = new TypeDeclaration("a", (Trait.Public | Trait.InScope));
-			var b = new TypeDeclaration("b", (Trait.Public | Trait.InScope));
-			var c = new TypeDeclaration("c", (Trait.Public | Trait.InScope));
-			var d = new TypeDeclaration("d", (Trait.Public | Trait.InScope));
-			var e = new TypeDeclaration("e", (Trait.Public | Trait.InScope));
-			var f = new TypeDeclaration("f", (Trait.Public | Trait.InScope));
+			var a = new TypeDefinition("a", (Trait.Public | Trait.InScope));
+			var b = new TypeDefinition("b", (Trait.Public | Trait.InScope));
+			var c = new TypeDefinition("c", (Trait.Public | Trait.InScope));
+			var d = new TypeDefinition("d", (Trait.Public | Trait.InScope));
+			var e = new TypeDefinition("e", (Trait.Public | Trait.InScope));
+			var f = new TypeDefinition("f", (Trait.Public | Trait.InScope));
 
-			void clear(TypeDeclaration t) { t.BaseList.Clear(); t.Members.Clear(); }
+			void clear(TypeDefinition t) { t.BaseList.Clear(); t.Members.Clear(); }
 			void reset() { clear(a); clear(b); clear(c); clear(d); clear(e); clear(f); }
-			MemberDeclaration field(TypeDeclaration t) => new MemberDeclaration(t.Name, new TypeDeclaration(t.Name) { Traits = Trait.Public });
+			MemberDeclaration field(TypeDefinition t) => new MemberDeclaration(t.Name, new TypeDefinition(t.Name) { Traits = Trait.Public });
 
 			// =================================== //
 
-			yield return new object[] { new TypeDeclaration[] { a, b, c }, "a b c" };
+			yield return new object[] { new TypeDefinition[] { a, b, c }, "a b c" };
 
 			reset();
 			a.BaseList.Add(b);
 			b.BaseList.Add(c);
-			yield return new object[] { new TypeDeclaration[] { a, b, c }, "c b a" };
+			yield return new object[] { new TypeDefinition[] { a, b, c }, "c b a" };
 
 			reset();
 			a.Members.Add(field(c));
 			b.Members.Add(field(c));
-			yield return new object[] { new TypeDeclaration[] { a, b, c }, "c a b" };
+			yield return new object[] { new TypeDefinition[] { a, b, c }, "c a b" };
 
 			reset();
 			a.BaseList.Add(b);
 			a.Members.Add(field(c));
-			yield return new object[] { new TypeDeclaration[] { a, b, c }, "b c a" };
+			yield return new object[] { new TypeDefinition[] { a, b, c }, "b c a" };
 		}
 
 		private static IEnumerable<object[]> GetSourceFiles()
@@ -84,7 +84,7 @@ namespace Acklann.TSBuild.Tests
 			yield break;
 		}
 
-		private static string Serialize(TypeDeclaration type)
+		private static string Serialize(TypeDefinition type)
 		{
 			var builder = new StringBuilder();
 			builder.AppendLine($"{type.Name}");

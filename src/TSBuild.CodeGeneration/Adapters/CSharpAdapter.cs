@@ -10,21 +10,21 @@ namespace Acklann.TSBuild.CodeGeneration
 {
 	public class CSharpAdapter : CSharpSyntaxWalker
 	{
-		public CSharpAdapter() : this(new TypeDeclaration())
+		public CSharpAdapter() : this(new TypeDefinition())
 		{
 		}
 
-		public CSharpAdapter(TypeDeclaration definition)
+		public CSharpAdapter(TypeDefinition definition)
 		{
 			_definition = definition;
 		}
 
-		public TypeDeclaration Definition
+		public TypeDefinition Definition
 		{
 			get => _definition;
 		}
 
-		public static IEnumerable<TypeDeclaration> ReadFile(string filePath)
+		public static IEnumerable<TypeDefinition> ReadFile(string filePath)
 		{
 			if (!File.Exists(filePath)) throw new FileNotFoundException($"Could not find file at '{filePath}'.");
 
@@ -37,7 +37,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 				foreach (SyntaxNode item in declarations)
 				{
-					var adapter = new CSharpAdapter(new TypeDeclaration());
+					var adapter = new CSharpAdapter(new TypeDefinition());
 					adapter.Visit(node);
 					yield return adapter._definition;
 				}
@@ -88,7 +88,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
 		{
-			var property = new MemberDeclaration(node.Identifier.ValueText.Trim(), new TypeDeclaration());
+			var property = new MemberDeclaration(node.Identifier.ValueText.Trim(), new TypeDefinition());
 			property.Traits |= node.Modifiers.GetTraits();
 			if (node.ChildNodes().FirstOrDefault(x => x.IsKind(SyntaxKind.ExplicitInterfaceSpecifier)) != null) property.Traits |= Trait.Interface;
 
@@ -101,7 +101,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		public override void VisitFieldDeclaration(FieldDeclarationSyntax node)
 		{
-			var type = new TypeDeclaration();
+			var type = new TypeDefinition();
 
 			var unwantedNodes = from x in node.ChildNodes()
 								where x.IsKind(SyntaxKind.AttributeList)
@@ -119,7 +119,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		public override void VisitEnumMemberDeclaration(EnumMemberDeclarationSyntax node)
 		{
-			var member = new MemberDeclaration(node.Identifier.ValueText, new TypeDeclaration() { Namespace = nameof(System), Name = nameof(Int32), Traits = Trait.Primitive | Trait.Enum });
+			var member = new MemberDeclaration(node.Identifier.ValueText, new TypeDefinition() { Namespace = nameof(System), Name = nameof(Int32), Traits = Trait.Primitive | Trait.Enum });
 			object variable = node.EqualsValue?.Value.ToFullString().Trim();
 			bool isInt = int.TryParse((string)variable, out int constant);
 
@@ -131,7 +131,7 @@ namespace Acklann.TSBuild.CodeGeneration
 			base.VisitEnumMemberDeclaration(node);
 		}
 
-		private static void SetValues(TypeDeclaration type, CSharpSyntaxNode node)
+		private static void SetValues(TypeDefinition type, CSharpSyntaxNode node)
 		{
 			SyntaxNode temp = node.ChildNodes().FirstOrDefault(x => x.IsKind(SyntaxKind.QualifiedName));
 			if (temp == null) temp = node;
@@ -165,7 +165,7 @@ namespace Acklann.TSBuild.CodeGeneration
 				if (Pattern.EnumerableType.IsMatch(generic.ToFullString())) type.Traits |= Trait.Enumerable;
 				foreach (CSharpSyntaxNode item in generic.TypeArgumentList.ChildNodes())
 				{
-					var arg = new TypeDeclaration();
+					var arg = new TypeDefinition();
 					type.ParameterList.Add(arg);
 					SetValues(arg, item);
 				}
@@ -181,23 +181,23 @@ namespace Acklann.TSBuild.CodeGeneration
 			}
 		}
 
-		private static void SetValues(TypeDeclaration type, BaseListSyntax baseList)
+		private static void SetValues(TypeDefinition type, BaseListSyntax baseList)
 		{
 			if (baseList != null)
 				foreach (SimpleBaseTypeSyntax item in baseList.ChildNodes().Where(x => x.IsKind(SyntaxKind.SimpleBaseType)))
 				{
-					var baseType = new TypeDeclaration();
+					var baseType = new TypeDefinition();
 					SetValues(baseType, item.Type);
 					type.BaseList.Add(baseType);
 				}
 		}
 
-		private static void SetValues(TypeDeclaration type, TypeParameterListSyntax args)
+		private static void SetValues(TypeDefinition type, TypeParameterListSyntax args)
 		{
 			if (args != null)
 				foreach (TypeParameterSyntax item in args.ChildNodes())
 				{
-					type.ParameterList.Add(new TypeDeclaration(item.Identifier.ValueText.Trim()));
+					type.ParameterList.Add(new TypeDefinition(item.Identifier.ValueText.Trim()));
 				}
 		}
 
@@ -217,7 +217,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 			foreach (var item in baseList)
 			{
-				_definition.BaseList.Add(new TypeDeclaration
+				_definition.BaseList.Add(new TypeDefinition
 				{
 					Name = shortName(item.ToFullString())
 				});
@@ -226,7 +226,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		#region Private Members
 
-		private TypeDeclaration _definition;
+		private TypeDefinition _definition;
 
 		#endregion Private Members
 	}

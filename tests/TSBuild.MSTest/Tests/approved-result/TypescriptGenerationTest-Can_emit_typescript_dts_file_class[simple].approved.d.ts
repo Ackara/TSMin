@@ -1,6 +1,5 @@
-interface Animal 
-{
-	name: string;
-	legs: number;
-	status: Status;
+﻿interface Animal {
+	name?: string;
+	legs?: number;
+	status?: any;
 }
