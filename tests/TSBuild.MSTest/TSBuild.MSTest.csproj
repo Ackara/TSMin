@@ -21,6 +21,10 @@
 <PackageLicenseFile>license.txt</PackageLicenseFile>
 </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Acklann.Diffa" Version="1.1.1" />
     <PackageReference Include="FakeItEasy" Version="6.1.0" />

@@ -184,7 +184,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			}
 		}
 
-		public void WriteIndent(string content)
+		public void WriteIndent(string content = default)
 		{
 			Write(string.Concat(GetIndent(), content));
 		}

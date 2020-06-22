@@ -1,0 +1,43 @@
+== bundle-1 (app.js)
+==================================================
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var TSMin;
+(function (TSMin) {
+    var Observable = /** @class */ (function () {
+        function Observable() {
+            this.isSelected = false;
+        }
+        return Observable;
+    }());
+    TSMin.Observable = Observable;
+})(TSMin || (TSMin = {}));
+/// <reference path="Observable.ts" />
+var TSMin;
+(function (TSMin) {
+    var Car = /** @class */ (function (_super) {
+        __extends(Car, _super);
+        function Car() {
+            var _this = _super.call(this) || this;
+            _this.make = "Forte";
+            _this.year = 2019;
+            return _this;
+        }
+        return Car;
+    }(TSMin.Observable));
+    TSMin.Car = Car;
+})(TSMin || (TSMin = {}));
+
+
+
