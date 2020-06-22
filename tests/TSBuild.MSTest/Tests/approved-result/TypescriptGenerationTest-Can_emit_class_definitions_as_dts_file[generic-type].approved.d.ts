@@ -2,7 +2,7 @@
 	name?: string;
 }
 
-interface Skill<T> {
+interface Skill<any> {
 }
 
 interface AfricanLion extends Predator, Skill<any> {

@@ -14,19 +14,22 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 
 		public void WriteReferencePaths()
 		{
-			foreach (string refPath in _settings.References)
-				if (!string.IsNullOrEmpty(refPath))
-				{
-					WriteLine($"/// <reference path=\"{refPath}\" />");
-				}
+			if (_settings.References != null && _settings.References.Length > 0)
+			{
+				foreach (string refPath in _settings.References)
+					if (!string.IsNullOrEmpty(refPath))
+					{
+						WriteLine($"/// <reference path=\"{refPath}\" />");
+					}
+				WriteLine();
+			}
 		}
 
-		public void WriteNamespaceStart(bool forDeclarationFile = false)
+		public void WriteNamespaceStart()
 		{
 			if (_settings.HasNamespace)
 			{
-				if (forDeclarationFile) WriteLine($"declare namespace {_settings.Namespace} {{");
-				else WriteLine($"namespace {_settings.Namespace} {{");
+				WriteLine($"namespace {_settings.Namespace} {{");
 				PushIndent();
 			}
 		}
@@ -40,43 +43,14 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			}
 		}
 
-		public void WriteClassStart(TypeDefinition definition, bool forDeclarationFile = false)
-		{
-			Write(GetIndent());
-			if (forDeclarationFile) Write("export ");
-			if (_settings.UseAbstract && definition.IsClass) Write("abstract ");
-			Write(definition.IsInterface ? "interface " : "class ");
-			WriteTypeSignature(definition);
-			WriteTypeBaseList(definition, forDeclarationFile);
-			WriteLine(" {");
-
-			PushIndent();
-		}
-
-		public void WriteProperty(MemberDeclaration member, bool forDeclarationFile = false)
+		public void WriteProperty(MemberDeclaration member, bool optional = false, bool knockout = false)
 		{
 			Write(GetIndent());
 			Write(member.Name.ToCamel());
-			if (forDeclarationFile) Write('?');
+			if (optional) Write('?');
 			Write(": ");
-			WriteDataType(member.Type);
+			Write(GetDataType(member.Type, _settings.Prefix, _settings.Suffix, knockout));
 			WriteLine(';');
-		}
-
-		public void WriteKnockoutPropertyInitialization(MemberDeclaration member)
-		{
-			string name = member.Name.ToCamel();
-
-			Write(GetIndent());
-			WriteLine($"this.{name} = ko.observable((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
-		}
-
-		public void WriteKnockoutPropertyAssignment(MemberDeclaration member)
-		{
-			string name = member.Name.ToCamel();
-
-			Write(GetIndent());
-			WriteLine($"this.{name}((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
 		}
 
 		public void WriteEnumValue(MemberDeclaration member)
@@ -86,7 +60,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			if (member.DefaultValue != null) Write($" = {member.DefaultValue}");
 		}
 
-		public void WriteDataType(TypeDefinition definition)
+		internal static string GetDataType(TypeDefinition definition, string prefix, string suffix, bool knockout = false)
 		{
 			bool isPrimitive = true;
 
@@ -126,24 +100,24 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 					break;
 
 				default:
-					name = (definition.InScope ? NormalizeName(definition) : "any");
+					name = (definition.InScope ? NormalizeName(definition, prefix, suffix) : "any");
 					isPrimitive = false;
 					break;
 			}
 
-			if (_settings.UseKnockoutJs)
+			if (knockout)
 			{
 				if (isPrimitive || definition.IsEnum)
-					Write(definition.IsCollection ? $"KnockoutObservableArray<{name}>" : $"KnockoutObservable<{name}>");
+					return (definition.IsCollection ? $"KnockoutObservableArray<{name}>" : $"KnockoutObservable<{name}>");
 				else
-					Write(definition.IsCollection ? $"KnockoutObservableArray<{name}>" : name);
+					return (definition.IsCollection ? $"KnockoutObservableArray<{name}>" : name);
 			}
-			else Write(definition.IsCollection ? $"Array<{name}>" : name);
+			else return (definition.IsCollection ? $"Array<{name}>" : name);
 		}
 
 		public void WriteTypeSignature(TypeDefinition definition)
 		{
-			Write(NormalizeName(definition));
+			Write(NormalizeName(definition, _settings));
 			if (definition.HasParameters)
 			{
 				Write('<');
@@ -154,7 +128,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 				{
 					type = definition.ParameterList[i];
 
-					if (type.InScope) Write(NormalizeName(type));
+					if (type.InScope) Write(NormalizeName(type, _settings));
 					else Write("any");
 
 					if (i < (n - 1)) Write(", ");
@@ -163,23 +137,33 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			}
 		}
 
-		public void WriteTypeBaseList(TypeDefinition definition, bool asDeclarationFile = false)
+		public void WriteTypeBaseList(TypeDefinition definition)
 		{
 			if (definition?.BaseList?.Count > 0)
 			{
-				int i = 0, n = definition.BaseList.Count;
-				if (definition.HasBaseType && asDeclarationFile == false)
+				bool onFirstItem = true;
+				foreach (TypeDefinition def in definition.BaseList.Where(x => x.IsClass))
 				{
-					Write(" extends ");
-					WriteTypeSignature(definition.BaseType);
-					i++;
+					if (onFirstItem)
+					{
+						Write(" extends ");
+						onFirstItem = false;
+					}
+					else Write(", ");
+					WriteTypeSignature(def);
 				}
 
-				Write(asDeclarationFile ? " extends " : " implements ");
-				for (; i < n; i++)
+				onFirstItem = true;
+				foreach (TypeDefinition def in definition.BaseList.Where(x => x.IsInterface))
 				{
-					WriteTypeSignature(definition.BaseList[i]);
-					if (i < (n - 1)) Write(", ");
+					if (onFirstItem)
+					{
+						if (definition.IsClass) Write(" implements ");
+						else Write(" extends ");
+						onFirstItem = false;
+					}
+					else Write(", ");
+					WriteTypeSignature(def);
 				}
 			}
 		}
@@ -193,11 +177,6 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 		{
 			PopIndent();
 			WriteLine(string.Concat(GetIndent(), '}'));
-		}
-
-		public void Emit(string content)
-		{
-			base.Write(string.Concat(GetIndent(), content));
 		}
 
 		public void EmitLine(string content)
@@ -220,17 +199,24 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 		private int _depth;
 		private readonly TypescriptGeneratorSettings _settings;
 
-		private string NormalizeName(TypeDefinition definition)
+		private static string NormalizeName(TypeDefinition definition, TypescriptGeneratorSettings settings)
 		{
-			string prefix = (!definition.IsEnum && !string.IsNullOrEmpty(_settings.Prefix) ? _settings.Prefix : string.Empty);
-			string suffix = (!definition.IsEnum && !string.IsNullOrEmpty(_settings.Suffix) ? _settings.Suffix : string.Empty);
+			string prefix = (!definition.IsEnum && !string.IsNullOrEmpty(settings.Prefix) ? settings.Prefix : string.Empty);
+			string suffix = (!definition.IsEnum && !string.IsNullOrEmpty(settings.Suffix) ? settings.Suffix : string.Empty);
+			return NormalizeName(definition, prefix, suffix);
+		}
 
+		private static string NormalizeName(TypeDefinition definition, string prefix, string suffix)
+		{
+			prefix = (!definition.IsEnum && !string.IsNullOrEmpty(prefix) ? prefix : string.Empty);
+			suffix = (!definition.IsEnum && !string.IsNullOrEmpty(suffix) ? suffix : string.Empty);
 			return string.Concat(prefix, definition.Name.ToPascal(), suffix).Trim();
 		}
 
 		private string GetIndent()
 		{
-			return string.Concat(Enumerable.Repeat('\t', _depth)) ?? string.Empty;
+			if (_depth <= 0) return string.Empty;
+			else return string.Concat(Enumerable.Repeat('\t', _depth)) ?? string.Empty;
 		}
 
 		#endregion Backing Members

@@ -13,7 +13,7 @@ namespace Acklann.TSBuild.Tests
 	public class TypescriptGenerationTest
 	{
 		[TestMethod]
-		public void Can_emit_typescript_dts_file_enum()
+		public void Can_emit_enum_definition_as_as_dts_file()
 		{
 			// Arrange
 			var declaration = new TypeDefinition("Foo", (Trait.Public | Trait.Enum))
@@ -30,16 +30,16 @@ namespace Acklann.TSBuild.Tests
 		}
 
 		[DataTestMethod]
-		[DynamicData(nameof(GetClassDefinitions), DynamicDataSourceType.Method)]
-		public void Can_emit_typescript_dts_file_class(string label, TypeDefinition[] args)
+		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
+		public void Can_emit_class_definitions_as_dts_file(string label, TypeDefinition[] args)
 		{
 			string result = UTF8(DeclarationFileGenerator.EmitDeclarationFile(args));
 			Diff.Approve(result, Encoding.UTF8, "d.ts", label);
 		}
 
 		[DataTestMethod]
-		[DynamicData(nameof(GetClassDefinitions), DynamicDataSourceType.Method)]
-		public void Can_emit_typescript_file_classes(string label, TypeDefinition[] args)
+		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
+		public void Can_emit_class_definitions_as_typescript_models(string label, TypeDefinition[] args)
 		{
 			var config = new TypescriptGeneratorSettings("Foo", suffix: "Base");
 			string result = UTF8(TypescriptGenerator.Emit(config, args));
@@ -47,17 +47,17 @@ namespace Acklann.TSBuild.Tests
 		}
 
 		[DataTestMethod]
-		[DynamicData(nameof(GetClassDefinitions), DynamicDataSourceType.Method)]
-		public void Can_emit_knockout_js_models(string label, TypeDefinition[] args)
+		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
+		public void Can_emit_definition_as_knockout_js_models(string label, TypeDefinition[] args)
 		{
 			var config = new TypescriptGeneratorSettings("App", useAbstract: true, koJs: true, references: new string[] { "../../../node_modules/@types/knockout/index.d.ts" });
-			string result = UTF8(TypescriptGenerator.Emit(config, args));
+			string result = UTF8(KnockoutJsGenerator.Emit(config, args));
 			Diff.Approve(result, Encoding.UTF8, "ts", label);
 		}
 
 		#region Backing Members
 
-		private static IEnumerable<object[]> GetClassDefinitions()
+		private static IEnumerable<object[]> GetDefinitions()
 		{
 			var status = new TypeDefinition("Status", (Trait.Public | Trait.Enum))
 				.Add(new MemberDeclaration("Striving", new TypeDefinition("int"), 5))
@@ -85,10 +85,16 @@ namespace Acklann.TSBuild.Tests
 				.Inherit(animal)
 				.Add(new MemberDeclaration("Stealth", new TypeDefinition("int")));
 
-			var lion = new TypeDefinition("Lion", Trait.Public)
+			var lion = new TypeDefinition("Lion", (Trait.Public | Trait.Class))
 				.Inherit(feline)
 				.Inherit(pathera)
-				.Add(new MemberDeclaration("Kills", new TypeDefinition("int")));
+				.Add(new MemberDeclaration("Name", new TypeDefinition("string")))
+				.Add(new MemberDeclaration("Legs", new TypeDefinition("int")))
+				.Add(new MemberDeclaration("Status", status))
+				.Add(new MemberDeclaration("Kills", new TypeDefinition("int")))
+				.Add(new MemberDeclaration("Whiskers", new TypeDefinition("int")))
+				.Add(new MemberDeclaration("Stealth", new TypeDefinition("int")))
+				;
 
 			yield return new object[]
 			{
@@ -101,10 +107,10 @@ namespace Acklann.TSBuild.Tests
 			var skill = new TypeDefinition("Skill", (Trait.Public | Trait.Interface))
 				.Add(new TypeDefinition("T"));
 
-			var predator = new TypeDefinition("Predator", Trait.Public)
+			var predator = new TypeDefinition("Predator", (Trait.Public | Trait.Class))
 				.Add(new MemberDeclaration("Name", new TypeDefinition("string")));
 
-			var africanLion = new TypeDefinition("AfricanLion", Trait.Public)
+			var africanLion = new TypeDefinition("AfricanLion", (Trait.Public | Trait.Class))
 				.Inherit(predator)
 				.Inherit(skill)
 				.Add(new MemberDeclaration("Region", new TypeDefinition("string")));

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Acklann.TSBuild.CodeGeneration.Generators
 {
-	public class TypescriptGenerator
+	public class KnockoutJsGenerator
 	{
 		public static byte[] Emit(params string[] sourceFiles) => Emit(default, sourceFiles);
 
@@ -29,11 +29,17 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 					definition = definitions[i];
 
 					if (definition.IsEnum)
-						EmitEnumDeclaration(writer, definition, settings);
+					{
+						TypescriptGenerator.EmitEnumDeclaration(writer, definition, settings);
+					}
 					else if (definition.IsInterface)
-						EmitInterfaceDeclaration(writer, definition, settings);
+					{
+						TypescriptGenerator.EmitInterfaceDeclaration(writer, definition, settings);
+					}
 					else
+					{
 						EmitClassDeclaration(writer, definition, settings);
+					}
 
 					if (i < (n - 1)) writer.WriteLine();
 				}
@@ -47,72 +53,52 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 
 		// ==================== BACKING MEMBERS ==================== //
 
-		internal static void EmitEnumDeclaration(CodeWriter writer, TypeDefinition definition, TypescriptGeneratorSettings settings)
-		{
-			writer.WriteIndent($"export enum {definition.Name.ToPascal()} {{");
-			writer.WriteLine();
-			writer.PushIndent();
-
-			MemberDeclaration member;
-			int n = definition.Members.Count;
-			for (int i = 0; i < n; i++)
-			{
-				member = definition.Members[i];
-
-				writer.EmitLine(string.Concat(
-					member.Name,
-					(member.DefaultValue == default ? string.Empty : $" = {member.DefaultValue}"),
-					(i < (n - 1) ? "," : string.Empty)));
-			}
-
-			writer.PopIndent();
-			writer.EmitLine("}");
-		}
-
-		internal static void EmitClassDeclaration(CodeWriter writer, TypeDefinition definition, TypescriptGeneratorSettings settings)
+		private static void EmitClassDeclaration(CodeWriter writer, TypeDefinition definition, TypescriptGeneratorSettings settings)
 		{
 			writer.WriteIndent("export ");
 			if (settings.UseAbstract && definition.IsClass) writer.Write("abstract ");
 			writer.Write("class ");
 			writer.WriteTypeSignature(definition);
 			writer.WriteTypeBaseList(definition);
-
 			writer.WriteLine(" {");
 			writer.PushIndent();
 
-			foreach (MemberDeclaration member in definition.Members)
-			{
-				writer.WriteProperty(member);
-			}
+			// --- Contructor --- //
 
-			writer.PopIndent();
-			writer.WriteIndent("}");
+			writer.WriteIndent($"constructor(model?: any) {{");
 			writer.WriteLine();
-		}
-
-		internal static void EmitInterfaceDeclaration(CodeWriter writer, TypeDefinition definition, TypescriptGeneratorSettings settings)
-		{
-			writer.WriteIndent("export interface ");
-			writer.WriteTypeSignature(definition);
-
-			if (definition?.BaseList?.Count > 0)
-			{
-				var onFirstItem = true;
-				writer.Write(" extends ");
-				foreach (TypeDefinition def in definition.BaseList)
-				{
-					if (onFirstItem) onFirstItem = false;
-					else writer.Write(", ");
-
-					writer.WriteTypeSignature(def);
-				}
-			}
-			writer.WriteLine(" {");
 			writer.PushIndent();
 
 			foreach (MemberDeclaration member in definition.Members)
 			{
-				writer.WriteProperty(member, optional: true);
+				string name = member.Name.ToCamel();
+				writer.WriteIndent($"this.{name} = ko.observable((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
+				writer.WriteLine();
+			}
+			writer.CloseBrace();
+			writer.WriteLine();
+
+			// --- Copy Function --- //
+
+			writer.WriteIndent($"public copy(model: any) {{");
+			writer.WriteLine();
+			writer.PushIndent();
+
+			foreach (MemberDeclaration member in definition.Members)
+			{
+				string name = member.Name.ToCamel();
+				writer.WriteIndent();
+				writer.WriteLine($"this.{name}((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
+			}
+			writer.CloseBrace();
+			writer.WriteLine();
+
+			// --- Properties --- //
+
+			foreach (MemberDeclaration member in definition.Members)
+			{
+				//writer.WriteIndent($"{member.Name.ToCamel()}: {member.Type.ToTypeName(settings)};");
+				writer.WriteProperty(member, knockout: true);
 			}
 
 			writer.PopIndent();

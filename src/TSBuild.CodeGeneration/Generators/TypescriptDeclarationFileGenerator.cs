@@ -19,11 +19,9 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			using (var stream = new MemoryStream())
 			using (var writer = new CodeWriter(stream, Encoding.UTF8, settings))
 			{
-				if (settings.HasNamespace)
-				{
-					writer.WriteLine($"declare namespace {settings.Namespace} {{");
-					writer.PushIndent();
-				}
+				writer.WriteReferencePaths();
+				if (settings.HasNamespace) writer.Write("declare ");
+				writer.WriteNamespaceStart();
 
 				TypeDefinition definition;
 				int n = definitions.Length;
@@ -34,7 +32,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 					if (definition.IsEnum)
 						GenerateEnumDeclaration(writer, definition, settings);
 					else
-						GenerateClassDeclaration(writer, definition, settings);
+						EmitObjectDeclaration(writer, definition, settings);
 
 					if (i < (n - 1)) writer.WriteLine();
 				}
@@ -70,24 +68,32 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.EmitLine("}");
 		}
 
-		private static void GenerateClassDeclaration(CodeWriter writer, TypeDefinition definition, TypescriptGeneratorSettings settings)
+		private static void EmitObjectDeclaration(CodeWriter writer, TypeDefinition definition, TypescriptGeneratorSettings settings)
 		{
-			writer.Emit("interface ");
+			writer.WriteIndent("interface ");
 			writer.WriteTypeSignature(definition);
-			writer.WriteTypeBaseList(definition, asDeclarationFile: true);
+
+			bool onFirstItem = true;
+			foreach (TypeDefinition def in definition.BaseList)
+			{
+				if (onFirstItem)
+				{
+					writer.Write(" extends ");
+					onFirstItem = false;
+				}
+				else writer.Write(", ");
+				writer.WriteTypeSignature(def);
+			}
+
 			writer.WriteLine(" {");
 			writer.PushIndent();
 
-			MemberDeclaration member;
-			int n = definition.Members.Count;
-			for (int i = 0; i < n; i++)
+			foreach (MemberDeclaration member in definition.Members)
 			{
-				member = definition.Members[i];
-				writer.EmitLine($"{member.Name.ToCamel()}?: {member.Type.ToTypeName(settings)};");
+				writer.WriteProperty(member, optional: true);
 			}
 
-			writer.PopIndent();
-			writer.EmitLine("}");
+			writer.CloseBrace();
 		}
 	}
 }

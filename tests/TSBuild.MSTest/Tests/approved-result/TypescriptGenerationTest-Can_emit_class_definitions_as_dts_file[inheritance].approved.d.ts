@@ -1,4 +1,4 @@
-declare enum Status {
+﻿declare enum Status {
 	Striving = 5,
 	Endangered,
 	Instinct
@@ -19,23 +19,10 @@ interface Pathera extends Animal {
 }
 
 interface Lion extends Feline, Pathera {
-	
+	name?: string;
 	legs?: number;
 	status?: Status;
 	kills?: number;
 	whiskers?: number;
 	stealth?: number;
-}
-
-
-interface Predator {
-	name?: string;
-}
-
-interface Skill<T> {
-}
-
-interface AfricanLion extends Predator, Skill<any> {
-	name?: string;
-	region?: string;
 }
