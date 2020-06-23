@@ -92,5 +92,16 @@ namespace Acklann.TSBuild.Tests
 
 			Diff.Approve(results);
 		}
+
+		[TestMethod]
+		public void Can_generate_typescript_model_with_msbuild()
+		{
+			// Arrange
+
+			// Act
+
+			// Assert
+			throw new System.NotImplementedException();
+		}
 	}
 }

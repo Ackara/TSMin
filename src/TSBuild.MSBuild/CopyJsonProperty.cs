@@ -21,17 +21,17 @@ namespace Acklann.TSBuild.MSBuild
 			foreach (string path in JPath.Split(new char[] { ';', ',' }, System.StringSplitOptions.RemoveEmptyEntries))
 			{
 				Json.CopyJsonProperty(src, dest, path);
-				BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Copied '{path}' property to '{Path.GetFileName(dest)}'", null, nameof(CopyJsonProperty), MessageImportance.Normal));
+				BuildEngine.Info($"Copied '{path}' property to '{Path.GetFileName(dest)}'");
 			}
 
 			return true;
 		}
 
-		#region ITask
+		#region Backing Members
 
 		public IBuildEngine BuildEngine { get; set; }
 		public ITaskHost HostObject { get; set; }
 
-		#endregion ITask
+		#endregion Backing Members
 	}
 }
