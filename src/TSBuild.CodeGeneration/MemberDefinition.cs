@@ -1,13 +1,13 @@
 namespace Acklann.TSBuild.CodeGeneration
 {
 	[System.Diagnostics.DebuggerDisplay("{" + nameof(Name) + "}")]
-	public class MemberDeclaration : DeclarationBase
+	public class MemberDefinition : DefinitionBase
 	{
-		public MemberDeclaration() : base()
+		public MemberDefinition() : base()
 		{
 		}
 
-		public MemberDeclaration(string name, TypeDefinition type, object defaultValue = default) : base()
+		public MemberDefinition(string name, TypeDefinition type, object defaultValue = default) : base()
 		{
 			Name = name;
 			Type = type;

@@ -53,7 +53,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine();
 			writer.PushIndent();
 
-			MemberDeclaration member;
+			MemberDefinition member;
 			int n = definition.Members.Count;
 			for (int i = 0; i < n; i++)
 			{
@@ -80,7 +80,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine(" {");
 			writer.PushIndent();
 
-			foreach (MemberDeclaration member in definition.Members)
+			foreach (MemberDefinition member in definition.Members)
 			{
 				writer.WriteProperty(member);
 			}
@@ -110,7 +110,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine(" {");
 			writer.PushIndent();
 
-			foreach (MemberDeclaration member in definition.Members)
+			foreach (MemberDefinition member in definition.Members)
 			{
 				writer.WriteProperty(member, optional: true);
 			}

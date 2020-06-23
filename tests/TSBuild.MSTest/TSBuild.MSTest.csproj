@@ -90,6 +90,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Sample.tt</DependentUpon>
     </Compile>
+    <Compile Update="test-data\source-files\Lion.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="test-data\source-files\" />
   </ItemGroup>
 
 

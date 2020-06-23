@@ -56,7 +56,7 @@ namespace Acklann.TSBuild.Tests
 		[TestMethod]
 		public void Can_parse_csharp_property()
 		{
-			MemberDeclaration result;
+			MemberDefinition result;
 
 			result = CreateMemberFromSnippet("List<object[]> Data { get; set; }");
 			result.Name.ShouldBe("Data");
@@ -93,7 +93,7 @@ namespace Acklann.TSBuild.Tests
 		[TestMethod]
 		public void Can_parse_csharp_field()
 		{
-			MemberDeclaration result;
+			MemberDefinition result;
 
 			result = CreateMemberFromSnippet("[Foo]string Name;");
 			result.Name.ShouldBe("Name");
@@ -121,7 +121,7 @@ namespace Acklann.TSBuild.Tests
 
 		#region Backing Members
 
-		private static MemberDeclaration CreateMemberFromSnippet(string snippet)
+		private static MemberDefinition CreateMemberFromSnippet(string snippet)
 		{
 			if (string.IsNullOrEmpty(snippet)) throw new ArgumentNullException(nameof(snippet));
 

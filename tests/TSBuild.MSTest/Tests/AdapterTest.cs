@@ -54,7 +54,7 @@ namespace Acklann.TSBuild.Tests
 
 			void clear(TypeDefinition t) { t.BaseList.Clear(); t.Members.Clear(); }
 			void reset() { clear(a); clear(b); clear(c); clear(d); clear(e); clear(f); }
-			MemberDeclaration field(TypeDefinition t) => new MemberDeclaration(t.Name, new TypeDefinition(t.Name) { Traits = Trait.Public });
+			MemberDefinition field(TypeDefinition t) => new MemberDefinition(t.Name, new TypeDefinition(t.Name) { Traits = Trait.Public });
 
 			// =================================== //
 
@@ -78,10 +78,18 @@ namespace Acklann.TSBuild.Tests
 
 		private static IEnumerable<object[]> GetSourceFiles()
 		{
+#if DEBUG
+
+#endif
 			//yield return new object[] { new string[] { Sample.GetTranseiSampleDLL().FullName } };
 			//yield return new object[] { new string[] { Sample.GetPaymentmethodCS().FullName, Sample.GetClientCS().FullName } };
+			string folder = Path.Combine(Sample.DirectoryName, "source-files");
+			if (!Directory.Exists(folder)) throw new DirectoryNotFoundException($"Could not find directory at '{folder}'.");
 
-			yield break;
+			foreach (string item in Directory.GetFiles(folder))
+			{
+				yield return new object[] { new string[] { item } };
+			}
 		}
 
 		private static string Serialize(TypeDefinition type)

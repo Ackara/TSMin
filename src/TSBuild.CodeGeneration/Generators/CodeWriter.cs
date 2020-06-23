@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Acklann.TSBuild.CodeGeneration.Generators
 {
-	public class CodeWriter : StreamWriter
+	internal class CodeWriter : StreamWriter
 	{
 		public CodeWriter(Stream stream, Encoding encoding, TypescriptGeneratorSettings settings) : base(stream, encoding)
 		{
@@ -43,7 +43,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			}
 		}
 
-		public void WriteProperty(MemberDeclaration member, bool optional = false, bool knockout = false)
+		public void WriteProperty(MemberDefinition member, bool optional = false, bool knockout = false)
 		{
 			Write(GetIndent());
 			Write(member.Name.ToCamel());
@@ -53,7 +53,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			WriteLine(';');
 		}
 
-		public void WriteEnumValue(MemberDeclaration member)
+		public void WriteEnumValue(MemberDefinition member)
 		{
 			Write(GetIndent());
 			Write(member.Name);

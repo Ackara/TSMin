@@ -1,6 +1,6 @@
 namespace Acklann.TSBuild.CodeGeneration
 {
-	public class DeclarationBase
+	public class DefinitionBase
 	{
 		public string Name { get; set; }
 

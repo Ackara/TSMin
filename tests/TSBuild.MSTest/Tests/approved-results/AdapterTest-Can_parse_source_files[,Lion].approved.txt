@@ -1,0 +1,6 @@
+Lion
+	BaseList: IAnimal
+
+	Members: Name, Legs, MarketPrice, Extinct, DiscoveryDate
+
+

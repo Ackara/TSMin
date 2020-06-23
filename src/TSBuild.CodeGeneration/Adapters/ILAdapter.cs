@@ -71,9 +71,9 @@ namespace Acklann.TSBuild.CodeGeneration
 			return declaration;
 		}
 
-		internal static MemberDeclaration AsMemberDeclaration(FieldDefinition definition)
+		internal static MemberDefinition AsMemberDeclaration(FieldDefinition definition)
 		{
-			var declaration = new MemberDeclaration(definition.Name, new TypeDefinition());
+			var declaration = new MemberDefinition(definition.Name, new TypeDefinition());
 			declaration.Type.Namespace = definition.FieldType.Namespace;
 			declaration.Type.Name = definition.FieldType.FullName.Replace(definition.FieldType.Namespace, string.Empty).Trim('.', ' ');
 			declaration.DefaultValue = definition.Constant;
@@ -86,9 +86,9 @@ namespace Acklann.TSBuild.CodeGeneration
 			return declaration;
 		}
 
-		internal static MemberDeclaration AsMemberDeclaration(PropertyDefinition definition)
+		internal static MemberDefinition AsMemberDeclaration(PropertyDefinition definition)
 		{
-			var declaration = new MemberDeclaration(definition.Name, new TypeDefinition());
+			var declaration = new MemberDefinition(definition.Name, new TypeDefinition());
 			declaration.Type.Namespace = definition.PropertyType.Namespace;
 			declaration.Type.Name = definition.PropertyType.FullName;
 			if (!string.IsNullOrEmpty(declaration.Type.Namespace)) declaration.Type.Name = definition.PropertyType.Name.Replace(definition.PropertyType.Namespace, string.Empty).Trim('.', ' ');

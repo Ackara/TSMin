@@ -38,7 +38,7 @@ namespace Acklann.TSBuild.CodeGeneration
 				foreach (SyntaxNode item in declarations)
 				{
 					var adapter = new CSharpAdapter(new TypeDefinition());
-					adapter.Visit(node);
+					adapter.Visit(item);
 					yield return adapter._definition;
 				}
 			}
@@ -88,7 +88,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
 		{
-			var property = new MemberDeclaration(node.Identifier.ValueText.Trim(), new TypeDefinition());
+			var property = new MemberDefinition(node.Identifier.ValueText.Trim(), new TypeDefinition());
 			property.Traits |= node.Modifiers.GetTraits();
 			if (node.ChildNodes().FirstOrDefault(x => x.IsKind(SyntaxKind.ExplicitInterfaceSpecifier)) != null) property.Traits |= Trait.Interface;
 
@@ -114,12 +114,12 @@ namespace Acklann.TSBuild.CodeGeneration
 			Trait modifiers = node.Modifiers.GetTraits();
 
 			foreach (var item in variables)
-				_definition.Add(new MemberDeclaration(item.Identifier.ValueText.Trim(), type) { Traits = modifiers });
+				_definition.Add(new MemberDefinition(item.Identifier.ValueText.Trim(), type) { Traits = modifiers });
 		}
 
 		public override void VisitEnumMemberDeclaration(EnumMemberDeclarationSyntax node)
 		{
-			var member = new MemberDeclaration(node.Identifier.ValueText, new TypeDefinition() { Namespace = nameof(System), Name = nameof(Int32), Traits = Trait.Primitive | Trait.Enum });
+			var member = new MemberDefinition(node.Identifier.ValueText, new TypeDefinition() { Namespace = nameof(System), Name = nameof(Int32), Traits = Trait.Primitive | Trait.Enum });
 			object variable = node.EqualsValue?.Value.ToFullString().Trim();
 			bool isInt = int.TryParse((string)variable, out int constant);
 

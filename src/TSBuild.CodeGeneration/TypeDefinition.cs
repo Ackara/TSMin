@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Acklann.TSBuild.CodeGeneration
 {
 	[System.Diagnostics.DebuggerDisplay("{" + nameof(FullName) + ",nq}")]
-	public partial class TypeDefinition : DeclarationBase
+	public partial class TypeDefinition : DefinitionBase
 	{
 		public TypeDefinition() : this(null)
 		{
@@ -15,7 +15,7 @@ namespace Acklann.TSBuild.CodeGeneration
 			Traits = traits;
 			ArrayRankSpecifiers = 0;
 			BaseList = new List<TypeDefinition>();
-			Members = new List<MemberDeclaration>();
+			Members = new List<MemberDefinition>();
 			ParameterList = new List<TypeDefinition>();
 		}
 
@@ -56,9 +56,9 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		public List<TypeDefinition> ParameterList { get; set; }
 
-		public List<MemberDeclaration> Members { get; set; }
+		public List<MemberDefinition> Members { get; set; }
 
-		public TypeDefinition Add(MemberDeclaration member)
+		public TypeDefinition Add(MemberDefinition member)
 		{
 			member.Owner = this;
 			Members.Add(member);
@@ -129,7 +129,7 @@ namespace Acklann.TSBuild.CodeGeneration
 					}
 
 				if (!type.IsEnum)
-					foreach (MemberDeclaration member in type.Members)
+					foreach (MemberDefinition member in type.Members)
 					{
 						if (member.Type.FullName == reference.FullName || member.Type.Name == reference.Name)
 							member.Type = reference;

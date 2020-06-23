@@ -25,6 +25,9 @@ namespace Acklann.TSBuild
 		public static FileInfo GetError5TS() => GetFile(@"error-5.ts");
 		public static FileInfo GetIndexHTML() => GetFile(@"index.html");
 		public static FileInfo GetProjXML() => GetFile(@"proj.xml");
+		
+		public static FileInfo GetScrapTS() => GetFile(@"scrap.ts");
+		public static FileInfo GetScrap2TS() => GetFile(@"scrap2.ts");
 		public static FileInfo GetConfigBundle1JSON() => GetFile(@"project\config-bundle-1.json");
 		public static FileInfo GetConfigDefault8JSON() => GetFile(@"project\config-default-8.json");
 		public static FileInfo GetConfigExpanded4JSON() => GetFile(@"project\config-expanded-4.json");
@@ -33,6 +36,7 @@ namespace Acklann.TSBuild
 		public static FileInfo GetToastTS() => GetFile(@"project\domain\Toast.ts");
 		public static FileInfo GetCarTS() => GetFile(@"project\Models\Car.ts");
 		public static FileInfo GetObservableTS() => GetFile(@"project\Models\Observable.ts");
+		public static FileInfo GetIanimalCS() => GetFile(@"source-files\IAnimal.cs");
 
 		public struct File
 		{
@@ -40,6 +44,9 @@ namespace Acklann.TSBuild
 			public const string Error5TS = @"error-5.ts";
 			public const string IndexHTML = @"index.html";
 			public const string ProjXML = @"proj.xml";
+			
+			public const string ScrapTS = @"scrap.ts";
+			public const string Scrap2TS = @"scrap2.ts";
 			public const string ConfigBundle1JSON = @"project\config-bundle-1.json";
 			public const string ConfigDefault8JSON = @"project\config-default-8.json";
 			public const string ConfigExpanded4JSON = @"project\config-expanded-4.json";
@@ -48,6 +55,7 @@ namespace Acklann.TSBuild
 			public const string ToastTS = @"project\domain\Toast.ts";
 			public const string CarTS = @"project\Models\Car.ts";
 			public const string ObservableTS = @"project\Models\Observable.ts";
+			public const string IanimalCS = @"source-files\IAnimal.cs";
 		}
 	}	
 }

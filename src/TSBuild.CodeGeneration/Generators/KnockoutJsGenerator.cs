@@ -69,7 +69,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine();
 			writer.PushIndent();
 
-			foreach (MemberDeclaration member in definition.Members)
+			foreach (MemberDefinition member in definition.Members)
 			{
 				string name = member.Name.ToCamel();
 				writer.WriteIndent($"this.{name} = ko.observable((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
@@ -84,7 +84,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine();
 			writer.PushIndent();
 
-			foreach (MemberDeclaration member in definition.Members)
+			foreach (MemberDefinition member in definition.Members)
 			{
 				string name = member.Name.ToCamel();
 				writer.WriteIndent();
@@ -95,7 +95,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 
 			// --- Properties --- //
 
-			foreach (MemberDeclaration member in definition.Members)
+			foreach (MemberDefinition member in definition.Members)
 			{
 				//writer.WriteIndent($"{member.Name.ToCamel()}: {member.Type.ToTypeName(settings)};");
 				writer.WriteProperty(member, knockout: true);

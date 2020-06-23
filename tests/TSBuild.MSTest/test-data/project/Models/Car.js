@@ -1,2 +1,0 @@
-var TSMin,__extends=this&&this.__extends||function(){var e=function(t,n){return(e=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,n){t.__proto__=n}||function(t,n){for(var r in n)n.hasOwnProperty(r)&&(t[r]=n[r])})(t,n)};return function(t,n){function r(){this.constructor=t}e(t,n),t.prototype=null===n?Object.create(n):(r.prototype=n.prototype,new r)}}();!function(t){var n=function(n){function t(){var t=n.call(this)||this;return t.make="Forte",t.year=2019,t}return __extends(t,n),t}(t.Observable);t.Car=n}(TSMin||(TSMin={}));
-//# sourceMappingURL=Car.js.map

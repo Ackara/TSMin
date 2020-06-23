@@ -1,2 +1,0 @@
-var TSMin;!function(n){var o=function(){function n(){}return n.toMoney=function(n){return"$"+n},n.debug=function(n){console.log("debug: "+n)},n.info=function(n){document.getElementById("msg").innerHTML=""+n},n}();n.Toast=o}(TSMin||(TSMin={}));
-//# sourceMappingURL=Toast.js.map
