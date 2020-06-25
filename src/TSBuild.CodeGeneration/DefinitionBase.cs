@@ -130,5 +130,17 @@ namespace Acklann.TSBuild.CodeGeneration
 					Traits &= ~Trait.Constant;
 			}
 		}
+
+		public bool IsStatic
+		{
+			get => Traits.HasFlag(Trait.Static);
+			set
+			{
+				if (value)
+					Traits |= Trait.Static;
+				else
+					Traits &= ~Trait.Static;
+			}
+		}
 	}
 }

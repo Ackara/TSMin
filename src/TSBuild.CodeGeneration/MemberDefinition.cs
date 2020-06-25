@@ -7,10 +7,11 @@ namespace Acklann.TSBuild.CodeGeneration
 		{
 		}
 
-		public MemberDefinition(string name, TypeDefinition type, object defaultValue = default) : base()
+		public MemberDefinition(string name, TypeDefinition type, Trait trait = default, object defaultValue = default) : base()
 		{
 			Name = name;
 			Type = type;
+			Traits = trait;
 			DefaultValue = defaultValue;
 		}
 

@@ -30,7 +30,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 
 					if (definition.IsEnum)
 					{
-						TypescriptGenerator.EmitEnumDeclaration(writer, definition, settings);
+						TypescriptGenerator.EmitEnumDeclaration(writer, definition);
 					}
 					else if (definition.IsInterface)
 					{

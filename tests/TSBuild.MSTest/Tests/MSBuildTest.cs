@@ -121,7 +121,7 @@ namespace Acklann.TSBuild.Tests
 
 			// Assert
 			success.ShouldBeTrue();
-			Diff.Approve("ffoooo", label);
+			Diff.ApproveFile(outputFile, label);
 		}
 
 		#region Backing Members

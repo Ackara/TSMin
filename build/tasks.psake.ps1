@@ -71,7 +71,7 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 	# Create nuget package
 	# ==================================================
 	$project = Join-Path $SolutionFolder "src/*MSBuild/*.*proj" | Get-Item;
-	$outputFolder = Join-Path $SolutionFolder "src/$SolutionName/bin/tools";
+	$outputFolder = Join-Path $SolutionFolder "src/$SolutionName/bin/msbuild-targets";
 	Write-Separator "dotnet publish '$($project.Name)'";
 	Exec { &dotnet publish $project.FullName --configuration $Configuration --output $outputFolder; }
 
@@ -99,7 +99,9 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 
 Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publish all nuget packages to a nuget repository." `
 -precondition { return ($InProduction -or $InPreview ) -and (Test-Path $ArtifactsFolder -PathType Container) } `
--action { }
+-action {
+	Get-ChildItem $ArtifactsFolder -Filter "*.nupkg";
+}
 
 Task "Publish-VSIX-Package" -alias "push-vsix" -description "This task publish all VSIX packages to https://marketplace.visualstudio.com/" `
 -precondition { return (Test-Path $ArtifactsFolder -PathType Container) } `
@@ -113,8 +115,8 @@ Task "Publish-VSIX-Package" -alias "push-vsix" -description "This task publish a
 	Exec { &$vsixPublisher publish -payload $package.FullName -publishManifest $manifest.FullName -personalAccessToken $pat -ignoreWarnings "VSIXValidatorWarning01,VSIXValidatorWarning02"; }
 }
 
-#-precondition { return ($InProduction -or $InPreview ) } `
 Task "Add-GitReleaseTag" -alias "tag" -description "This task tags the lastest commit with the version number." `
+-precondition { return ($InProduction -or $InPreview ) } `
 -depends @("restore") -action { 
 	$version = $ManifestFilePath | Select-NcrementVersionNumber $EnvironmentName -Format "C";
 	

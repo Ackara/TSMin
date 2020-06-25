@@ -26,7 +26,7 @@ namespace Acklann.TSBuild.Tests
 
 			// Assert
 			results.ToString().ShouldNotBeNullOrEmpty();
-			Diff.Approve(results, ".txt", null, label);
+			Diff.Approve(results, ".txt", label);
 		}
 
 		[DataTestMethod]

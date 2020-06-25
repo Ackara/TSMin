@@ -13,7 +13,7 @@ namespace Acklann.TSBuild.Tests
 	public class TypescriptGenerationTest
 	{
 		[TestMethod]
-		public void Can_emit_enum_definition_as_as_dts_file()
+		public void Can_emit_enum_definition_as_as_dts()
 		{
 			// Arrange
 			var declaration = new TypeDefinition("Foo", (Trait.Public | Trait.Enum))
@@ -31,7 +31,7 @@ namespace Acklann.TSBuild.Tests
 
 		[DataTestMethod]
 		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
-		public void Can_emit_class_definitions_as_dts_file(string label, TypeDefinition[] args)
+		public void Can_emit_class_definitions_as_dts(string label, TypeDefinition[] args)
 		{
 			string result = UTF8(DeclarationFileGenerator.EmitDeclarationFile(args));
 			Diff.Approve(result, Encoding.UTF8, "d.ts", label);
@@ -60,14 +60,14 @@ namespace Acklann.TSBuild.Tests
 		private static IEnumerable<object[]> GetDefinitions()
 		{
 			var status = new TypeDefinition("Status", (Trait.Public | Trait.Enum))
-				.Add(new MemberDefinition("Striving", new TypeDefinition("int"), 5))
+				.Add(new MemberDefinition("Striving", new TypeDefinition("int"), defaultValue: 5))
 				.Add(new MemberDefinition("Endangered", new TypeDefinition("int")))
 				.Add(new MemberDefinition("Instinct", new TypeDefinition("int")));
 
 			var animal = new TypeDefinition("Animal", (Trait.Public | Trait.Interface))
-				.Add(new MemberDefinition("Name", new TypeDefinition("string")))
-				.Add(new MemberDefinition("Legs", new TypeDefinition("int")))
-				.Add(new MemberDefinition("Status", status));
+				.Add(new MemberDefinition("Name", new TypeDefinition("string"), Trait.Public))
+				.Add(new MemberDefinition("Legs", new TypeDefinition("int"), Trait.Public))
+				.Add(new MemberDefinition("Status", status, Trait.Public));
 
 			yield return new object[]
 			{
@@ -79,21 +79,21 @@ namespace Acklann.TSBuild.Tests
 
 			var feline = new TypeDefinition("Feline", (Trait.Public | Trait.Interface))
 				.Inherit(animal)
-				.Add(new MemberDefinition("Whiskers", new TypeDefinition("int")));
+				.Add(new MemberDefinition("Whiskers", new TypeDefinition("int"), Trait.Public));
 
 			var pathera = new TypeDefinition("Pathera", (Trait.Public | Trait.Interface))
 				.Inherit(animal)
-				.Add(new MemberDefinition("Stealth", new TypeDefinition("int")));
+				.Add(new MemberDefinition("Stealth", new TypeDefinition("int"), Trait.Public));
 
 			var lion = new TypeDefinition("Lion", (Trait.Public | Trait.Class))
 				.Inherit(feline)
 				.Inherit(pathera)
-				.Add(new MemberDefinition("Name", new TypeDefinition("string")))
-				.Add(new MemberDefinition("Legs", new TypeDefinition("int")))
-				.Add(new MemberDefinition("Status", status))
-				.Add(new MemberDefinition("Kills", new TypeDefinition("int")))
-				.Add(new MemberDefinition("Whiskers", new TypeDefinition("int")))
-				.Add(new MemberDefinition("Stealth", new TypeDefinition("int")))
+				.Add(new MemberDefinition("Name", new TypeDefinition("string"), Trait.Public))
+				.Add(new MemberDefinition("Legs", new TypeDefinition("int"), Trait.Public))
+				.Add(new MemberDefinition("Status", status, Trait.Public))
+				.Add(new MemberDefinition("Kills", new TypeDefinition("int"), Trait.Public))
+				.Add(new MemberDefinition("Whiskers", new TypeDefinition("int"), Trait.Public))
+				.Add(new MemberDefinition("Stealth", new TypeDefinition("int"), Trait.Public))
 				;
 
 			yield return new object[]
@@ -108,12 +108,12 @@ namespace Acklann.TSBuild.Tests
 				.Add(new TypeDefinition("T"));
 
 			var predator = new TypeDefinition("Predator", (Trait.Public | Trait.Class))
-				.Add(new MemberDefinition("Name", new TypeDefinition("string")));
+				.Add(new MemberDefinition("Name", new TypeDefinition("string"), Trait.Public));
 
 			var africanLion = new TypeDefinition("AfricanLion", (Trait.Public | Trait.Class))
 				.Inherit(predator)
 				.Inherit(skill)
-				.Add(new MemberDefinition("Region", new TypeDefinition("string")));
+				.Add(new MemberDefinition("Region", new TypeDefinition("string"), Trait.Public));
 
 			yield return new object[]
 			{

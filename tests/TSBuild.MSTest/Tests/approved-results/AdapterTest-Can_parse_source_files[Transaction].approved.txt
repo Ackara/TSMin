@@ -1,0 +1,6 @@
+Transaction
+	BaseList: IEntity
+
+	Members: Id, Date, Category, Description, Amount, Currency, Payout, Status, Gateway, ReferenceId, InvoiceId, TABLE, id, date, category, description, amount, currency, payout, status, gateway, reference_id, invoice_id, _columns
+
+

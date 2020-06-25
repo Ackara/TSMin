@@ -36,13 +36,18 @@ namespace Acklann.TSBuild.MSBuild
 
 		public bool AsKnockoutJsModel { get; set; }
 
+		public bool AsDeclarationfile { get; set; }
+
 		public bool Execute()
 		{
 			var options = new TypescriptGeneratorSettings(Namespace, Prefix, Suffix, AsAbstract, AsKnockoutJsModel, References);
 			if (_sourceFiles == null) _sourceFiles = SourceFiles.Select(x => x.GetMetadata("FullPath")).ToArray();
 
 			BuildEngine.Info($"Generating typescript models ...");
-			byte[] data = TypescriptGenerator.Emit(options, _sourceFiles);
+			byte[] data = (AsDeclarationfile ?
+				DeclarationFileGenerator.EmitDeclarationFile(options, _sourceFiles) :
+				TypescriptGenerator.Emit(options, _sourceFiles)
+				);
 
 			if (string.IsNullOrEmpty(_outputFile)) _outputFile = DestinationFile.GetMetadata("FullPath");
 			string folder = Path.GetDirectoryName(_outputFile);

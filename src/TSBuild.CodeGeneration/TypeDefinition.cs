@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Acklann.TSBuild.CodeGeneration
 {
@@ -77,6 +78,13 @@ namespace Acklann.TSBuild.CodeGeneration
 		{
 			BaseList.Add(definition);
 			return this;
+		}
+
+		public IEnumerable<MemberDefinition> GetPublicFieldsAndProperties()
+		{
+			return from x in Members
+				   where x.IsPublic && !x.IsConstant && !x.IsStatic
+				   select x;
 		}
 
 		public IEnumerable<TypeDefinition> EnumerateBaseList()

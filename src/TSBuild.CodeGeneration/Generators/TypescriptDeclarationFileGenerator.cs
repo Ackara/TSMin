@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Acklann.TSBuild.CodeGeneration.Generators
@@ -9,7 +10,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 
 		public static byte[] EmitDeclarationFile(TypescriptGeneratorSettings settings, params string[] sourceFiles)
 		{
-			throw new System.NotImplementedException();
+			return EmitDeclarationFile(settings, Adapter.ParseFiles(sourceFiles).ToArray());
 		}
 
 		public static byte[] EmitDeclarationFile(params TypeDefinition[] definitions) => EmitDeclarationFile(default, definitions);
@@ -28,6 +29,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 				for (int i = 0; i < n; i++)
 				{
 					definition = definitions[i];
+
 
 					if (definition.IsEnum)
 						GenerateEnumDeclaration(writer, definition, settings);
@@ -88,7 +90,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine(" {");
 			writer.PushIndent();
 
-			foreach (MemberDefinition member in definition.Members)
+			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
 				writer.WriteProperty(member, optional: true);
 			}

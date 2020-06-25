@@ -46,7 +46,7 @@
       <Visible>false</Visible>
     </Content>
 
-    <Content Include="bin\tools\*">
+    <Content Include="bin\msbuild-targets\*">
       <PackagePath>tools\</PackagePath>
       <Visible>false</Visible>
     </Content>

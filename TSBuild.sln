@@ -25,8 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.Sample", "tests\TSB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.MSBuild", "src\TSBuild.MSBuild\TSBuild.MSBuild.csproj", "{CBD38EAD-25CE-4D52-BFC0-CC4338348E4A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E4A8EE8B-63E6-40E9-BC71-20A4AEFF0159}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSBuild.CodeGeneration", "src\TSBuild.CodeGeneration\TSBuild.CodeGeneration.csproj", "{686DD978-E277-4430-878C-6A07FA9E253F}"
 EndProject
 Global
@@ -66,10 +64,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{84A610AF-432A-4682-BB57-E62EC71493F7} = {E4A8EE8B-63E6-40E9-BC71-20A4AEFF0159}
-		{EF352AE3-078E-4DB1-A73B-594D88F2FDE2} = {E4A8EE8B-63E6-40E9-BC71-20A4AEFF0159}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61A79BF2-11C5-46A1-AEC2-D405A7CEA30E}

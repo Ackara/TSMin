@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <ShouldCompileTypescriptOnBuild Condition="$(ShouldCompileTypescriptOnBuild)==''">true</ShouldCompileTypescriptOnBuild>
-  </PropertyGroup>
+	<PropertyGroup>
+		<ShouldCompileTypescriptOnBuild Condition="$(ShouldCompileTypescriptOnBuild)==''">true</ShouldCompileTypescriptOnBuild>
+	</PropertyGroup>
 
-  <PropertyGroup Label="Task Options">
-    <MinifyTypescript Condition="$(MinifyTypescript)==''">true</MinifyTypescript>
-    <GenerateTypescriptSourceMap Condition="$(GenerateTypescriptSourceMap)==''">true</GenerateTypescriptSourceMap>
-    <TSBuildConfigurationFile Condition="$(TSBuildConfigurationFile)==''">$(MSBuildProjectDirectory)\transpiler.json</TSBuildConfigurationFile>
-  </PropertyGroup>
+	<PropertyGroup Label="Task Options">
+		<MinifyTypescript Condition="$(MinifyTypescript)==''">true</MinifyTypescript>
+		<GenerateTypescriptSourceMap Condition="$(GenerateTypescriptSourceMap)==''">true</GenerateTypescriptSourceMap>
+		<TSBuildConfigurationFile Condition="$(TSBuildConfigurationFile)==''">$(MSBuildProjectDirectory)\transpiler.json</TSBuildConfigurationFile>
+	</PropertyGroup>
 
-  <Target Name="CompileTypescriptFilesOnBuild"
+	<Target Name="CompileTypescriptFilesOnBuild"
           BeforeTargets="PreBuildEvent"
           Condition="$(ShouldCompileTypescriptOnBuild)">
-    <CallTarget Targets="CompileTypescriptFiles" />
-  </Target>
+		<CallTarget Targets="CompileTypescriptFiles" />
+	</Target>
 
-  <Target Name="CompileTypescriptFiles">
-    <Warning Text="No typescript configuration file found."
+	<Target Name="CompileTypescriptFiles">
+		<Warning Text="No typescript configuration file found."
              Condition="!Exists($(TSBuildConfigurationFile))" />
 
-    <CompileTypescript ConfigurationFile="$(TSBuildConfigurationFile)"
+		<CompileTypescript ConfigurationFile="$(TSBuildConfigurationFile)"
                        GenerateSourceMaps="$(GenerateTypescriptSourceMap)"
                        Minify="$(MinifyTypescript)"
                        Condition="Exists($(TSBuildConfigurationFile))" />
-  </Target>
+	</Target>
 
-  <UsingTask TaskName="CompileTypescript"
+	<UsingTask TaskName="CompileTypescript"
              AssemblyFile="..\tools\TSBuild.MSBuild.dll" />
 
-  <UsingTask TaskName="CopyJsonProperty"
+	<UsingTask TaskName="CopyJsonProperty"
+             AssemblyFile="..\tools\TSBuild.MSBuild.dll" />
+
+	<UsingTask TaskName="GenerateTypescriptModels"
              AssemblyFile="..\tools\TSBuild.MSBuild.dll" />
 </Project>

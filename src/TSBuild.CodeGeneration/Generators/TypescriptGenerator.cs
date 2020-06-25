@@ -33,7 +33,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 					definition = definitions[i];
 
 					if (definition.IsEnum)
-						EmitEnumDeclaration(writer, definition, settings);
+						EmitEnumDeclaration(writer, definition);
 					else if (definition.IsInterface)
 						EmitInterfaceDeclaration(writer, definition, settings);
 					else
@@ -51,8 +51,8 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 
 		// ==================== BACKING MEMBERS ==================== //
 
-		internal static void EmitEnumDeclaration(CodeWriter writer, TypeDefinition definition, TypescriptGeneratorSettings settings)
-		{
+		internal static void EmitEnumDeclaration(CodeWriter writer, TypeDefinition definition)
+        {
 			writer.WriteIndent($"export enum {definition.Name.ToPascal()} {{");
 			writer.WriteLine();
 			writer.PushIndent();
@@ -84,7 +84,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine(" {");
 			writer.PushIndent();
 
-			foreach (MemberDefinition member in definition.Members)
+			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
 				writer.WriteProperty(member);
 			}
