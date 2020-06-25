@@ -14,7 +14,7 @@ namespace Acklann.TSBuild.MSBuild
 
 		public GenerateTypescriptModels(string output, params string[] sourceFiles)
 		{
-			_destination = output;
+			_outputFile = output;
 			_sourceFiles = sourceFiles;
 		}
 
@@ -44,18 +44,19 @@ namespace Acklann.TSBuild.MSBuild
 			BuildEngine.Info($"Generating typescript models ...");
 			byte[] data = TypescriptGenerator.Emit(options, _sourceFiles);
 
-			if (string.IsNullOrEmpty(_destination)) _destination = DestinationFile.GetMetadata("FullPath");
-			string folder = Path.GetDirectoryName(_destination);
+			if (string.IsNullOrEmpty(_outputFile)) _outputFile = DestinationFile.GetMetadata("FullPath");
+			string folder = Path.GetDirectoryName(_outputFile);
 			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
-			File.WriteAllBytes(_destination, data);
+			File.WriteAllBytes(_outputFile, data);
+			BuildEngine.Info($"Generated typescript file at '{_outputFile}'.", nameof(GenerateTypescriptModels));
 			return true;
 		}
 
 		#region Backing Members
 
 		private string[] _sourceFiles;
-		private string _destination;
+		private string _outputFile;
 
 		public ITaskHost HostObject { get; set; }
 

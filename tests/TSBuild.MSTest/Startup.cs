@@ -3,7 +3,7 @@
 [assembly: Acklann.Diffa.ApprovedFolder("approved-results")]
 [assembly: Acklann.Diffa.Reporters.Reporter(typeof(Acklann.Diffa.Reporters.DiffReporter))]
 
-namespace Tees.MSTest
+namespace Acklann.TSBuild
 {
 	[TestClass]
 	public class Startup

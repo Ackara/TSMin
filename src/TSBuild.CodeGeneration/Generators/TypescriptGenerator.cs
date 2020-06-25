@@ -1,15 +1,19 @@
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Acklann.TSBuild.CodeGeneration.Generators
 {
 	public class TypescriptGenerator
 	{
-		public static byte[] Emit(params string[] sourceFiles) => Emit(default, sourceFiles);
+		public static byte[] Emit(params string[] sourceFiles)
+		{
+			return Emit(default, Adapter.ParseFiles(sourceFiles).ToArray());
+		}
 
 		public static byte[] Emit(TypescriptGeneratorSettings settings, params string[] sourceFiles)
 		{
-			throw new System.NotImplementedException();
+			return Emit(settings, Adapter.ParseFiles(sourceFiles).ToArray());
 		}
 
 		public static byte[] Emit(params TypeDefinition[] definitions) => Emit(default, definitions);

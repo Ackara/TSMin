@@ -1,9 +1,11 @@
 ﻿using Acklann.Diffa;
+using Acklann.TSBuild.CodeGeneration;
 using Acklann.TSBuild.MSBuild;
 using FakeItEasy;
 using Microsoft.Build.Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -93,15 +95,53 @@ namespace Acklann.TSBuild.Tests
 			Diff.Approve(results);
 		}
 
-		[TestMethod]
-		public void Can_generate_typescript_model_with_msbuild()
+		[DataTestMethod]
+		[DynamicData(nameof(GetTypescriptTestCases), DynamicDataSourceType.Method)]
+		public void Can_generate_typescript_models_from_source_files(string label, string[] sourceFiles, TypescriptGeneratorSettings options)
 		{
 			// Arrange
+			var engine = A.Fake<IBuildEngine>();
+
+			string outputFile = Path.Combine(Path.GetTempPath(), $"{label}.ts");
+			var sut = new GenerateTypescriptModels(outputFile, sourceFiles)
+			{
+				BuildEngine = engine,
+				HostObject = A.Fake<ITaskHost>(),
+
+				AsKnockoutJsModel = options.UseKnockoutJs,
+				AsAbstract = options.UseAbstract,
+				References = options.References,
+				Namespace = options.Namespace,
+				Prefix = options.Prefix,
+				Suffix = options.Suffix
+			};
 
 			// Act
+			var success = sut.Execute();
 
 			// Assert
-			throw new System.NotImplementedException();
+			success.ShouldBeTrue();
+			Diff.Approve("ffoooo", label);
 		}
+
+		#region Backing Members
+
+		private static IEnumerable<object[]> GetTypescriptTestCases()
+		{
+			var sourceFolder = Path.Combine(Sample.DirectoryName, "source-files");
+			if (!Directory.Exists(sourceFolder)) throw new DirectoryNotFoundException($"Could not find directory at '{sourceFolder}'.");
+
+			foreach (string filePath in Directory.EnumerateFiles(sourceFolder))
+			{
+				yield return new object[]
+				{
+					Path.GetFileNameWithoutExtension(filePath),
+					new string[] { filePath },
+					new TypescriptGeneratorSettings()
+				};
+			}
+		}
+
+		#endregion Backing Members
 	}
 }
