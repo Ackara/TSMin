@@ -26,7 +26,7 @@ Properties {
 
 Task "Default" -depends @("test", "pack");
 
-Task "Publish" -depends @("clean", "test", "pack", "push-nuget", "tag") `
+Task "Publish" -depends @("clean", "test", "pack", "push-nuget", "push-vsix", "tag") `
 -description "This task compiles, test then publish all packages to their respective destination.";
 
 # ======================================================================
@@ -100,13 +100,16 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publish all nuget packages to a nuget repository." `
 -precondition { return ($InProduction -or $InPreview ) -and (Test-Path $ArtifactsFolder -PathType Container) } `
 -action {
-	Get-ChildItem $ArtifactsFolder -Filter "*.nupkg";
+	$nupkg =  Join-Path $ArtifactsFolder "*.nupkg" | Get-Item;
+
+	Write-Separator "dotnet nuget push '$($nupkg.Name)'";
+	Exec { &dotnet nuget push $nupkg.FullName --source "https://api.nuget.org/v3/index.json"; }
 }
 
 Task "Publish-VSIX-Package" -alias "push-vsix" -description "This task publish all VSIX packages to https://marketplace.visualstudio.com/" `
 -precondition { return (Test-Path $ArtifactsFolder -PathType Container) } `
 -action {
-	[string]$vsixPublisher = Join-Path "$($env:ProgramFiles)*" "Microsoft Visual Studio\*\*\VSSDK\VisualStudioIntegration\Tools\Bin\VsixPublisher.exe" | Resolve-Path -ErrorAction Stop; 
+	[string]$vsixPublisher = Join-Path "$($env:ProgramFiles)*" "Microsoft Visual Studio\*\*\VSSDK\VisualStudioIntegration\Tools\Bin\VsixPublisher.exe" | Resolve-Path -ErrorAction Stop;
 	$package = Join-Path $ArtifactsFolder "*.vsix" | Get-Item;
 	$manifest = Join-Path $PSScriptRoot "publishing/visual-studio-marketplace.json" | Get-Item;
 	$pat = Get-Secret "VISUAL_STUDIO_MARKETPLACE_PAT" "vsixMarketplace";
@@ -117,9 +120,9 @@ Task "Publish-VSIX-Package" -alias "push-vsix" -description "This task publish a
 
 Task "Add-GitReleaseTag" -alias "tag" -description "This task tags the lastest commit with the version number." `
 -precondition { return ($InProduction -or $InPreview ) } `
--depends @("restore") -action { 
+-depends @("restore") -action {
 	$version = $ManifestFilePath | Select-NcrementVersionNumber $EnvironmentName -Format "C";
-	
+
 	if (-not ((&git status | Out-String) -match 'nothing to commit'))
 	{
 		Write-Separator "git commit";
@@ -246,6 +249,5 @@ function Get-Secret
 	}
 	return $result;
 }
-
 
 #endregion
