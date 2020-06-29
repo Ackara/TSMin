@@ -1,8 +1,6 @@
 TSBuild
 ======================================================================
 
-TSBuild is a tool that compile and minify your typescript files
-
 You want to use Typescript to compile to Javascript, as well as
 minifying said Javascript. However when you minify the compiled
 Javascript __the source-map files used for debugging, do not 
@@ -20,5 +18,3 @@ Getting Started
 __USAGE__
 
 
-Getting Started
-----------------------------------------------------------------------
