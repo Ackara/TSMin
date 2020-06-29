@@ -78,7 +78,7 @@ else
 		"SolutionFolder"=$PSScriptRoot;
 		"SecretsFilePath"=$SecretsFilePath;
 		"EnvironmentName"=$environmentName;
-		"InPreview"=$Production.IsPresent;
+		"InPreview"=$Preview.IsPresent;
 		"InProduction"=$Production.IsPresent;
 		"Interactive"=(-not $NonInteractive.IsPresent);
 	}

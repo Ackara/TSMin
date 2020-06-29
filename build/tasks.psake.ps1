@@ -107,7 +107,7 @@ Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publis
 }
 
 Task "Publish-VSIX-Package" -alias "push-vsix" -description "This task publish all VSIX packages to https://marketplace.visualstudio.com/" `
--precondition { return (Test-Path $ArtifactsFolder -PathType Container) } `
+-precondition { return ($InProduction -or $InPreview ) -and (Test-Path $ArtifactsFolder -PathType Container) } `
 -action {
 	[string]$vsixPublisher = Join-Path "$($env:ProgramFiles)*" "Microsoft Visual Studio\*\*\VSSDK\VisualStudioIntegration\Tools\Bin\VsixPublisher.exe" | Resolve-Path -ErrorAction Stop;
 	$package = Join-Path $ArtifactsFolder "*.vsix" | Get-Item;
