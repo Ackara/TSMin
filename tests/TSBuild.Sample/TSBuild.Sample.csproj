@@ -38,7 +38,7 @@
 	<Target Name="GenerateModels">
 
 		
-		<GenerateTypescriptModels SourceFiles="@(ViewModels)" DestinationFile="wwwroot\scripts\app.ts" />
+		<GenerateTypescriptModels SourceFiles="@(ViewModels)" DestinationFile="wwwroot\scripts\app.ts" AsKnockoutJsModel="true" />
 	</Target>
 
 	<Import Project="$(TestTarget)" Condition="Exists($(TestTarget))" />

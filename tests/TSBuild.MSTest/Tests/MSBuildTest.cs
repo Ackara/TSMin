@@ -140,6 +140,13 @@ namespace Acklann.TSBuild.Tests
 					new TypescriptGeneratorSettings()
 				};
 			}
+
+			yield return new object[]
+			{
+				"ko",
+				new string[]  { Directory.EnumerateFiles(sourceFolder, "*.cs").First() },
+				new TypescriptGeneratorSettings(null, koJs:true)
+			};
 		}
 
 		#endregion Backing Members
