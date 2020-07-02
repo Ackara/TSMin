@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<IsPackable>false</IsPackable>
@@ -7,9 +7,9 @@
 
 		<Title>TSBuild</Title>
 		<Description>Helps you compile and minify typescript files on save and on build.</Description>
-		<Version>0.0.49</Version>
-		<AssemblyVersion>0.0.49</AssemblyVersion>
-		<AssemblyFileVersion>0.0.49</AssemblyFileVersion>
+		<Version>0.0.50</Version>
+		<AssemblyVersion>0.0.50</AssemblyVersion>
+		<AssemblyFileVersion>0.0.50</AssemblyFileVersion>
 		<PackageIcon>icon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>

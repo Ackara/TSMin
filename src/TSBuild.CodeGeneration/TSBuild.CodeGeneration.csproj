@@ -1,10 +1,25 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TSBuild.CodeGeneration</AssemblyName>
     <RootNamespace>Acklann.TSBuild.CodeGeneration</RootNamespace>
-  </PropertyGroup>
+  
+<Title>TSBuild</Title>
+<Description>Helps you compile and minify typescript files on save and on build.</Description>
+<Version>0.0.50</Version>
+<AssemblyVersion>0.0.50</AssemblyVersion>
+<AssemblyFileVersion>0.0.50</AssemblyFileVersion>
+<PackageIcon>icon.png</PackageIcon>
+<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
+<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
+<PackageReleaseNotes>https://github.com/Ackara/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
+<PackageTags>typescript compiler bundle msbuild</PackageTags>
+<Authors>Ackara</Authors>
+<Company>Ackara</Company>
+<Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
+<PackageLicenseFile>license.txt</PackageLicenseFile>
+</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.6.0" />
@@ -14,5 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TSBuild\TSBuild.csproj" />
   </ItemGroup>
+
+
 
 </Project>

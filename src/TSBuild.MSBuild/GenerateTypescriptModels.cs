@@ -1,6 +1,7 @@
 using Acklann.TSBuild.CodeGeneration;
 using Acklann.TSBuild.CodeGeneration.Generators;
 using Microsoft.Build.Framework;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -34,17 +35,19 @@ namespace Acklann.TSBuild.MSBuild
 
 		public bool AsAbstract { get; set; }
 
-		public FileType OutputType { get; set; }
+		public string OutputType { get; set; }
 
 		public bool Execute()
 		{
-			var options = new TypescriptGeneratorSettings(Namespace, Prefix, Suffix, AsAbstract, (OutputType == FileType.KnockoutJs), References);
+			Enum.TryParse(OutputType, out FileType kind);
+
+			var options = new TypescriptGeneratorSettings(Namespace, Prefix, Suffix, AsAbstract, (kind == FileType.KnockoutJs), References);
 			if (_sourceFiles == null) _sourceFiles = SourceFiles.Select(x => x.GetMetadata("FullPath")).ToArray();
 
 			BuildEngine.Debug("Generating typescript models ...");
 
 			byte[] data;
-			switch (OutputType)
+			switch (kind)
 			{
 				default:
 				case FileType.Model:
@@ -78,7 +81,7 @@ namespace Acklann.TSBuild.MSBuild
 
 		public IBuildEngine BuildEngine { get; set; }
 
-		public enum FileType
+		private enum FileType
 		{
 			Model,
 			KnockoutJs,
