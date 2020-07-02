@@ -1,18 +1,25 @@
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Acklann.TSBuild.CodeGeneration.Generators
 {
 	public class KnockoutJsGenerator
 	{
-		public static byte[] Emit(params string[] sourceFiles) => Emit(default, sourceFiles);
+		public static byte[] Emit(params string[] sourceFiles)
+		{
+			return Emit(default, Adapter.ParseFiles(sourceFiles).ToArray());
+		}
+
+		public static byte[] Emit(params TypeDefinition[] definitions)
+		{
+			return Emit(default, definitions);
+		}
 
 		public static byte[] Emit(TypescriptGeneratorSettings settings, params string[] sourceFiles)
 		{
-			throw new System.NotImplementedException();
+			return Emit(settings, Adapter.ParseFiles(sourceFiles).ToArray());
 		}
-
-		public static byte[] Emit(params TypeDefinition[] definitions) => Emit(default, definitions);
 
 		public static byte[] Emit(TypescriptGeneratorSettings settings, params TypeDefinition[] definitions)
 		{
@@ -69,7 +76,13 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine();
 			writer.PushIndent();
 
-			foreach (MemberDefinition member in definition.Members)
+			if (definition.HasBaseType)
+			{
+				writer.WriteIndent("super(model);");
+				writer.WriteLine();
+			}
+
+			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
 				string name = member.Name.ToCamel();
 				writer.WriteIndent($"this.{name} = ko.observable((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
@@ -78,13 +91,13 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.CloseBrace();
 			writer.WriteLine();
 
-			// --- Copy Function --- //
+			// --- Copy Method --- //
 
 			writer.WriteIndent($"public copy(model: any) {{");
 			writer.WriteLine();
 			writer.PushIndent();
 
-			foreach (MemberDefinition member in definition.Members)
+			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
 				string name = member.Name.ToCamel();
 				writer.WriteIndent();
@@ -95,10 +108,9 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 
 			// --- Properties --- //
 
-			foreach (MemberDefinition member in definition.Members)
+			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
-				//writer.WriteIndent($"{member.Name.ToCamel()}: {member.Type.ToTypeName(settings)};");
-				writer.WriteProperty(member);
+				writer.WriteProperty(member, knockout: true);
 			}
 
 			writer.PopIndent();

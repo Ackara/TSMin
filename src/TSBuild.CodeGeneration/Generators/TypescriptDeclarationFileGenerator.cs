@@ -6,16 +6,16 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 {
 	public class DeclarationFileGenerator
 	{
-		public static byte[] EmitDeclarationFile(params string[] sourceFiles) => EmitDeclarationFile(default, sourceFiles);
+		public static byte[] Emit(params string[] sourceFiles) => Emit(default, sourceFiles);
 
-		public static byte[] EmitDeclarationFile(TypescriptGeneratorSettings settings, params string[] sourceFiles)
+		public static byte[] Emit(TypescriptGeneratorSettings settings, params string[] sourceFiles)
 		{
-			return EmitDeclarationFile(settings, Adapter.ParseFiles(sourceFiles).ToArray());
+			return Emit(settings, Adapter.ParseFiles(sourceFiles).ToArray());
 		}
 
-		public static byte[] EmitDeclarationFile(params TypeDefinition[] definitions) => EmitDeclarationFile(default, definitions);
+		public static byte[] Emit(params TypeDefinition[] definitions) => Emit(default, definitions);
 
-		public static byte[] EmitDeclarationFile(TypescriptGeneratorSettings settings, params TypeDefinition[] definitions)
+		public static byte[] Emit(TypescriptGeneratorSettings settings, params TypeDefinition[] definitions)
 		{
 			using (var stream = new MemoryStream())
 			using (var writer = new CodeWriter(stream, Encoding.UTF8, settings))
@@ -29,7 +29,6 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 				for (int i = 0; i < n; i++)
 				{
 					definition = definitions[i];
-
 
 					if (definition.IsEnum)
 						GenerateEnumDeclaration(writer, definition, settings);

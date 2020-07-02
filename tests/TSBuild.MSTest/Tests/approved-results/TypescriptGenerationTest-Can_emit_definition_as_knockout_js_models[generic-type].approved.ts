@@ -18,6 +18,7 @@ namespace App {
 
 	export abstract class AfricanLion extends Predator implements Skill<any> {
 		constructor(model?: any) {
+			super(model);
 			this.region = ko.observable((model && model.hasOwnProperty('region'))? model.region : null);
 		}
 

@@ -112,8 +112,7 @@ namespace Acklann.TSBuild.Tests
 				Suffix = opt.Suffix,
 				Namespace = opt.Namespace,
 				References = opt.References,
-				AsAbstract = opt.UseAbstract,
-				AsKnockoutJsModel = opt.UseKnockoutJs,
+				AsAbstract = opt.UseAbstract
 			};
 
 			// Act

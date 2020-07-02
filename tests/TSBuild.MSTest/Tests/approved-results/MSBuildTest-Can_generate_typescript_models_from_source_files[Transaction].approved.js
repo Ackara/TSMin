@@ -1,0 +1,2 @@
+"use strict";exports.__esModule=!0;var Transaction=function(){};exports.Transaction=Transaction;
+//# sourceMappingURL=MSBuildTest-Can_generate_typescript_models_from_source_files[Transaction].approved.js.map

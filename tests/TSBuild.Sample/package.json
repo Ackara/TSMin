@@ -1,0 +1,9 @@
+{
+  "name": "web",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "knockout": "3.5.0",
+    "@types/knockout": "3.4.64"
+  }
+}

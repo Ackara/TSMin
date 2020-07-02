@@ -34,20 +34,31 @@ namespace Acklann.TSBuild.MSBuild
 
 		public bool AsAbstract { get; set; }
 
-		public bool AsKnockoutJsModel { get; set; }
-
-		public bool AsDeclarationfile { get; set; }
+		public FileType OutputType { get; set; }
 
 		public bool Execute()
 		{
-			var options = new TypescriptGeneratorSettings(Namespace, Prefix, Suffix, AsAbstract, AsKnockoutJsModel, References);
+			var options = new TypescriptGeneratorSettings(Namespace, Prefix, Suffix, AsAbstract, (OutputType == FileType.KnockoutJs), References);
 			if (_sourceFiles == null) _sourceFiles = SourceFiles.Select(x => x.GetMetadata("FullPath")).ToArray();
 
-			BuildEngine.Info($"Generating typescript models ...");
-			byte[] data = (AsDeclarationfile ?
-				DeclarationFileGenerator.EmitDeclarationFile(options, _sourceFiles) :
-				TypescriptGenerator.Emit(options, _sourceFiles)
-				);
+			BuildEngine.Debug("Generating typescript models ...");
+
+			byte[] data;
+			switch (OutputType)
+			{
+				default:
+				case FileType.Model:
+					data = TypescriptGenerator.Emit(options, _sourceFiles);
+					break;
+
+				case FileType.KnockoutJs:
+					data = KnockoutJsGenerator.Emit(options, _sourceFiles);
+					break;
+
+				case FileType.Declaration:
+					data = DeclarationFileGenerator.Emit(options, _sourceFiles);
+					break;
+			}
 
 			if (string.IsNullOrEmpty(_outputFile)) _outputFile = DestinationFile.GetMetadata("FullPath");
 			string folder = Path.GetDirectoryName(_outputFile);
@@ -66,6 +77,13 @@ namespace Acklann.TSBuild.MSBuild
 		public ITaskHost HostObject { get; set; }
 
 		public IBuildEngine BuildEngine { get; set; }
+
+		public enum FileType
+		{
+			Model,
+			KnockoutJs,
+			Declaration
+		}
 
 		#endregion Backing Members
 	}

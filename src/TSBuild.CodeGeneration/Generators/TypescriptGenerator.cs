@@ -52,7 +52,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 		// ==================== BACKING MEMBERS ==================== //
 
 		internal static void EmitEnumDeclaration(CodeWriter writer, TypeDefinition definition)
-        {
+		{
 			writer.WriteIndent($"export enum {definition.Name.ToPascal()} {{");
 			writer.WriteLine();
 			writer.PushIndent();
@@ -86,7 +86,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 
 			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
-				writer.WriteProperty(member);
+				writer.WriteProperty(member, knockout: false);
 			}
 
 			writer.PopIndent();
@@ -114,9 +114,9 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine(" {");
 			writer.PushIndent();
 
-			foreach (MemberDefinition member in definition.Members)
+			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
-				writer.WriteProperty(member, optional: true);
+				writer.WriteProperty(member, optional: true, knockout: false);
 			}
 
 			writer.PopIndent();

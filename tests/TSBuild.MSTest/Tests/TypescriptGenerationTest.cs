@@ -21,11 +21,11 @@ namespace Acklann.TSBuild.Tests
 				.Add(new MemberDefinition("B", new TypeDefinition("int", (Trait.Enum | Trait.Public))));
 
 			// Act + Assert
-			string ts = UTF8(DeclarationFileGenerator.EmitDeclarationFile(declaration));
+			string ts = UTF8(DeclarationFileGenerator.Emit(declaration));
 			ts.ShouldMatch(@"declare enum Foo\s+{\s+A,\s+B\s+}");
 
 			var config = new TypescriptGeneratorSettings(ns: "Foo");
-			ts = UTF8(DeclarationFileGenerator.EmitDeclarationFile(config, declaration));
+			ts = UTF8(DeclarationFileGenerator.Emit(config, declaration));
 			ts.ShouldMatch(@"declare namespace Foo\s+{\s+enum Foo\s+{\s+A,\s+B\s+}\s+}");
 		}
 
@@ -33,7 +33,7 @@ namespace Acklann.TSBuild.Tests
 		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
 		public void Can_emit_class_definitions_as_dts(string label, TypeDefinition[] args)
 		{
-			string result = UTF8(DeclarationFileGenerator.EmitDeclarationFile(args));
+			string result = UTF8(DeclarationFileGenerator.Emit(args));
 			Diff.Approve(result, Encoding.UTF8, "d.ts", label);
 		}
 
