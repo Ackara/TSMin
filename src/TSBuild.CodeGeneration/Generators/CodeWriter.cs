@@ -43,13 +43,13 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			}
 		}
 
-		public void WriteProperty(MemberDefinition member, bool optional = false, bool knockout = false)
-		{
+		public void WriteProperty(MemberDefinition member, bool optional = false)
+        {
 			Write(GetIndent());
 			Write(member.Name.ToCamel());
 			if (optional) Write('?');
 			Write(": ");
-			Write(GetDataType(member.Type, _settings.Prefix, _settings.Suffix, knockout));
+			Write(GetDataType(member.Type, _settings.Prefix, _settings.Suffix, _settings.UseKnockoutJs));
 			WriteLine(';');
 		}
 

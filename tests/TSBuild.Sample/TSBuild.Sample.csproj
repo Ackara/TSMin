@@ -36,8 +36,6 @@
 	</Target>
 
 	<Target Name="GenerateModels">
-
-		
 		<GenerateTypescriptModels SourceFiles="@(ViewModels)" DestinationFile="wwwroot\scripts\app.ts" AsKnockoutJsModel="true" />
 	</Target>
 

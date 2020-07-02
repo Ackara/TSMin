@@ -98,7 +98,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			foreach (MemberDefinition member in definition.Members)
 			{
 				//writer.WriteIndent($"{member.Name.ToCamel()}: {member.Type.ToTypeName(settings)};");
-				writer.WriteProperty(member, knockout: true);
+				writer.WriteProperty(member);
 			}
 
 			writer.PopIndent();

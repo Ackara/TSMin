@@ -97,7 +97,7 @@ namespace Acklann.TSBuild.Tests
 
 		[DataTestMethod]
 		[DynamicData(nameof(GetTypescriptTestCases), DynamicDataSourceType.Method)]
-		public void Can_generate_typescript_models_from_source_files(string label, string[] sourceFiles, TypescriptGeneratorSettings options)
+		public void Can_generate_typescript_models_from_source_files(string label, string[] sourceFiles, TypescriptGeneratorSettings opt)
 		{
 			// Arrange
 			var engine = A.Fake<IBuildEngine>();
@@ -108,12 +108,12 @@ namespace Acklann.TSBuild.Tests
 				BuildEngine = engine,
 				HostObject = A.Fake<ITaskHost>(),
 
-				AsKnockoutJsModel = options.UseKnockoutJs,
-				AsAbstract = options.UseAbstract,
-				References = options.References,
-				Namespace = options.Namespace,
-				Prefix = options.Prefix,
-				Suffix = options.Suffix
+				Prefix = opt.Prefix,
+				Suffix = opt.Suffix,
+				Namespace = opt.Namespace,
+				References = opt.References,
+				AsAbstract = opt.UseAbstract,
+				AsKnockoutJsModel = opt.UseKnockoutJs,
 			};
 
 			// Act
@@ -131,22 +131,15 @@ namespace Acklann.TSBuild.Tests
 			var sourceFolder = Path.Combine(Sample.DirectoryName, "source-files");
 			if (!Directory.Exists(sourceFolder)) throw new DirectoryNotFoundException($"Could not find directory at '{sourceFolder}'.");
 
-			foreach (string filePath in Directory.EnumerateFiles(sourceFolder))
+			foreach (string sourceFilePath in Directory.EnumerateFiles(sourceFolder))
 			{
 				yield return new object[]
 				{
-					Path.GetFileNameWithoutExtension(filePath),
-					new string[] { filePath },
+					Path.GetFileNameWithoutExtension(sourceFilePath),
+					new string[] { sourceFilePath },
 					new TypescriptGeneratorSettings()
 				};
 			}
-
-			yield return new object[]
-			{
-				"ko",
-				new string[]  { Directory.EnumerateFiles(sourceFolder, "*.cs").First() },
-				new TypescriptGeneratorSettings(null, koJs:true)
-			};
 		}
 
 		#endregion Backing Members

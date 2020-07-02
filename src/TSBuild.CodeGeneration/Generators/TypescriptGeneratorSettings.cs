@@ -2,7 +2,7 @@ namespace Acklann.TSBuild.CodeGeneration
 {
 	public readonly struct TypescriptGeneratorSettings
 	{
-		public TypescriptGeneratorSettings(string ns, string prefix = default, string suffix = default, bool useAbstract = default, bool koJs = default, params string[] references)
+		public TypescriptGeneratorSettings(string ns = default, string prefix = default, string suffix = default, bool useAbstract = default, bool koJs = default, params string[] references)
 		{
 			Namespace = ns;
 			Prefix = prefix;
