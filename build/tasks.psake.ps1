@@ -125,8 +125,8 @@ Task "Add-GitReleaseTag" -alias "tag" -description "This task tags the lastest c
 
 	if (-not ((&git status | Out-String) -match 'nothing to commit'))
 	{
-		Write-Separator "git commit";
 		Exec { &git add .; }
+		Write-Separator "git commit";
 		Exec { &git commit -m "Increment version number to '$version'."; }
 	}
 
