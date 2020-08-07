@@ -2,9 +2,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Acklann.TSBuild</RootNamespace>
-    <AssemblyFileVersion>0.0.50</AssemblyFileVersion>
-    <AssemblyVersion>0.0.50</AssemblyVersion>
-    <Version>0.0.50</Version>
+    <AssemblyFileVersion>0.0.51</AssemblyFileVersion>
+    <AssemblyVersion>0.0.51</AssemblyVersion>
+    <Version>0.0.51</Version>
   </PropertyGroup>
 
   <PropertyGroup Label="Package">
