@@ -88,6 +88,10 @@ namespace Acklann.TSBuild.Tests
 			result.Type.Name.ShouldBe("int");
 			result.Type.IsArray.ShouldBeTrue();
 			result.Type.ArrayRankSpecifiers.ShouldBe(1);
+
+			result = CreateMemberFromSnippet("public Foo[] Items { get; set; }");
+			result.Name.ShouldBe("Items");
+			result.Type.IsArray.ShouldBeTrue();
 		}
 
 		[TestMethod]

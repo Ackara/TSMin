@@ -31,11 +31,11 @@
 		<ViewModels Include="Models\*.cs" />
 	</ItemGroup>
 
-	<Target Name="CopyJsonTest">
+	<Target Name="CopyJsonTest" Condition="Exists($(TestTarget))">
 		<CopyJsonProperty SourceFile="..\..\secrets.json" JPath="local.test" />
 	</Target>
 
-	<Target Name="GenerateModels">
+	<Target Name="GenerateModels" Condition="Exists($(TestTarget))">
 		
 		<GenerateTypescriptModels SourceFiles="@(ViewModels)" DestinationFile="typings\server.d.ts" OutputType="Declaration" />
 		<GenerateTypescriptModels SourceFiles="@(ViewModels)" DestinationFile="wwwroot\scripts\app.ts" OutputType="KnockoutJs" References="../../node_modules/@types/knockout/index.d.ts" />

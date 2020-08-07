@@ -120,6 +120,22 @@ namespace Acklann.TSBuild.Tests
 				"generic-type",
 				TypeDefinition.ResolveDependencies(new TypeDefinition[]{ africanLion, skill, predator }).ToArray()
 			};
+
+			// -----
+
+			var lineItem = new TypeDefinition("LineItem", (Trait.Public | Trait.Class))
+				.Add(new MemberDefinition("Position", new TypeDefinition("int"), Trait.Public))
+				.Add(new MemberDefinition("Name", new TypeDefinition("string"), Trait.Public));
+
+			var form = new TypeDefinition("Form", (Trait.Public | Trait.Class))
+				.Add(new MemberDefinition("Name", new TypeDefinition("string"), Trait.Public))
+				.Add(new MemberDefinition("Items", lineItem, Trait.Public | Trait.Array));
+
+			yield return new object[]
+			{
+				"form",
+				TypeDefinition.ResolveDependencies(new TypeDefinition[]{ lineItem, form }).ToArray()
+			};
 		}
 
 		private static string UTF8(byte[] x) => Encoding.UTF8.GetString(x);

@@ -96,6 +96,7 @@ namespace Acklann.TSBuild.CodeGeneration
 								where x.IsKind(SyntaxKind.AccessorList) || x.IsKind(SyntaxKind.AccessorList)
 								select x;
 			SetValues(property.Type, node.RemoveNodes(unwantedNodes, SyntaxRemoveOptions.KeepNoTrivia));
+			if (property.Type.IsArray) property.IsArray = true;
 			_definition.Add(property);
 		}
 

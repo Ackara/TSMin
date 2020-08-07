@@ -55,7 +55,7 @@ Task "Restore-Dependencies" -alias "restore" -description "This task generate an
 	# ==================================================
 	if (-not (Test-Path $SecretsFilePath))
 	{
-		"{}" | Out-File $SecretsFilePath -Encoding utf8;
+		"{`"nugetKey`": null, `"vsixMarketplace`": null}" | Out-File $SecretsFilePath -Encoding utf8;
 		Write-Host "  * added '$(Split-Path $SecretsFilePath -Leaf)' to the solution.";
 	}
 }

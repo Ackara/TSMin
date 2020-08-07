@@ -85,7 +85,11 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
 				string name = member.Name.ToCamel();
-				writer.WriteIndent($"this.{name} = ko.observable((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
+				if (member.IsArray)
+					writer.WriteIndent($"this.{name} = ko.observableArray((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
+				else
+					writer.WriteIndent($"this.{name} = ko.observable((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
+
 				writer.WriteLine();
 			}
 			writer.CloseBrace();

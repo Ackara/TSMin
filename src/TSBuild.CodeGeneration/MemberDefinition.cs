@@ -13,6 +13,8 @@ namespace Acklann.TSBuild.CodeGeneration
 			Type = type;
 			Traits = trait;
 			DefaultValue = defaultValue;
+
+			if (Type != null && Type.IsArray) Type.IsArray = true;
 		}
 
 		public TypeDefinition Owner;
