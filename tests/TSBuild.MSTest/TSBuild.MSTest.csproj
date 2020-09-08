@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<IsPackable>false</IsPackable>
@@ -28,7 +28,7 @@
 
 	<ItemGroup>
 		<Content Include="test-data\source-files\Zoo.cs">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<Content Include="test-data\source-files\Transaction.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -100,17 +100,37 @@
 			<AutoGen>True</AutoGen>
 			<DependentUpon>Sample.tt</DependentUpon>
 		</Compile>
-		
+
 		<Compile Update="test-data\source-files\Lion.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
+
+		<Compile Update="test-data\specs\case1\Form720.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+
+		<Compile Update="test-data\specs\case1\IBasicInfo.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+
+		<Compile Update="test-data\specs\case2\Contact1.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+
+		<Compile Update="test-data\specs\case2\Form100.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
 	</ItemGroup>
 
-	<Target Name="CleanJavascriptFiles" BeforeTargets="PreBuildEvents" AfterTargets="PreBuildEvent">
+	<Target Name="CleanJavascriptFiles" AfterTargets="PreBuildEvent">
 		<ItemGroup>
 			<JSFiles Include="test-data\**\*.js;test-data\**\*.map" />
 		</ItemGroup>
 
 		<Delete Files="@(JSFiles)" />
+	</Target>
+
+	<Target Name="InstallNPM" BeforeTargets="PreBuildEvent">
+		<Exec Command="npm install" Condition="!Exists('node_modules/')" />
 	</Target>
 </Project>

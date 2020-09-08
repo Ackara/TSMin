@@ -79,11 +79,10 @@ namespace Acklann.TSBuild.Tests
 		private static IEnumerable<object[]> GetSourceFiles()
 		{
 #if DEBUG
-			yield return new object[] { new string[]
-			{
-				@"C:\Users\abaker\Projects\Fami\src\Fami.ASP\Models\Form720BLineItem.cs",
-				@"C:\Users\abaker\Projects\Fami\src\Fami.ASP\Models\Form720B.cs"
-			}};
+			//yield return new object[] { new string[]
+			//{
+			//	
+			//}};
 #endif
 			string folder = Path.Combine(Sample.DirectoryName, "source-files");
 			if (!Directory.Exists(folder)) throw new DirectoryNotFoundException($"Could not find directory at '{folder}'.");

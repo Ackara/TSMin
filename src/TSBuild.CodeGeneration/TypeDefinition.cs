@@ -64,6 +64,7 @@ namespace Acklann.TSBuild.CodeGeneration
 			member.Owner = this;
 			Members.Add(member);
 			if (IsEnum) member.Traits |= Trait.Enum | Trait.Public;
+			if (IsInterface) member.Traits |= Trait.Public;
 
 			return this;
 		}

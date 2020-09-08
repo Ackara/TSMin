@@ -4,6 +4,7 @@ using Acklann.TSBuild.CodeGeneration.Generators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -29,7 +30,7 @@ namespace Acklann.TSBuild.Tests
 			ts.ShouldMatch(@"declare namespace Foo\s+{\s+enum Foo\s+{\s+A,\s+B\s+}\s+}");
 		}
 
-		[DataTestMethod]
+		//[DataTestMethod]
 		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
 		public void Can_emit_class_definitions_as_dts(string label, TypeDefinition[] args)
 		{
@@ -37,7 +38,7 @@ namespace Acklann.TSBuild.Tests
 			Diff.Approve(result, Encoding.UTF8, "d.ts", label);
 		}
 
-		[DataTestMethod]
+		//[DataTestMethod]
 		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
 		public void Can_emit_class_definitions_as_typescript_models(string label, TypeDefinition[] args)
 		{
@@ -46,13 +47,43 @@ namespace Acklann.TSBuild.Tests
 			Diff.Approve(result, Encoding.UTF8, "ts", label);
 		}
 
-		[DataTestMethod]
+		//[DataTestMethod]
 		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
 		public void Can_emit_definition_as_knockout_js_models(string label, TypeDefinition[] args)
 		{
 			var config = new TypescriptGeneratorSettings("App", useAbstract: true, koJs: true, references: new string[] { "../../../node_modules/@types/knockout/index.d.ts" });
 			string result = UTF8(KnockoutJsGenerator.Emit(config, args));
 			Diff.Approve(result, Encoding.UTF8, "ts", label);
+		}
+
+		[DataTestMethod]
+		[ApprovedFolder("approved-results/spec-results/ts")]
+		[DynamicData(nameof(GetSpecifications), DynamicDataSourceType.Method)]
+		public void Can_emit_typescript_files(string[] sourceFiles, string label)
+		{
+			var config = new TypescriptGeneratorSettings("App");
+			string results = UTF8(TypescriptGenerator.Emit(config, sourceFiles));
+			Diff.Approve(results, ".ts", label);
+		}
+
+		[DataTestMethod]
+		[ApprovedFolder("approved-results/spec-results/dts")]
+		[DynamicData(nameof(GetSpecifications), DynamicDataSourceType.Method)]
+		public void Can_emit_declaration_files(string[] sourceFiles, string label)
+		{
+			var config = new TypescriptGeneratorSettings();
+			string results = UTF8(DeclarationFileGenerator.Emit(config, sourceFiles));
+			Diff.Approve(results, ".ts", label);
+		}
+
+		[DataTestMethod]
+		[ApprovedFolder("approved-results/spec-results/ko")]
+		[DynamicData(nameof(GetSpecifications), DynamicDataSourceType.Method)]
+		public void Can_emit_knockout_js_files(string[] sourceFiles, string label)
+		{
+			var config = new TypescriptGeneratorSettings("App", suffix: "Model", koJs: true, references: new string[] { "../../../../node_modules/@types/knockout/index.d.ts" });
+			var results = KnockoutJsGenerator.Emit(config, sourceFiles);
+			Diff.Approve(UTF8(results), ".ts", label);
 		}
 
 		#region Backing Members
@@ -136,6 +167,21 @@ namespace Acklann.TSBuild.Tests
 				"form",
 				TypeDefinition.ResolveDependencies(new TypeDefinition[]{ lineItem, form }).ToArray()
 			};
+		}
+
+		private static IEnumerable<object[]> GetSpecifications()
+		{
+			string rootFolder = Path.Combine(Sample.DirectoryName, "specs");
+			foreach (string folder in Directory.GetDirectories(rootFolder, "*"))
+			{
+				string[] sourceFiles = Directory.GetFiles(folder, "*.cs");
+
+				yield return new object[]
+				{
+					sourceFiles,
+					Path.GetFileName(folder)
+				};
+			}
 		}
 
 		private static string UTF8(byte[] x) => Encoding.UTF8.GetString(x);

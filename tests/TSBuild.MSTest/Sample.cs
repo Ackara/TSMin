@@ -36,7 +36,11 @@ namespace Acklann.TSBuild
 		public static FileInfo GetToastTS() => GetFile(@"project\domain\Toast.ts");
 		public static FileInfo GetCarTS() => GetFile(@"project\Models\Car.ts");
 		public static FileInfo GetObservableTS() => GetFile(@"project\Models\Observable.ts");
-		public static FileInfo GetIanimalCS() => GetFile(@"source-files\IAnimal.cs");
+		public static FileInfo GetLionCS() => GetFile(@"source-files\Lion.cs");
+		public static FileInfo GetTransactionCS() => GetFile(@"source-files\Transaction.cs");
+		public static FileInfo GetZooCS() => GetFile(@"source-files\Zoo.cs");
+		public static FileInfo GetForm720CS() => GetFile(@"specs\case1\Form720.cs");
+		public static FileInfo GetIbasicinfoCS() => GetFile(@"specs\case1\IBasicInfo.cs");
 
 		public struct File
 		{
@@ -55,7 +59,11 @@ namespace Acklann.TSBuild
 			public const string ToastTS = @"project\domain\Toast.ts";
 			public const string CarTS = @"project\Models\Car.ts";
 			public const string ObservableTS = @"project\Models\Observable.ts";
-			public const string IanimalCS = @"source-files\IAnimal.cs";
+			public const string LionCS = @"source-files\Lion.cs";
+			public const string TransactionCS = @"source-files\Transaction.cs";
+			public const string ZooCS = @"source-files\Zoo.cs";
+			public const string Form720CS = @"specs\case1\Form720.cs";
+			public const string IbasicinfoCS = @"specs\case1\IBasicInfo.cs";
 		}
 	}	
 }

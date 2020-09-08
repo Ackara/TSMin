@@ -60,7 +60,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 
 		// ==================== BACKING MEMBERS ==================== //
 
-		private static void EmitClassDeclaration(CodeWriter writer, TypeDefinition definition, TypescriptGeneratorSettings settings)
+		internal static void EmitClassDeclaration(CodeWriter writer, TypeDefinition definition, TypescriptGeneratorSettings settings)
 		{
 			writer.WriteIndent("export ");
 			if (settings.UseAbstract && definition.IsClass) writer.Write("abstract ");
@@ -115,6 +115,36 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
 				writer.WriteProperty(member, knockout: true);
+			}
+
+			writer.PopIndent();
+			writer.WriteIndent("}");
+			writer.WriteLine();
+		}
+
+		internal static void EmitInterfaceDeclaration(CodeWriter writer, TypeDefinition definition, TypescriptGeneratorSettings settings)
+		{
+			writer.WriteIndent("export interface ");
+			writer.WriteTypeSignature(definition);
+
+			if (definition?.BaseList?.Count > 0)
+			{
+				var onFirstItem = true;
+				writer.Write(" extends ");
+				foreach (TypeDefinition def in definition.BaseList)
+				{
+					if (onFirstItem) onFirstItem = false;
+					else writer.Write(", ");
+
+					writer.WriteTypeSignature(def);
+				}
+			}
+			writer.WriteLine(" {");
+			writer.PushIndent();
+
+			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
+			{
+				writer.WriteProperty(member, optional: true, knockout: true);
 			}
 
 			writer.PopIndent();

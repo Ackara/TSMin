@@ -63,7 +63,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 		internal static string GetDataType(TypeDefinition definition, string prefix, string suffix, bool array, bool knockout = false)
 		{
 			bool isPrimitive = true, isArray = (array || definition.IsCollection);
-			
+
 			string name = definition.Name;
 			if (isArray && definition.ParameterList?.Count == 1) name = definition.ParameterList[0].Name;
 
@@ -142,7 +142,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			if (definition?.BaseList?.Count > 0)
 			{
 				bool onFirstItem = true;
-				foreach (TypeDefinition def in definition.BaseList.Where(x => x.IsClass))
+				foreach (TypeDefinition def in definition.BaseList.Where(x => x.IsClass || x.IsStruct))
 				{
 					if (onFirstItem)
 					{
@@ -158,8 +158,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 				{
 					if (onFirstItem)
 					{
-						if (definition.IsClass) Write(" implements ");
-						else Write(" extends ");
+						Write(" implements ");
 						onFirstItem = false;
 					}
 					else Write(", ");

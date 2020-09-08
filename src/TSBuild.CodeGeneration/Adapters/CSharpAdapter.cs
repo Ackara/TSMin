@@ -32,7 +32,7 @@ namespace Acklann.TSBuild.CodeGeneration
 			if (tree.TryGetRoot(out SyntaxNode node))
 			{
 				var declarations = from t in node.DescendantNodes()
-								   where t.IsKind(SyntaxKind.ClassDeclaration) || t.IsKind(SyntaxKind.EnumDeclaration) || t.IsKind(SyntaxKind.StructDeclaration)
+								   where t.IsKind(SyntaxKind.ClassDeclaration) || t.IsKind(SyntaxKind.EnumDeclaration) || t.IsKind(SyntaxKind.StructDeclaration) || t.IsKind(SyntaxKind.InterfaceDeclaration)
 								   select t;
 
 				foreach (SyntaxNode item in declarations)
@@ -60,7 +60,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		public override void VisitClassDeclaration(ClassDeclarationSyntax node)
 		{
-			_definition.Traits |= node.Modifiers.GetTraits();
+			_definition.Traits |= node.Modifiers.GetTraits() | Trait.Class;
 			_definition.Name = node.Identifier.ValueText;
 			SetValues(_definition, node.TypeParameterList);
 			SetValues(_definition, node.BaseList);
@@ -70,7 +70,7 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		public override void VisitStructDeclaration(StructDeclarationSyntax node)
 		{
-			_definition.Traits |= (node.Modifiers.GetTraits() | Trait.Class);
+			_definition.Traits |= (node.Modifiers.GetTraits() | Trait.Struct);
 			_definition.Name = node.Identifier.ValueText;
 			GetBaseTypes(node);
 

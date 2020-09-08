@@ -1,2 +1,0 @@
-var Foo;!function(n){var t;(t=n.Status||(n.Status={}))[t.Striving=5]="Striving",t[t.Endangered=6]="Endangered",t[t.Instinct=7]="Instinct";var i=function(){};n.LionBase=i}(Foo||(Foo={}));
-//# sourceMappingURL=TypescriptGenerationTest-Can_emit_class_definitions_as_typescript_models[inheritance].approved.js.map
