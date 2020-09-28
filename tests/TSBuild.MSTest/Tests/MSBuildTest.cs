@@ -96,6 +96,7 @@ namespace Acklann.TSBuild.Tests
 		}
 
 		[DataTestMethod]
+		//[ApprovedFolder("approved-results/spec-results/msbuild")]
 		[DynamicData(nameof(GetTypescriptTestCases), DynamicDataSourceType.Method)]
 		public void Can_generate_typescript_models_from_source_files(string label, string[] sourceFiles, TypescriptGeneratorSettings opt)
 		{
@@ -139,6 +140,14 @@ namespace Acklann.TSBuild.Tests
 					new TypescriptGeneratorSettings()
 				};
 			}
+
+			//var sf = Directory.GetFiles(@"C:\Users\abaker\Projects\Fami\src\Fami.ASP\Models");
+			//yield return new object[]
+			//{
+			//	"man",
+			//	sf,
+			//	new TypescriptGeneratorSettings()
+			//};
 		}
 
 		#endregion Backing Members

@@ -12,7 +12,7 @@
 	</PropertyGroup>
 
 	<Target Name="CompileTypescriptFilesOnBuild"
-          BeforeTargets="PreBuildEvent"
+          BeforeTargets="PostBuildEvent"
           Condition="$(ShouldCompileTypescriptOnBuild)">
 		<CallTarget Targets="CompileTypescriptFiles" />
 	</Target>

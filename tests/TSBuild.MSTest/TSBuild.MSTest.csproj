@@ -4,12 +4,14 @@
 		<IsPackable>false</IsPackable>
 		<RootNamespace>Acklann.TSBuild</RootNamespace>
 		<Optimize>false</Optimize>
+	</PropertyGroup>
 
+	<PropertyGroup>
 		<Title>TSBuild</Title>
 		<Description>Helps you compile and minify typescript files on save and on build.</Description>
-		<Version>0.0.52</Version>
-		<AssemblyVersion>0.0.52</AssemblyVersion>
-		<AssemblyFileVersion>0.0.52</AssemblyFileVersion>
+		<Version>0.0.54</Version>
+		<AssemblyVersion>0.0.54</AssemblyVersion>
+		<AssemblyFileVersion>0.0.54</AssemblyFileVersion>
 		<PackageIcon>icon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
@@ -114,11 +116,11 @@
 		</Compile>
 
 		<Compile Update="test-data\specs\case2\Contact1.cs">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
 
 		<Compile Update="test-data\specs\case2\Form100.cs">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Compile>
 	</ItemGroup>
 

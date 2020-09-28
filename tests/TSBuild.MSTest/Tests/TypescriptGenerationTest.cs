@@ -182,6 +182,11 @@ namespace Acklann.TSBuild.Tests
 					Path.GetFileName(folder)
 				};
 			}
+
+			// =====
+
+			//string[] s = Directory.GetFiles(@"C:\Users\abaker\Projects\Fami\src\Fami.ASP\Models");
+			//yield return new object[] { s, "fami" };
 		}
 
 		private static string UTF8(byte[] x) => Encoding.UTF8.GetString(x);

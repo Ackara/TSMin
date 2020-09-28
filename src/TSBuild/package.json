@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "typescript": "3.7.2"
+    "typescript": "4.0.x"
   },
   "name": "foo",
   "description": "Helps you compile and minify typescript files on save and on build.",

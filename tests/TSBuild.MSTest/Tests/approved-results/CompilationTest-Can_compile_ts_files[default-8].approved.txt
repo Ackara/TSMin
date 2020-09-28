@@ -1,6 +1,6 @@
 == default-8 (Car.js)
 ==================================================
-var TSMin,__extends=this&&this.__extends||function(){var e=function(t,n){return(e=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,n){t.__proto__=n}||function(t,n){for(var r in n)n.hasOwnProperty(r)&&(t[r]=n[r])})(t,n)};return function(t,n){function r(){this.constructor=t}e(t,n),t.prototype=null===n?Object.create(n):(r.prototype=n.prototype,new r)}}();!function(t){var n=function(n){function t(){var t=n.call(this)||this;return t.make="Forte",t.year=2019,t}return __extends(t,n),t}(t.Observable);t.Car=n}(TSMin||(TSMin={}));
+var TSMin,__extends=this&&this.__extends||function(){var e=function(t,n){return(e=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,n){t.__proto__=n}||function(t,n){for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(t[r]=n[r])})(t,n)};return function(t,n){function r(){this.constructor=t}e(t,n),t.prototype=null===n?Object.create(n):(r.prototype=n.prototype,new r)}}();!function(t){var n,r=(n=t.Observable,__extends(e,n),e);function e(){var t=n.call(this)||this;return t.make="Forte",t.year=2019,t}t.Car=r}(TSMin=TSMin||{});
 //# sourceMappingURL=Car.js.map
 
 
@@ -12,14 +12,14 @@ var TSMin,__extends=this&&this.__extends||function(){var e=function(t,n){return(
     "Car.ts"
   ],
   "names": [],
-  "mappings": "IAEU,gXAAV,SAAU,GACN,IAAA,EAAA,SAAA,GACI,SAAA,IAAA,IAAA,EACI,EAAA,KAAA,OAAO,YAEP,EAAK,KAAO,QACZ,EAAK,KAAO,OAKpB,OAVyB,UAAA,EAAA,GAUzB,EAVA,CAAyB,EAAA,YAAZ,EAAA,IAAG,EADpB,CAAU,QAAA,MAAK",
+  "mappings": "IAEU,sYAAV,SAAU,GACN,IAAA,EAAA,GAAA,EAAyB,EAAA,WAAA,UAAA,EAAA,GAUzB,GATI,SAAA,IAAA,IAAA,EACI,EAAA,KAAA,OAAO,YAEP,EAAK,KAAO,QACZ,EAAK,KAAO,OALP,EAAA,IAAG,EADpB,CAAU,MAAA,OAAK",
   "file": "Car.js"
 }
 
 
 == default-8 (Observable.js)
 ==================================================
-var TSMin;!function(i){var n=function(){this.isSelected=!1};(TSMin||(TSMin={})).Observable=n}();
+var TSMin;(TSMin||(TSMin={})).Observable=function(){this.isSelected=!1};
 //# sourceMappingURL=Observable.js.map
 
 
@@ -31,14 +31,14 @@ var TSMin;!function(i){var n=function(){this.isSelected=!1};(TSMin||(TSMin={})).
     "Observable.ts"
   ],
   "names": [],
-  "mappings": "AAAA,IAAU,OAAV,SAAU,GACN,IAAA,EACI,WACI,KAAK,YAAa,IAHpB,QAAA,MAAK,KACE,WAAU,EAD3B",
+  "mappings": "AAAA,IAAU,OAAA,QAAA,MAAK,KACE,WACT,WACI,KAAK,YAAa",
   "file": "Observable.js"
 }
 
 
 == default-8 (Server.js)
 ==================================================
-var TSMin;!function(t){var e=function(){function t(t){t(this.pass.bind(this),this.reject.bind(this))}return t.prototype.then=function(t){return this.thenCallback=t,this},t.prototype.catch=function(t){return this.catchCallback=t,this},t.prototype.finally=function(t){this.finalCallback=t},t.prototype.pass=function(t){this.thenCallback&&this.thenCallback(t||!0),this.finalCallback&&this.finalCallback()},t.prototype.reject=function(t){this.catchCallback&&this.catchCallback(t),this.finalCallback&&this.finalCallback()},t}();t.ServerPromise=e;var n=function(){function t(){}return t.sendHttpRequest=function(i,o,r){return new e(function(e,n){var s="application/json; charset=utf-8";r||(r={}),r.hasOwnProperty("contentType")||(r.contentType="object"==typeof r.body?s:null);var t=new XMLHttpRequest;if(t.open(i,o,!0),r.contentType&&t.setRequestHeader("Content-Type",r.contentType),r.headers)for(var a=0;a<r.headers.length;a++)t.setRequestHeader(r.headers[a].name,r.headers[a].value);t.onreadystatechange=function(){if(4===this.readyState){var t=this.getResponseHeader("Content-Type")===s?JSON.parse(this.responseText):this.responseText;200<=this.status&&this.status<=299?(e(t),t||console.warn(i+" "+this.responseURL+": NO CONTENT")):(n({status:this.status,url:this.responseURL,data:t,message:(i+" "+this.responseURL+": "+this.status+" "+("object"!=typeof t?this.responseText:"")).trim()}),console.debug(t))}},t.onerror=function(){n({message:"Network Error"})},r.contentType===s?t.send(JSON.stringify(r.body)):t.send(r.body)})},t}();t.Server=n}(TSMin||(TSMin={}));
+var TSMin;!function(t){var e=(s.prototype.then=function(t){return this.thenCallback=t,this},s.prototype.catch=function(t){return this.catchCallback=t,this},s.prototype.finally=function(t){this.finalCallback=t},s.prototype.pass=function(t){this.thenCallback&&this.thenCallback(t||!0),this.finalCallback&&this.finalCallback()},s.prototype.reject=function(t){this.catchCallback&&this.catchCallback(t),this.finalCallback&&this.finalCallback()},s);function s(t){t(this.pass.bind(this),this.reject.bind(this))}t.ServerPromise=e;var n=(a.sendHttpRequest=function(i,o,r){return new e(function(e,s){var n="application/json; charset=utf-8";(r=r||{}).hasOwnProperty("contentType")||(r.contentType="object"==typeof r.body?n:null);var t=new XMLHttpRequest;if(t.open(i,o,!0),r.contentType&&t.setRequestHeader("Content-Type",r.contentType),r.headers)for(var a=0;a<r.headers.length;a++)t.setRequestHeader(r.headers[a].name,r.headers[a].value);t.onreadystatechange=function(){var t;4===this.readyState&&(t=this.getResponseHeader("Content-Type")===n?JSON.parse(this.responseText):this.responseText,200<=this.status&&this.status<=299?(e(t),t||console.warn(i+" "+this.responseURL+": NO CONTENT")):(s({status:this.status,url:this.responseURL,data:t,message:(i+" "+this.responseURL+": "+this.status+" "+("object"!=typeof t?this.responseText:"")).trim()}),console.debug(t)))},t.onerror=function(){s({message:"Network Error"})},r.contentType===n?t.send(JSON.stringify(r.body)):t.send(r.body)})},a);function a(){}t.Server=n}(TSMin=TSMin||{});
 //# sourceMappingURL=Server.js.map
 
 
@@ -50,14 +50,14 @@ var TSMin;!function(t){var e=function(){function t(t){t(this.pass.bind(this),thi
     "Server.ts"
   ],
   "names": [],
-  "mappings": "AAAA,IAAU,OAAV,SAAU,GAKN,IAAA,EAAA,WACI,SAAA,EAAY,GACR,EAAO,KAAK,KAAK,KAAK,MAAO,KAAK,OAAO,KAAK,OA8BtD,OAvBW,EAAA,UAAA,KAAP,SAAY,GAER,OADA,KAAK,aAAe,EACb,MAGJ,EAAA,UAAK,MAAZ,SAAa,GAET,OADA,KAAK,cAAgB,EACd,MAGJ,EAAA,UAAO,QAAd,SAAe,GACX,KAAK,cAAgB,GAGjB,EAAA,UAAA,KAAR,SAAa,GACL,KAAK,cAAgB,KAAK,aAAa,IAAQ,GAC/C,KAAK,eAAiB,KAAK,iBAG3B,EAAA,UAAA,OAAR,SAAe,GACP,KAAK,eAAiB,KAAK,cAAc,GACzC,KAAK,eAAiB,KAAK,iBAEvC,EAhCA,GAAa,EAAA,cAAa,EAkC1B,IAAA,EAAA,WAAA,SAAA,KA8CA,OA7CkB,EAAA,gBAAd,SAA6C,EAAgB,EAAa,GACtE,OAAO,IAAI,EAAc,SAAU,EAAM,GACrC,IAAM,EAAmB,kCAEpB,IAAW,EAAU,IACrB,EAAQ,eAAe,iBAAkB,EAAQ,YAAuC,iBAAjB,EAAQ,KAAoB,EAAmB,MAE3H,IAAI,EAAU,IAAI,eAIlB,GAHA,EAAQ,KAAK,EAAQ,GAAK,GACtB,EAAQ,aAAe,EAAQ,iBAAiB,eAAgB,EAAQ,aAExE,EAAQ,QACR,IAAK,IAAI,EAAI,EAAG,EAAI,EAAQ,QAAQ,OAAQ,IACxC,EAAQ,iBAAiB,EAAQ,QAAQ,GAAG,KAAM,EAAQ,QAAQ,GAAG,OAI7E,EAAQ,mBAAqB,WACzB,GAAwB,IAApB,KAAK,WAAkB,CACvB,IAAI,EAAe,KAAK,kBAAkB,kBAAoB,EAAmB,KAAK,MAAM,KAAK,cAAgB,KAAK,aAEnG,KAAf,KAAK,QAAiB,KAAK,QAAU,KACrC,EAAK,GACA,GAAU,QAAQ,KAAQ,EAAM,IAAI,KAAK,YAAW,kBAIzD,EAAyB,CACrB,OAAQ,KAAK,OAAQ,IAAK,KAAK,YAAa,KAAM,EAClD,SAAY,EAAM,IAAI,KAAK,YAAW,KAAK,KAAK,OAAM,KAAuB,iBAAX,EAAsB,KAAK,aAAe,KAAM,SAEtH,QAAQ,MAAM,MAI1B,EAAQ,QAAU,WACd,EAAyB,CAAE,QAAS,mBAGpC,EAAQ,cAAgB,EAAoB,EAAQ,KAAK,KAAK,UAAU,EAAQ,OAC7E,EAAQ,KAAK,EAAQ,SAKxC,EA9CA,GAAa,EAAA,OAAM,EAvCvB,CAAU,QAAA,MAAK",
+  "mappings": "AAAA,IAAU,OAAV,SAAU,GAKN,IAAA,GASW,EAAA,UAAA,KAAP,SAAY,GAER,OADA,KAAK,aAAe,EACb,MAGJ,EAAA,UAAK,MAAZ,SAAa,GAET,OADA,KAAK,cAAgB,EACd,MAGJ,EAAA,UAAO,QAAd,SAAe,GACX,KAAK,cAAgB,GAGjB,EAAA,UAAA,KAAR,SAAa,GACL,KAAK,cAAgB,KAAK,aAAa,IAAQ,GAC/C,KAAK,eAAiB,KAAK,iBAG3B,EAAA,UAAA,OAAR,SAAe,GACP,KAAK,eAAiB,KAAK,cAAc,GACzC,KAAK,eAAiB,KAAK,iBAEvC,GA/BI,SAAA,EAAY,GACR,EAAO,KAAK,KAAK,KAAK,MAAO,KAAK,OAAO,KAAK,OAFzC,EAAA,cAAa,EAkC1B,IAAA,GACkB,EAAA,gBAAd,SAA6C,EAAgB,EAAa,GACtE,OAAO,IAAI,EAAc,SAAU,EAAM,GACrC,IAAM,EAAmB,mCAET,EAAX,GAAqB,IACb,eAAe,iBAAkB,EAAQ,YAAuC,iBAAjB,EAAQ,KAAoB,EAAmB,MAE3H,IAAI,EAAU,IAAI,eAIlB,GAHA,EAAQ,KAAK,EAAQ,GAAK,GACtB,EAAQ,aAAe,EAAQ,iBAAiB,eAAgB,EAAQ,aAExE,EAAQ,QACR,IAAK,IAAI,EAAI,EAAG,EAAI,EAAQ,QAAQ,OAAQ,IACxC,EAAQ,iBAAiB,EAAQ,QAAQ,GAAG,KAAM,EAAQ,QAAQ,GAAG,OAI7E,EAAQ,mBAAqB,WACzB,IACQ,EADgB,IAApB,KAAK,aACD,EAAe,KAAK,kBAAkB,kBAAoB,EAAmB,KAAK,MAAM,KAAK,cAAgB,KAAK,aAEnG,KAAf,KAAK,QAAiB,KAAK,QAAU,KACrC,EAAK,GACA,GAAU,QAAQ,KAAQ,EAAM,IAAI,KAAK,YAAW,kBAIzD,EAAyB,CACrB,OAAQ,KAAK,OAAQ,IAAK,KAAK,YAAa,KAAM,EAClD,SAAY,EAAM,IAAI,KAAK,YAAW,KAAK,KAAK,OAAM,KAAuB,iBAAX,EAAsB,KAAK,aAAe,KAAM,SAEtH,QAAQ,MAAM,MAI1B,EAAQ,QAAU,WACd,EAAyB,CAAE,QAAS,mBAGpC,EAAQ,cAAgB,EAAoB,EAAQ,KAAK,KAAK,UAAU,EAAQ,OAC7E,EAAQ,KAAK,EAAQ,SAKxC,GA9CA,SAAA,KAAa,EAAA,OAAM,EAvCvB,CAAU,MAAA,OAAK",
   "file": "Server.js"
 }
 
 
 == default-8 (Toast.js)
 ==================================================
-var TSMin;!function(n){var o=function(){function n(){}return n.toMoney=function(n){return"$"+n},n.debug=function(n){console.log("debug: "+n)},n.info=function(n){document.getElementById("msg").innerHTML=""+n},n}();n.Toast=o}(TSMin||(TSMin={}));
+var TSMin;!function(n){var o=(t.toMoney=function(n){return"$"+n},t.debug=function(n){console.log("debug: "+n)},t.info=function(n){document.getElementById("msg").innerHTML=""+n},t);function t(){}n.Toast=o}(TSMin=TSMin||{});
 //# sourceMappingURL=Toast.js.map
 
 
@@ -69,7 +69,7 @@ var TSMin;!function(n){var o=function(){function n(){}return n.toMoney=function(
     "Toast.ts"
   ],
   "names": [],
-  "mappings": "AAAA,IAAU,OAAV,SAAU,GACN,IAAA,EAAA,WAAA,SAAA,KAaA,OAZkB,EAAA,QAAd,SAAsB,GAClB,MAAO,IAAI,GAGD,EAAA,MAAd,SAAoB,GAChB,QAAQ,IAAI,UAAY,IAGd,EAAA,KAAd,SAAmB,GACL,SAAS,eAAe,OAC9B,UAAY,GAAG,GAE3B,EAbA,GAAa,EAAA,MAAK,EADtB,CAAU,QAAA,MAAK",
+  "mappings": "AAAA,IAAU,OAAV,SAAU,GACN,IAAA,GACkB,EAAA,QAAd,SAAsB,GAClB,MAAO,IAAI,GAGD,EAAA,MAAd,SAAoB,GAChB,QAAQ,IAAI,UAAY,IAGd,EAAA,KAAd,SAAmB,GACL,SAAS,eAAe,OAC9B,UAAY,GAAG,GAE3B,GAbA,SAAA,KAAa,EAAA,MAAK,EADtB,CAAU,MAAA,OAAK",
   "file": "Toast.js"
 }
 
