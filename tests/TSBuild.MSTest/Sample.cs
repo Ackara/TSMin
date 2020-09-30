@@ -42,6 +42,8 @@ namespace Acklann.TSBuild
 		public static FileInfo GetIbasicinfoCS() => GetFile(@"specs\case1\IBasicInfo.cs");
 		public static FileInfo GetContact1CS() => GetFile(@"specs\case2\Contact1.cs");
 		public static FileInfo GetForm100CS() => GetFile(@"specs\case2\Form100.cs");
+		public static FileInfo GetAnimalCS() => GetFile(@"specs\case3\Animal.cs");
+		public static FileInfo GetTigerCS() => GetFile(@"specs\case3\Tiger.cs");
 
 		public struct File
 		{
@@ -66,6 +68,8 @@ namespace Acklann.TSBuild
 			public const string IbasicinfoCS = @"specs\case1\IBasicInfo.cs";
 			public const string Contact1CS = @"specs\case2\Contact1.cs";
 			public const string Form100CS = @"specs\case2\Form100.cs";
+			public const string AnimalCS = @"specs\case3\Animal.cs";
+			public const string TigerCS = @"specs\case3\Tiger.cs";
 		}
 	}	
 }

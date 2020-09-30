@@ -9,9 +9,9 @@
 	<PropertyGroup>
 		<Title>TSBuild</Title>
 		<Description>Helps you compile and minify typescript files on save and on build.</Description>
-		<Version>0.0.54</Version>
-		<AssemblyVersion>0.0.54</AssemblyVersion>
-		<AssemblyFileVersion>0.0.54</AssemblyFileVersion>
+		<Version>0.0.55</Version>
+		<AssemblyVersion>0.0.55</AssemblyVersion>
+		<AssemblyFileVersion>0.0.55</AssemblyFileVersion>
 		<PackageIcon>icon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
@@ -26,6 +26,8 @@
 	<ItemGroup>
 		<Compile Remove="test-data\source-files\Transaction.cs" />
 		<Compile Remove="test-data\source-files\Zoo.cs" />
+		<Compile Remove="test-data\specs\case3\Animal.cs" />
+		<Compile Remove="test-data\specs\case3\Tiger.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,6 +37,15 @@
 		<Content Include="test-data\source-files\Transaction.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="test-data\specs\case3\Animal.cs">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include="test-data\specs\case3\Tiger.cs">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 	<ItemGroup>

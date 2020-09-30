@@ -6,7 +6,7 @@
 		"@types/knockout": "3.4.64",
 		"glob": "^7.1.6",
 		"multi-stage-sourcemap": "^0.3.1",
-		"typescript": "^3.7.2",
-		"uglify-js": "^3.4.9"
+		"typescript": "^4.0.3",
+		"uglify-js": "^3.11.0"
 	}
 }

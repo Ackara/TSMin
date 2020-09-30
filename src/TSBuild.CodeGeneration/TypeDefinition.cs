@@ -88,20 +88,20 @@ namespace Acklann.TSBuild.CodeGeneration
 				   select x;
 		}
 
-		public IEnumerable<TypeDefinition> EnumerateBaseList()
+		public IEnumerable<TypeDefinition> EnumerateInScopeBaseTypes()
 		{
 			if (BaseList == null || BaseList.Count < 1) yield break;
 
-			for (int i = 0; i < BaseList.Count; i++)
-				if (!BaseList[i].IsInterface)
+			foreach (TypeDefinition def in BaseList)
+				if (!def.IsInterface && def.InScope)
 				{
-					yield return BaseList[i];
+					yield return def;
 				}
 
-			for (int i = 0; i < BaseList.Count; i++)
-				if (BaseList[i].IsInterface)
+			foreach (TypeDefinition def in BaseList)
+				if (def.IsInterface && def.InScope)
 				{
-					yield return BaseList[i];
+					yield return def;
 				}
 		}
 

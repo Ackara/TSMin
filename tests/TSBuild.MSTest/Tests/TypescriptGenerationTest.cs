@@ -30,32 +30,6 @@ namespace Acklann.TSBuild.Tests
 			ts.ShouldMatch(@"declare namespace Foo\s+{\s+enum Foo\s+{\s+A,\s+B\s+}\s+}");
 		}
 
-		//[DataTestMethod]
-		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
-		public void Can_emit_class_definitions_as_dts(string label, TypeDefinition[] args)
-		{
-			string result = UTF8(DeclarationFileGenerator.Emit(args));
-			Diff.Approve(result, Encoding.UTF8, "d.ts", label);
-		}
-
-		//[DataTestMethod]
-		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
-		public void Can_emit_class_definitions_as_typescript_models(string label, TypeDefinition[] args)
-		{
-			var config = new TypescriptGeneratorSettings("Foo", suffix: "Base");
-			string result = UTF8(TypescriptGenerator.Emit(config, args));
-			Diff.Approve(result, Encoding.UTF8, "ts", label);
-		}
-
-		//[DataTestMethod]
-		[DynamicData(nameof(GetDefinitions), DynamicDataSourceType.Method)]
-		public void Can_emit_definition_as_knockout_js_models(string label, TypeDefinition[] args)
-		{
-			var config = new TypescriptGeneratorSettings("App", useAbstract: true, koJs: true, references: new string[] { "../../../node_modules/@types/knockout/index.d.ts" });
-			string result = UTF8(KnockoutJsGenerator.Emit(config, args));
-			Diff.Approve(result, Encoding.UTF8, "ts", label);
-		}
-
 		[DataTestMethod]
 		[ApprovedFolder("approved-results/spec-results/ts")]
 		[DynamicData(nameof(GetSpecifications), DynamicDataSourceType.Method)]
@@ -182,11 +156,6 @@ namespace Acklann.TSBuild.Tests
 					Path.GetFileName(folder)
 				};
 			}
-
-			// =====
-
-			//string[] s = Directory.GetFiles(@"C:\Users\abaker\Projects\Fami\src\Fami.ASP\Models");
-			//yield return new object[] { s, "fami" };
 		}
 
 		private static string UTF8(byte[] x) => Encoding.UTF8.GetString(x);
