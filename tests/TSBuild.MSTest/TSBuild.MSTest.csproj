@@ -9,9 +9,9 @@
 	<PropertyGroup>
 		<Title>TSBuild</Title>
 		<Description>Helps you compile and minify typescript files on save and on build.</Description>
-		<Version>0.0.55</Version>
-		<AssemblyVersion>0.0.55</AssemblyVersion>
-		<AssemblyFileVersion>0.0.55</AssemblyFileVersion>
+		<Version>0.0.56</Version>
+		<AssemblyVersion>0.0.56</AssemblyVersion>
+		<AssemblyFileVersion>0.0.56</AssemblyFileVersion>
 		<PackageIcon>icon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
