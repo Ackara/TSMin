@@ -49,7 +49,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			Write(member.Name.ToCamel());
 			if (optional) Write('?');
 			Write(": ");
-			Write(GetDataType(member.Type, _settings.Prefix, _settings.Suffix, knockout));
+			Write(GetDataType(member.Type, _settings.Prefix, _settings.Suffix, member.IsCollection, knockout));
 			WriteLine(';');
 		}
 
@@ -60,12 +60,12 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			if (member.DefaultValue != null) Write($" = {member.DefaultValue}");
 		}
 
-		internal static string GetDataType(TypeDefinition definition, string prefix, string suffix, bool knockout = false)
+		internal static string GetDataType(TypeDefinition definition, string prefix, string suffix, bool array, bool knockout = false)
 		{
-			bool isPrimitive = true;
+			bool isPrimitive = true, isArray = (array || definition.IsCollection);
 
 			string name = definition.Name;
-			if (definition.IsCollection && definition.ParameterList?.Count == 1) name = definition.ParameterList[0].Name;
+			if (isArray && definition.ParameterList?.Count == 1) name = definition.ParameterList[0].Name;
 
 			switch (name)
 			{
@@ -108,11 +108,11 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			if (knockout)
 			{
 				if (isPrimitive || definition.IsEnum)
-					return (definition.IsCollection ? $"KnockoutObservableArray<{name}>" : $"KnockoutObservable<{name}>");
+					return (isArray ? $"KnockoutObservableArray<{name}>" : $"KnockoutObservable<{name}>");
 				else
-					return (definition.IsCollection ? $"KnockoutObservableArray<{name}>" : name);
+					return (isArray ? $"KnockoutObservableArray<{name}>" : name);
 			}
-			else return (definition.IsCollection ? $"Array<{name}>" : name);
+			else return (isArray ? $"Array<{name}>" : name);
 		}
 
 		public void WriteTypeSignature(TypeDefinition definition)
@@ -142,7 +142,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			if (definition?.BaseList?.Count > 0)
 			{
 				bool onFirstItem = true;
-				foreach (TypeDefinition def in definition.BaseList.Where(x => x.IsClass))
+				foreach (TypeDefinition def in definition.BaseList.Where(x => x.IsClass || x.IsStruct))
 				{
 					if (onFirstItem)
 					{
@@ -158,8 +158,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 				{
 					if (onFirstItem)
 					{
-						if (definition.IsClass) Write(" implements ");
-						else Write(" extends ");
+						Write(" implements ");
 						onFirstItem = false;
 					}
 					else Write(", ");

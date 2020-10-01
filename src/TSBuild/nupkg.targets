@@ -12,13 +12,14 @@
 	</PropertyGroup>
 
 	<Target Name="CompileTypescriptFilesOnBuild"
-          BeforeTargets="PreBuildEvent"
+          BeforeTargets="PostBuildEvent"
           Condition="$(ShouldCompileTypescriptOnBuild)">
 		<CallTarget Targets="CompileTypescriptFiles" />
 	</Target>
 
 	<Target Name="CompileTypescriptFiles">
-		<Warning Text="No typescript configuration file found."
+		<Message Text="No typescript configuration file found."
+						 Importance="high"
              Condition="!Exists($(TSBuildConfigurationFile))" />
 
 		<CompileTypescript ConfigurationFile="$(TSBuildConfigurationFile)"

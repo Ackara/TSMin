@@ -45,6 +45,7 @@ namespace Acklann.TSBuild.MSBuild
 			if (_sourceFiles == null) _sourceFiles = SourceFiles.Select(x => x.GetMetadata("FullPath")).ToArray();
 
 			BuildEngine.Debug("Generating typescript models ...");
+			foreach (string filePath in _sourceFiles) BuildEngine.Debug($"src: '{filePath}'");
 
 			byte[] data;
 			switch (kind)

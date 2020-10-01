@@ -116,7 +116,8 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 
 			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
-				writer.WriteProperty(member, optional: true, knockout: false);
+				
+				writer.WriteProperty(member, optional: true, knockout: settings.UseKnockoutJs);
 			}
 
 			writer.PopIndent();

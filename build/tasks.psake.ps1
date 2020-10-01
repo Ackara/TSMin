@@ -29,7 +29,7 @@ Task "Default" -depends @("test", "pack");
 Task "Publish" -depends @("clean", "test", "pack", "push-nuget", "push-vsix", "tag") `
 -description "This task compiles, test then publish all packages to their respective destination.";
 
-# ======================================================================
+# ======================================================
 
 Task "Restore-Dependencies" -alias "restore" -description "This task generate and/or import all file and module dependencies." `
 -action {
@@ -55,7 +55,7 @@ Task "Restore-Dependencies" -alias "restore" -description "This task generate an
 	# ==================================================
 	if (-not (Test-Path $SecretsFilePath))
 	{
-		"{}" | Out-File $SecretsFilePath -Encoding utf8;
+		"{`"nugetKey`": null, `"vsixMarketplace`": null}" | Out-File $SecretsFilePath -Encoding utf8;
 		Write-Host "  * added '$(Split-Path $SecretsFilePath -Leaf)' to the solution.";
 	}
 }
@@ -131,7 +131,7 @@ Task "Add-GitReleaseTag" -alias "tag" -description "This task tags the lastest c
 	}
 
 	Write-Separator "git tag '$version'";
-	Exec { &git -annotate "v$version" --message "Version $version"; }
+	Exec { &git -a "v$version" --message "Version $version"; }
 }
 
 #endregion

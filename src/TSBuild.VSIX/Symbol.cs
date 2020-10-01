@@ -4,9 +4,10 @@ namespace Acklann.TSBuild
 {
 	public static class Symbol
 	{
+		//public const string Name = "C:\USERS\ABAKER\APPDATA\LOCAL\MICROSOFT\VISUALSTUDIO\16.0_52205840\EXTENSIONS\DCPVHWPI.VNJ\TSBuild.dll";
 		public const string Name = "TSBuild";
 
-		public const string Version = "0.0.49";
+		public const string Version = "0.0.55";
 		
 		public struct Package
 		{

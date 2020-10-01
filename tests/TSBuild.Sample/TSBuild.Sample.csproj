@@ -6,9 +6,9 @@
 
 		<Title>TSBuild</Title>
 		<Description>Helps you compile and minify typescript files on save and on build.</Description>
-		<Version>0.0.50</Version>
-		<AssemblyVersion>0.0.50</AssemblyVersion>
-		<AssemblyFileVersion>0.0.50</AssemblyFileVersion>
+		<Version>0.0.55</Version>
+		<AssemblyVersion>0.0.55</AssemblyVersion>
+		<AssemblyFileVersion>0.0.55</AssemblyFileVersion>
 		<PackageIcon>icon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
@@ -31,11 +31,13 @@
 		<ViewModels Include="Models\*.cs" />
 	</ItemGroup>
 
-	<Target Name="CopyJsonTest">
+	<Target Name="CopyJsonTest" Condition="Exists($(TestTarget))">
 		<CopyJsonProperty SourceFile="..\..\secrets.json" JPath="local.test" />
 	</Target>
 
-	<Target Name="GenerateModels">
+
+
+	<Target Name="GenerateModels" Condition="Exists($(TestTarget))">
 		
 		<GenerateTypescriptModels SourceFiles="@(ViewModels)" DestinationFile="typings\server.d.ts" OutputType="Declaration" />
 		<GenerateTypescriptModels SourceFiles="@(ViewModels)" DestinationFile="wwwroot\scripts\app.ts" OutputType="KnockoutJs" References="../../node_modules/@types/knockout/index.d.ts" />

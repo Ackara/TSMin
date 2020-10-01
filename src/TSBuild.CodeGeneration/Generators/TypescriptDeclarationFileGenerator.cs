@@ -75,7 +75,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteTypeSignature(definition);
 
 			bool onFirstItem = true;
-			foreach (TypeDefinition def in definition.BaseList)
+			foreach (TypeDefinition def in definition.EnumerateInScopeBaseTypes())
 			{
 				if (onFirstItem)
 				{

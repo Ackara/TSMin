@@ -79,10 +79,11 @@ namespace Acklann.TSBuild.Tests
 		private static IEnumerable<object[]> GetSourceFiles()
 		{
 #if DEBUG
-
+			//yield return new object[] { new string[]
+			//{
+			//	
+			//}};
 #endif
-			//yield return new object[] { new string[] { Sample.GetTranseiSampleDLL().FullName } };
-			//yield return new object[] { new string[] { Sample.GetPaymentmethodCS().FullName, Sample.GetClientCS().FullName } };
 			string folder = Path.Combine(Sample.DirectoryName, "source-files");
 			if (!Directory.Exists(folder)) throw new DirectoryNotFoundException($"Could not find directory at '{folder}'.");
 

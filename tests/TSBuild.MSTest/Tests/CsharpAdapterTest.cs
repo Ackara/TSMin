@@ -1,9 +1,11 @@
 using Acklann.TSBuild.CodeGeneration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
+using System.Net.Sockets;
 
 namespace Acklann.TSBuild.Tests
 {
@@ -51,6 +53,14 @@ namespace Acklann.TSBuild.Tests
 
 			result = CreateTypeFromSnippet("class Foo { }");
 			result.Name.ShouldBe("Foo");
+			result.IsClass.ShouldBeTrue();
+
+			result = CreateTypeFromSnippet("interface Foo: { string Id { get; set; } string Name { get; set; } }");
+			result.Members.ShouldAllBe(x => x.IsPublic);
+
+			result = CreateTypeFromSnippet("public class Contact1 { public string FirstName { get; set; }  public string LastName { get; set; } }");
+			result.IsClass.ShouldBeTrue();
+			result.IsPublic.ShouldBeTrue();
 		}
 
 		[TestMethod]
@@ -88,6 +98,10 @@ namespace Acklann.TSBuild.Tests
 			result.Type.Name.ShouldBe("int");
 			result.Type.IsArray.ShouldBeTrue();
 			result.Type.ArrayRankSpecifiers.ShouldBe(1);
+
+			result = CreateMemberFromSnippet("public Foo[] Items { get; set; }");
+			result.Name.ShouldBe("Items");
+			result.Type.IsArray.ShouldBeTrue();
 		}
 
 		[TestMethod]
