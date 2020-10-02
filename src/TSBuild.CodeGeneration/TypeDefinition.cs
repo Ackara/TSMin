@@ -32,9 +32,14 @@ namespace Acklann.TSBuild.CodeGeneration
 				Name).Trim('.', ' ', '\r', '\n');
 		}
 
-		public bool HasBaseType
+		public bool HasInScopeBaseType
 		{
-			get => BaseType != null;
+			get => BaseType != null && BaseType.InScope;
+		}
+
+		public bool InheritsInScopeDefinition
+		{
+			get => (BaseList?.Count(x => x.InScope) ?? 0) > 0;
 		}
 
 		public bool HasParameters

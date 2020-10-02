@@ -14,8 +14,8 @@ namespace Acklann.TSBuild
 		static NodeJS()
 		{
 			Assembly assembly = typeof(NodeJS).Assembly;
-			//string rootFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) ?? Path.GetTempPath();
-			InstallationDirectory = Path.Combine(AppContext.BaseDirectory, nameof(TSBuild), assembly.GetName().Version.ToString(3));
+			string rootFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) ?? Path.GetTempPath();
+			InstallationDirectory = Path.Combine(rootFolder, nameof(TSBuild), assembly.GetName().Version.ToString(3));
 			PackageDirectory = Path.Combine(InstallationDirectory, "node_modules");
 		}
 

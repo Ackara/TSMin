@@ -142,7 +142,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			if (definition?.BaseList?.Count > 0)
 			{
 				bool onFirstItem = true;
-				foreach (TypeDefinition def in definition.BaseList.Where(x => x.IsClass || x.IsStruct))
+				foreach (TypeDefinition def in definition.BaseList.Where(x => x.InScope && (x.IsClass || x.IsStruct)))
 				{
 					if (onFirstItem)
 					{
@@ -154,7 +154,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 				}
 
 				onFirstItem = true;
-				foreach (TypeDefinition def in definition.BaseList.Where(x => x.IsInterface))
+				foreach (TypeDefinition def in definition.BaseList.Where(x => x.InScope && x.IsInterface))
 				{
 					if (onFirstItem)
 					{

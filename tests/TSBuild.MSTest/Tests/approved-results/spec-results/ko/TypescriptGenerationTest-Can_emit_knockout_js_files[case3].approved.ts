@@ -3,7 +3,6 @@
 namespace App {
 	export class AnimalModel {
 		constructor(model?: any) {
-			super(model);
 			this.name = ko.observable((model && model.hasOwnProperty('name'))? model.name : null);
 			this.hitPoints = ko.observable((model && model.hasOwnProperty('hitPoints'))? model.hitPoints : null);
 		}

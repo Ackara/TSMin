@@ -76,7 +76,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine();
 			writer.PushIndent();
 
-			if (definition.HasBaseType)
+			if (definition.HasInScopeBaseType)
 			{
 				writer.WriteIndent("super(model);");
 				writer.WriteLine();

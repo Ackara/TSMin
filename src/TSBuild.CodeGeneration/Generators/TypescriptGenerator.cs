@@ -99,11 +99,11 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteIndent("export interface ");
 			writer.WriteTypeSignature(definition);
 
-			if (definition?.BaseList?.Count > 0)
+			if (definition.InheritsInScopeDefinition)
 			{
 				var onFirstItem = true;
 				writer.Write(" extends ");
-				foreach (TypeDefinition def in definition.BaseList)
+				foreach (TypeDefinition def in definition.EnumerateInScopeBaseTypes())
 				{
 					if (onFirstItem) onFirstItem = false;
 					else writer.Write(", ");

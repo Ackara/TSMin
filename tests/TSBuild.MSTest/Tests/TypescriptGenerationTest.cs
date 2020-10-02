@@ -146,7 +146,7 @@ namespace Acklann.TSBuild.Tests
 		private static IEnumerable<object[]> GetSpecifications()
 		{
 			string rootFolder = Path.Combine(Sample.DirectoryName, "specs");
-			foreach (string folder in Directory.GetDirectories(rootFolder, "*"))
+			foreach (string folder in Directory.GetDirectories(rootFolder, "*4"))
 			{
 				string[] sourceFiles = Directory.GetFiles(folder, "*.cs");
 
