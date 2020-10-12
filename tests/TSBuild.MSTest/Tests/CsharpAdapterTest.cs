@@ -1,11 +1,9 @@
 using Acklann.TSBuild.CodeGeneration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
-using System.Net.Sockets;
 
 namespace Acklann.TSBuild.Tests
 {

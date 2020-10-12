@@ -142,5 +142,10 @@ namespace Acklann.TSBuild.CodeGeneration
 					Traits &= ~Trait.Static;
 			}
 		}
+
+		public bool IsObject
+		{
+			get => IsClass || IsStruct;
+		}
 	}
 }

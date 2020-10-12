@@ -3,7 +3,7 @@
     <Title>TSBuild</Title>
     <Product>TSBuild</Product>
     <ProductName>TSBuild</ProductName>
-    <Version>0.0.58</Version>
+    <Version>0.0.59</Version>
     <AssemblyVersion>0.0.26</AssemblyVersion>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
@@ -78,7 +78,9 @@
       <DependentUpon>Symbol.tt</DependentUpon>
     </Compile>
     <Compile Include="TypescriptWatcher.cs" />
-    <Compile Include="Views\ConfigurationPage.cs" />
+    <Compile Include="Views\ConfigurationPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="VSPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

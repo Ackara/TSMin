@@ -110,6 +110,24 @@ namespace Acklann.TSBuild.CodeGeneration
 				}
 		}
 
+		public IEnumerable<TypeDefinition> EnumerateReferencedTypes()
+		{
+			foreach (TypeDefinition item in BaseList)
+				yield return item;
+
+			foreach (MemberDefinition item in Members)
+			{
+				yield return item.Type;
+				foreach (var sub in item.Type.ParameterList)
+				{
+					yield return sub;
+				}
+			}
+
+			foreach (TypeDefinition item in ParameterList)
+				yield return item;
+		}
+
 		public static IEnumerable<TypeDefinition> ResolveDependencies(TypeDefinition[] definitions)
 		{
 			foreach (TypeDefinition def in definitions)
@@ -123,7 +141,8 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		private static void FindReferences(TypeDefinition type, TypeDefinition[] definitions)
 		{
-			TypeDefinition item;
+			TypeDefinition item, subItem;
+			var scope = type.EnumerateReferencedTypes().ToArray();
 			foreach (TypeDefinition reference in definitions)
 			{
 				if (type.BaseList?.Count > 0)
@@ -140,6 +159,21 @@ namespace Acklann.TSBuild.CodeGeneration
 						item = type.ParameterList[i];
 						if (item.FullName == reference.FullName || item.Name == reference.Name)
 							type.ParameterList[i] = reference;
+					}
+
+				if (type.Members?.Count > 0)
+					for (int i = 0; i < type.Members.Count; i++)
+					{
+						item = type.Members[i].Type;
+						if (item.FullName == reference.FullName || item.Name == reference.Name)
+							type.Members[i].Type = reference;
+
+						for (int j = 0; j < item.ParameterList.Count; j++)
+						{
+							subItem = item.ParameterList[j];
+							if (subItem.FullName == reference.FullName || item.Name == reference.Name)
+								item.ParameterList[j] = reference;
+						}
 					}
 
 				if (!type.IsEnum)

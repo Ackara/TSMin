@@ -1,6 +1,7 @@
 using Acklann.Daterpillar.Attributes;
 using Acklann.Daterpillar.Linq;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using Tecari.LLC.Gateways;
 
@@ -20,5 +21,7 @@ namespace Tecari.LLC
 		public string Address { get; set; }
 
 		public Keeper[] Workers { get; set; }
-	}
+
+        //public List<Keeper> ActiveWorkers { get; set; }
+    }
 }

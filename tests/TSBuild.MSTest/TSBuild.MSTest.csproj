@@ -9,9 +9,9 @@
 	<PropertyGroup>
 		<Title>TSBuild</Title>
 		<Description>Helps you compile and minify typescript files on save and on build.</Description>
-		<Version>0.0.58</Version>
-		<AssemblyVersion>0.0.58</AssemblyVersion>
-		<AssemblyFileVersion>0.0.58</AssemblyFileVersion>
+		<Version>0.0.59</Version>
+		<AssemblyVersion>0.0.59</AssemblyVersion>
+		<AssemblyFileVersion>0.0.59</AssemblyFileVersion>
 		<PackageIcon>icon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
@@ -29,6 +29,8 @@
 		<Compile Remove="test-data\specs\case3\Animal.cs" />
 		<Compile Remove="test-data\specs\case3\Tiger.cs" />
 		<Compile Remove="test-data\specs\case4\IJobInfo.cs" />
+		<Compile Remove="test-data\specs\case5\Book.cs" />
+		<Compile Remove="test-data\specs\case5\Library.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,6 +50,12 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	  <None Include="test-data\specs\case4\IJobInfo.cs">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include="test-data\specs\case5\Book.cs">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include="test-data\specs\case5\Library.cs">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
@@ -112,10 +120,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+
 		<Compile Update="Sample.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>Sample.tt</DependentUpon>
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>Sample.tt</DependentUpon>
 		</Compile>
 
 		<Compile Update="test-data\source-files\Lion.cs">

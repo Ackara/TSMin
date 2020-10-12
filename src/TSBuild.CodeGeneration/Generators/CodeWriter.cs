@@ -100,7 +100,15 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 					break;
 
 				default:
-					name = (definition.InScope ? NormalizeName(definition, prefix, suffix) : "any");
+					if (definition.IsCollection)
+					{
+						TypeDefinition itemType = definition.ParameterList[0];
+						name = (itemType.InScope ? NormalizeName(itemType, prefix, suffix) : "any");
+					}
+					else
+					{
+						name = (definition.InScope ? NormalizeName(definition, prefix, suffix) : "any");
+					}
 					isPrimitive = false;
 					break;
 			}
@@ -198,7 +206,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 		private int _depth;
 		private readonly TypescriptGeneratorSettings _settings;
 
-		private static string NormalizeName(TypeDefinition definition, TypescriptGeneratorSettings settings)
+		internal static string NormalizeName(TypeDefinition definition, TypescriptGeneratorSettings settings)
 		{
 			string prefix = (!definition.IsEnum && !string.IsNullOrEmpty(settings.Prefix) ? settings.Prefix : string.Empty);
 			string suffix = (!definition.IsEnum && !string.IsNullOrEmpty(settings.Suffix) ? settings.Suffix : string.Empty);

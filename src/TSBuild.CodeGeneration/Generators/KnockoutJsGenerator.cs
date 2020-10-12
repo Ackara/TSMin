@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Acklann.TSBuild.CodeGeneration.Generators
@@ -85,8 +86,10 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
 				string name = member.Name.ToCamel();
-				if (member.IsArray)
+				if (member.Type.IsCollection)
 					writer.WriteIndent($"this.{name} = ko.observableArray((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
+				else if (member.Type.IsObject)
+					writer.WriteIndent($"this.{name} = new {CodeWriter.NormalizeName(member.Type, settings)}((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
 				else
 					writer.WriteIndent($"this.{name} = ko.observable((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
 
@@ -105,7 +108,11 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			{
 				string name = member.Name.ToCamel();
 				writer.WriteIndent();
-				writer.WriteLine($"this.{name}((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
+
+				if (member.Type.IsObject)
+					writer.WriteLine($"this.{name}.copy((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
+				else
+					writer.WriteLine($"this.{name}((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
 			}
 			writer.CloseBrace();
 			writer.WriteLine();
