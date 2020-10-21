@@ -28,7 +28,7 @@ namespace App {
 			this.books((model && model.hasOwnProperty('books'))? model.books : null);
 			this.selectedBook.copy((model && model.hasOwnProperty('selectedBook'))? model.selectedBook : null);
 			this.coupons((model && model.hasOwnProperty('coupons'))? model.coupons : null);
-			this.featuredBooks.copy((model && model.hasOwnProperty('featuredBooks'))? model.featuredBooks : null);
+			this.featuredBooks((model && model.hasOwnProperty('featuredBooks'))? model.featuredBooks : null);
 		}
 
 		books: KnockoutObservableArray<BookModel>;

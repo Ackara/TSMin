@@ -1,6 +1,5 @@
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 
 namespace Acklann.TSBuild.CodeGeneration.Generators
@@ -109,7 +108,9 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 				string name = member.Name.ToCamel();
 				writer.WriteIndent();
 
-				if (member.Type.IsObject)
+				if (member.IsArray)
+					writer.WriteLine($"this.{name}((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
+				else if (member.Type.IsObject)
 					writer.WriteLine($"this.{name}.copy((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
 				else
 					writer.WriteLine($"this.{name}((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
