@@ -21,6 +21,11 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		public TypeDefinition Type { get; set; }
 
+		public override bool IsCollection
+		{
+			get => base.IsCollection || Type.IsCollection;
+		}
+
 		public object DefaultValue { get; set; }
 
 		public bool HasValue

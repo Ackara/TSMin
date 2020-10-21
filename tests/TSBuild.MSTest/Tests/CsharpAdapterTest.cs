@@ -100,6 +100,7 @@ namespace Acklann.TSBuild.Tests
 			result = CreateMemberFromSnippet("public Foo[] Items { get; set; }");
 			result.Name.ShouldBe("Items");
 			result.Type.IsArray.ShouldBeTrue();
+			result.Type.IsCollection.ShouldBeTrue();
 		}
 
 		[TestMethod]

@@ -7,5 +7,7 @@
 	export class Library {
 		books: Array<Book>;
 		selectedBook: Book;
+		coupons: Array<string>;
+		featuredBooks: Array<Book>;
 	}
 }

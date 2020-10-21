@@ -42,7 +42,7 @@ namespace Acklann.TSBuild.CodeGeneration
 			}
 		}
 
-		public bool IsCollection
+		public virtual bool IsCollection
 		{
 			get => (Traits.HasFlag(Trait.Array) || Traits.HasFlag(Trait.Enumerable));
 		}

@@ -71,7 +71,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			writer.WriteLine(" {");
 			writer.PushIndent();
 
-			// --- Contructor --- //
+			// --- Constructor --- //
 
 			writer.WriteIndent($"constructor(model?: any) {{");
 			writer.WriteLine();
@@ -86,7 +86,7 @@ namespace Acklann.TSBuild.CodeGeneration.Generators
 			foreach (MemberDefinition member in definition.GetPublicFieldsAndProperties())
 			{
 				string name = member.Name.ToCamel();
-				if (member.Type.IsCollection)
+				if (member.IsCollection)
 					writer.WriteIndent($"this.{name} = ko.observableArray((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
 				else if (member.Type.IsObject)
 					writer.WriteIndent($"this.{name} = new {CodeWriter.NormalizeName(member.Type, settings)}((model && model.hasOwnProperty('{name}'))? model.{name} : null);");
