@@ -51,14 +51,14 @@ namespace Acklann.TSBuild
 			Process cmd = GetStartInfo(command, directory);
 			cmd.Start();
 			cmd.WaitForExit();
-			System.Diagnostics.Debug.WriteLine($"exit: {cmd.ExitCode}");
+			if(cmd.HasExited)System.Diagnostics.Debug.WriteLine($"exit: {cmd.ExitCode}");
 
 			return cmd;
 		}
 
 		public static void Install(ProgressHandler handler = default, bool overwrite = false)
 		{
-			int progress = 1, goal = (_dependencies.Length + 1);
+			int progress = 1, goal = (_dependencies.Length + 2);
 
 			if (!Directory.Exists(InstallationDirectory)) Directory.CreateDirectory(InstallationDirectory);
 
