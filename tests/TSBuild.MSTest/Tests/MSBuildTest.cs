@@ -123,6 +123,33 @@ namespace Acklann.TSBuild.Tests
 			Diff.ApproveFile(outputFile, label);
 		}
 
+		[TestMethod]
+		public void Manual()
+		{
+			// Arrange
+
+			var mockEngine = A.Fake<Microsoft.Build.Framework.IBuildEngine>();
+
+			var mockHost = A.Fake<ITaskHost>();
+
+			var srcFiles = new List<string>();
+
+			srcFiles.AddRange(Directory.EnumerateFiles(@"C:\Users\Ackeem\Projects\Foodie\src\Foodie\Authorization", "*.cs"));
+			srcFiles.AddRange(Directory.EnumerateFiles(@"C:\Users\Ackeem\Projects\Foodie\src\Foodie\Inventory", "*.cs"));
+			srcFiles.AddRange(Directory.EnumerateFiles(@"C:\Users\Ackeem\Projects\Foodie\src\Foodie\Data", "*.cs"));
+
+			// Act
+			var sut = new GenerateTypescriptModels(@"C:\Users\Ackeem\Downloads\foo.js", srcFiles.ToArray())
+			{
+				BuildEngine = mockEngine,
+				HostObject = mockHost
+			};
+			var success = sut.Execute();
+
+			// Assert
+			success.ShouldBeTrue();
+		}
+
 		#region Backing Members
 
 		private static IEnumerable<object[]> GetTypescriptTestCases()
