@@ -51,7 +51,7 @@ namespace Acklann.TSBuild
 			Process cmd = GetStartInfo(command, directory);
 			cmd.Start();
 			cmd.WaitForExit();
-			if (cmd.HasExited) Debug.WriteLine($"exit: {cmd.ExitCode}");
+			if(cmd.HasExited)System.Diagnostics.Debug.WriteLine($"exit: {cmd.ExitCode}");
 
 			return cmd;
 		}

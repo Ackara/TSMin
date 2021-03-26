@@ -3,7 +3,7 @@
     <Title>TSBuild</Title>
     <Product>TSBuild</Product>
     <ProductName>TSBuild</ProductName>
-    <Version>0.0.64</Version>
+    <Version>0.1.0</Version>
     <AssemblyVersion>0.0.26</AssemblyVersion>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>

@@ -3,8 +3,8 @@
   "description": "Helps you compile and minify typescript files on save and on build.",
   "version": {
     "major": 0,
-    "minor": 0,
-    "patch": 64
+    "minor": 1,
+    "patch": 0
   },
   "authors": "Ackara",
   "company": "Ackara",

@@ -10,9 +10,6 @@
 {
   "name": "conkit",
   "database": "secret",
-  "preview": {
-    "database": "secret",
-    "webhost": "secret"
-  }
+  "webhost": "secret"
 }
 
