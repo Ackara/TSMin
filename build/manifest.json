@@ -16,7 +16,7 @@
   "icon": "icon.png",
   "tags": "typescript compiler bundle msbuild",
   "branchVersionMap": {
-    "production": "x.y.z-\\rc",
+    "production": "x.y.z",
     "default": "x.y.z-\\beta"
   }
 }
