@@ -3,13 +3,13 @@
     <Title>TSBuild</Title>
     <Product>TSBuild</Product>
     <ProductName>TSBuild</ProductName>
-    <Version>0.0.63</Version>
+    <Version>0.0.64</Version>
     <AssemblyVersion>0.0.26</AssemblyVersion>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/Ackara/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
-    <Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
+    <Copyright>Copyright 2021 Ackara, All Rights Reserved.</Copyright>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
     <PackageTags>typescript compiler bundle msbuild</PackageTags>
     <Authors>Ackara</Authors>

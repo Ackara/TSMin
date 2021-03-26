@@ -2,9 +2,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Acklann.TSBuild</RootNamespace>
-    <AssemblyFileVersion>0.0.63</AssemblyFileVersion>
-    <AssemblyVersion>0.0.63</AssemblyVersion>
-    <Version>0.0.63</Version>
+    <AssemblyFileVersion>0.0.64</AssemblyFileVersion>
+    <AssemblyVersion>0.0.64</AssemblyVersion>
+    <Version>0.0.64</Version>
   </PropertyGroup>
 
   <PropertyGroup Label="Package">
@@ -13,7 +13,7 @@
 
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
-    <Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
+    <Copyright>Copyright 2021 Ackara, All Rights Reserved.</Copyright>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
 
     <PackageIcon>icon.png</PackageIcon>
