@@ -96,7 +96,6 @@ namespace Acklann.TSBuild.Tests
 		}
 
 		[DataTestMethod]
-		//[ApprovedFolder("approved-results/spec-results/msbuild")]
 		[DynamicData(nameof(GetTypescriptTestCases), DynamicDataSourceType.Method)]
 		public void Can_generate_typescript_models_from_source_files(string label, string[] sourceFiles, TypescriptGeneratorSettings opt)
 		{
@@ -123,6 +122,8 @@ namespace Acklann.TSBuild.Tests
 			success.ShouldBeTrue();
 			Diff.ApproveFile(outputFile, label);
 		}
+
+		
 
 		#region Backing Members
 

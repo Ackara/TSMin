@@ -35,7 +35,8 @@ namespace Acklann.TSBuild.CodeGeneration
 						while ((v < n && a < n) && WasVisited(_current.FullName))
 						{
 							a++;
-							_current = _definitions[a];
+							if (a < n) _current = _definitions[a];
+							else return true;
 						}
 						if (_current != _anchor) goto top;
 					}
