@@ -43,32 +43,6 @@ namespace Acklann.TSBuild.Tests
 		}
 
 		[TestMethod]
-		public void MyTestMethod()
-		{
-			var cwd = Path.Combine(Path.GetTempPath(), "tsbuild-temp");
-			if (Directory.Exists(cwd)) Directory.Delete(cwd, recursive: true);
-			Helper.CopyFolder(Sample.ProjectFolder, cwd);
-
-			var mockEngine = A.Fake<Microsoft.Build.Framework.IBuildEngine>();
-			A.CallTo(() => mockEngine.ProjectFileOfTaskNode).Returns(Path.Combine(cwd, @"C:\Users\abaker\Projects\Foodie\src\Foodie\Foodie.csproj"));
-
-			var sut = new MSBuild.CompileTypescript
-			{
-				BuildEngine = mockEngine,
-				ConfigurationFile = null
-			};
-
-			// Act
-			var success = sut.Execute();
-			var generatedFiles = Directory.EnumerateFiles(cwd).Select(x => Path.GetFileName(x)).ToArray();
-
-			// Assert
-			success.ShouldBeTrue();
-			generatedFiles.ShouldNotBeEmpty();
-			generatedFiles.Length.ShouldBe(4);
-		}
-
-		[TestMethod]
 		public void Can_copy_json_property_from_one_file_to_another()
 		{
 			// Arrange
@@ -147,6 +121,33 @@ namespace Acklann.TSBuild.Tests
 			// Assert
 			success.ShouldBeTrue();
 			Diff.ApproveFile(outputFile, label);
+		}
+
+		[TestMethod]
+		public void Manual()
+		{
+			// Arrange
+
+			var mockEngine = A.Fake<Microsoft.Build.Framework.IBuildEngine>();
+
+			var mockHost = A.Fake<ITaskHost>();
+
+			var srcFiles = new List<string>();
+
+			srcFiles.AddRange(Directory.EnumerateFiles(@"C:\Users\Ackeem\Projects\Foodie\src\Foodie\Authorization", "*.cs"));
+			srcFiles.AddRange(Directory.EnumerateFiles(@"C:\Users\Ackeem\Projects\Foodie\src\Foodie\Inventory", "*.cs"));
+			srcFiles.AddRange(Directory.EnumerateFiles(@"C:\Users\Ackeem\Projects\Foodie\src\Foodie\Data", "*.cs"));
+
+			// Act
+			var sut = new GenerateTypescriptModels(@"C:\Users\Ackeem\Downloads\foo.js", srcFiles.ToArray())
+			{
+				BuildEngine = mockEngine,
+				HostObject = mockHost
+			};
+			var success = sut.Execute();
+
+			// Assert
+			success.ShouldBeTrue();
 		}
 
 		#region Backing Members

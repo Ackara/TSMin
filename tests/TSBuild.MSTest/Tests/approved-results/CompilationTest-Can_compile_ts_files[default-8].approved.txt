@@ -1,6 +1,6 @@
 == default-8 (Car.js)
 ==================================================
-var TSMin,__extends=this&&this.__extends||function(){var e=function(t,n){return(e=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,n){t.__proto__=n}||function(t,n){for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(t[r]=n[r])})(t,n)};return function(t,n){function r(){this.constructor=t}e(t,n),t.prototype=null===n?Object.create(n):(r.prototype=n.prototype,new r)}}();!function(t){var n,r=(n=t.Observable,__extends(e,n),e);function e(){var t=n.call(this)||this;return t.make="Forte",t.year=2019,t}t.Car=r}(TSMin=TSMin||{});
+var TSMin,__extends=this&&this.__extends||function(){var o=function(t,n){return(o=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,n){t.__proto__=n}||function(t,n){for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(t[r]=n[r])})(t,n)};return function(t,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function r(){this.constructor=t}o(t,n),t.prototype=null===n?Object.create(n):(r.prototype=n.prototype,new r)}}();!function(t){var n,r=(n=t.Observable,__extends(o,n),o);function o(){var t=n.call(this)||this;return t.make="Forte",t.year=2019,t}t.Car=r}(TSMin=TSMin||{});
 //# sourceMappingURL=Car.js.map
 
 
@@ -12,7 +12,7 @@ var TSMin,__extends=this&&this.__extends||function(){var e=function(t,n){return(
     "Car.ts"
   ],
   "names": [],
-  "mappings": "IAEU,sYAAV,SAAU,GACN,IAAA,EAAA,GAAA,EAAyB,EAAA,WAAA,UAAA,EAAA,GAUzB,GATI,SAAA,IAAA,IAAA,EACI,EAAA,KAAA,OAAO,YAEP,EAAK,KAAO,QACZ,EAAK,KAAO,OALP,EAAA,IAAG,EADpB,CAAU,MAAA,OAAK",
+  "mappings": "IAEU,8fAAV,SAAU,GACN,IAAA,EAAA,GAAA,EAAyB,EAAA,WAAA,UAAA,EAAA,GAUzB,GATI,SAAA,IAAA,IAAA,EACI,EAAA,KAAA,OAAO,YAEP,EAAK,KAAO,QACZ,EAAK,KAAO,OALP,EAAA,IAAG,EADpB,CAAU,MAAA,OAAK",
   "file": "Car.js"
 }
 
