@@ -154,10 +154,9 @@ namespace Acklann.TSBuild.Tests
 		private static IEnumerable<object[]> GetTypescriptTestCases()
 		{
 			var sourceFolder = Path.Combine(Sample.DirectoryName, "source-files");
-			sourceFolder = @"C:\Users\abaker\Projects\Foodie\src\Foodie\Data";
 			if (!Directory.Exists(sourceFolder)) throw new DirectoryNotFoundException($"Could not find directory at '{sourceFolder}'.");
 
-			foreach (string sourceFilePath in Directory.EnumerateFiles(sourceFolder, "*.cs"))
+			foreach (string sourceFilePath in Directory.EnumerateFiles(sourceFolder, "*.ts"))
 			{
 				yield return new object[]
 				{
@@ -166,14 +165,6 @@ namespace Acklann.TSBuild.Tests
 					new TypescriptGeneratorSettings()
 				};
 			}
-
-			//var sf = Directory.GetFiles(@"C:\Users\abaker\Projects\Fami\src\Fami.ASP\Models");
-			//yield return new object[]
-			//{
-			//	"man",
-			//	sf,
-			//	new TypescriptGeneratorSettings()
-			//};
 		}
 
 		#endregion Backing Members

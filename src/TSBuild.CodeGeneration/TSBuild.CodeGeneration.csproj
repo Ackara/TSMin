@@ -7,9 +7,9 @@
   
 <Title>TSBuild</Title>
 <Description>Helps you compile and minify typescript files on save and on build.</Description>
-<Version>0.1.0</Version>
-<AssemblyVersion>0.1.0</AssemblyVersion>
-<AssemblyFileVersion>0.1.0</AssemblyFileVersion>
+<Version>0.1.1</Version>
+<AssemblyVersion>0.1.1</AssemblyVersion>
+<AssemblyFileVersion>0.1.1</AssemblyFileVersion>
 <PackageIcon>icon.png</PackageIcon>
 <RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
 <PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
@@ -17,7 +17,7 @@
 <PackageTags>typescript compiler bundle msbuild</PackageTags>
 <Authors>Ackara</Authors>
 <Company>Ackara</Company>
-<Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
+<Copyright>Copyright 2021 Ackara, All Rights Reserved.</Copyright>
 <PackageLicenseFile>license.txt</PackageLicenseFile>
 </PropertyGroup>
 

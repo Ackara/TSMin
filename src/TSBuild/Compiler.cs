@@ -12,7 +12,8 @@ namespace Acklann.TSBuild
         public static CompilerResult Run(Configuration.CompilerOptions options, string currentDirectory = default)
         {
             string scriptPath = Path.Combine(NodeJS.InstallationDirectory, "compiler.js");
-            if (!File.Exists(scriptPath)) throw new FileNotFoundException($"Could not find file at '{scriptPath}'.");
+
+			if (!File.Exists(scriptPath)) throw new FileNotFoundException($"Could not find file at '{scriptPath}'.");
 
             long start = System.DateTime.Now.Ticks;
             string cwd = (Path.GetDirectoryName(options.ConfigurationFile) ?? currentDirectory);
