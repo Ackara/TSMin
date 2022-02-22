@@ -138,9 +138,9 @@ namespace Acklann.TSBuild.Tests
 			var sut = new GenerateTypescriptModels(outputFile, srcFiles.ToArray())
 			{
 				BuildEngine = mockEngine,
-				HostObject = mockHost
+				ConfigurationFile = mockConfigFile
 			};
-			var success = sut.Execute();
+			var result = sut.Execute();
 
 			// Assert
 

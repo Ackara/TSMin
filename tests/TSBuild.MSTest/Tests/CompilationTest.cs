@@ -90,16 +90,7 @@ namespace Acklann.TSBuild.Tests
 			error.Message.ShouldNotBeNullOrEmpty();
 		}
 
-		[TestMethod]
-		public void ManualTest()
-		{
-			// Arrange
-			var options = new CompilerOptions(@"C:\Users\abaker\Projects\Fami\src\Fami.ASP\transpiler.json");
-
-			// Act
-			var results = Compiler.Run(options, @"C:\Users\abaker\Projects\Fami\src\Fami.ASP");
-
-		}
+		
 
 		#region Backing Members
 
