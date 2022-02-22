@@ -129,25 +129,25 @@ namespace Acklann.TSBuild.Tests
 			// Arrange
 
 			var mockEngine = A.Fake<Microsoft.Build.Framework.IBuildEngine>();
+			A.CallTo(() => mockEngine.ProjectFileOfTaskNode)
+				.Returns(@"C:\Users\Ackeem\Projects\Fami\src\Fami.ASP\Fami.ASP.csproj");
 
-			var mockHost = A.Fake<ITaskHost>();
-
-			var srcFiles = new List<string>();
-
-			srcFiles.AddRange(Directory.EnumerateFiles(@"C:\Users\Ackeem\Projects\Foodie\src\Foodie\Authorization", "*.cs"));
-			srcFiles.AddRange(Directory.EnumerateFiles(@"C:\Users\Ackeem\Projects\Foodie\src\Foodie\Inventory", "*.cs"));
-			srcFiles.AddRange(Directory.EnumerateFiles(@"C:\Users\Ackeem\Projects\Foodie\src\Foodie\Data", "*.cs"));
+			var mockConfigFile = A.Fake<Microsoft.Build.Framework.ITaskItem>();
+			A.CallTo(() => mockConfigFile.GetMetadata(A<string>.Ignored))
+				.Returns(@"C:\Users\Ackeem\Projects\Fami\src\Fami.ASP\transpiler.json");
+			
 
 			// Act
-			var sut = new GenerateTypescriptModels(@"C:\Users\Ackeem\Downloads\foo.js", srcFiles.ToArray())
+			var sut = new CompileTypescript()
 			{
 				BuildEngine = mockEngine,
-				HostObject = mockHost
+				ConfigurationFile = mockConfigFile
 			};
-			var success = sut.Execute();
+			var result = sut.Execute();
 
 			// Assert
-			success.ShouldBeTrue();
+			result.ShouldBeTrue();
+			
 		}
 
 		#region Backing Members
