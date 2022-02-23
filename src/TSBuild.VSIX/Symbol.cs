@@ -7,7 +7,7 @@ namespace Acklann.TSBuild
 	{
 		public const string Name = "TSBuild";
 
-		public const string Version = "0.1.3";
+		public const string Version = "0.1.5";
 		
 		public struct Package
 		{
