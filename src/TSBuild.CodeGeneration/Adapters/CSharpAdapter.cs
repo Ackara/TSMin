@@ -60,6 +60,8 @@ namespace Acklann.TSBuild.CodeGeneration
 
 		public override void VisitClassDeclaration(ClassDeclarationSyntax node)
 		{
+			if (node.Parent.Kind() == SyntaxKind.ClassDeclaration) return;
+
 			_definition.Traits |= node.Modifiers.GetTraits() | Trait.Class;
 			_definition.Name = node.Identifier.ValueText;
 			SetValues(_definition, node.TypeParameterList);

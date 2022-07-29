@@ -149,7 +149,7 @@ namespace Acklann.TSBuild.Tests
 
 		private static IEnumerable<object[]> GetTypescriptTestCases()
 		{
-			var sourceFolder = Path.Combine(Sample.DirectoryName, "source-files");
+			var sourceFolder = Path.Combine(Sample.DirectoryName);
 			if (!Directory.Exists(sourceFolder)) throw new DirectoryNotFoundException($"Could not find directory at '{sourceFolder}'.");
 
 			foreach (string sourceFilePath in Directory.EnumerateFiles(sourceFolder, "*.ts"))
