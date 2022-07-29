@@ -4,15 +4,15 @@
   "version": {
     "major": 0,
     "minor": 1,
-    "patch": 3
+    "patch": 5
   },
-  "authors": "Ackara",
-  "company": "Ackara",
+  "authors": "Tekcari",
+  "company": "Tekcari",
   "copyright": "Copyright {year} {company}, All Rights Reserved.",
   "license": "license.txt",
-  "website": "https://github.com/{company}/{name}",
-  "repository": "https://github.com/{company}/{name}.git",
-  "releaseNotes": "https://github.com/{company}/{name}/blob/master/changelog.md",
+  "website": "https://github.com/Ackara/{name}",
+  "repository": "https://github.com/Ackara/{name}.git",
+  "releaseNotes": "https://github.com/Ackara/{name}/blob/master/changelog.md",
   "icon": "icon.png",
   "tags": "typescript compiler bundle msbuild",
   "branchVersionMap": {
