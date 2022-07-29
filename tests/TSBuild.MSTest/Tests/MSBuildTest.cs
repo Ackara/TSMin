@@ -123,7 +123,7 @@ namespace Acklann.TSBuild.Tests
 			Diff.ApproveFile(outputFile, label);
 		}
 
-		[TestMethod]
+		//[TestMethod]
 		public void Manual()
 		{
 			// Arrange
@@ -138,13 +138,11 @@ namespace Acklann.TSBuild.Tests
 			var sut = new GenerateTypescriptModels(outputFile, srcFiles.ToArray())
 			{
 				BuildEngine = mockEngine,
-				ConfigurationFile = mockConfigFile
+				HostObject = mockHost
 			};
 			var result = sut.Execute();
 
 			// Assert
-
-			success.ShouldBeTrue();
 		}
 
 		#region Backing Members
