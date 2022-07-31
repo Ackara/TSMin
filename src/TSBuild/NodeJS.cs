@@ -23,7 +23,7 @@ namespace Acklann.TSBuild
 
 		private static readonly string[] _dependencies = new string[]
 		{
-			"typescript@4.x", "uglify-js@3.x", "multi-stage-sourcemap@0.3.1", "glob@7.x"
+			"typescript@4.x", "uglify-js@3.x", "multi-stage-sourcemap@0.3.1", "glob@8.x"
 		};
 
 		public static bool CheckInstallation()
