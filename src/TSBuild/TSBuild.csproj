@@ -2,9 +2,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Acklann.TSBuild</RootNamespace>
-    <AssemblyFileVersion>0.1.5</AssemblyFileVersion>
-    <AssemblyVersion>0.1.5</AssemblyVersion>
-    <Version>0.1.5</Version>
+    <AssemblyFileVersion>0.1.6</AssemblyFileVersion>
+    <AssemblyVersion>0.1.6</AssemblyVersion>
+    <Version>0.1.6</Version>
   </PropertyGroup>
 
   <PropertyGroup Label="Package">
@@ -17,9 +17,9 @@
     <PackageLicenseFile>license.txt</PackageLicenseFile>
 
     <PackageIcon>icon.png</PackageIcon>
-    <RepositoryUrl>https://github.com/Tekcari/TSBuild.git</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/Tekcari/TSBuild</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/Tekcari/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Ackara/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
     <PackageTags>typescript compiler bundle msbuild</PackageTags>
 
     <IsTool>true</IsTool>

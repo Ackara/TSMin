@@ -1,9 +1,9 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="TSBuild.VSIX.11a83e18-a351-457d-ae0f-ad74779ead37" Version="0.1.5" Language="en-US" Publisher="Tekcari" />
+        <Identity Id="TSBuild.VSIX.11a83e18-a351-457d-ae0f-ad74779ead37" Version="0.1.6" Language="en-US" Publisher="Tekcari" />
         <DisplayName>TSBuild</DisplayName>
         <Description xml:space="preserve">Helps you compile and minify typescript files on save and on build.</Description>
-        <MoreInfo>https://github.com/Tekcari/TSBuild</MoreInfo>
+        <MoreInfo>https://github.com/Ackara/TSBuild</MoreInfo>
         <License>Resources\license.txt</License>
         <ReleaseNotes>Resources\changelog.txt</ReleaseNotes>
         <Icon>Resources\icon.ico</Icon>

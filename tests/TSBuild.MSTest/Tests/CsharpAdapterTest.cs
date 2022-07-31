@@ -38,6 +38,7 @@ namespace Acklann.TSBuild.Tests
 			result = CreateTypeFromSnippet("class Foo{ public int Id{get; set;} class SQL{} }");
 			result.Name.ShouldBe("Foo");
 			result.Members.Count.ShouldBe(1);
+			result.Members[0].Name.ShouldBe("Id");
 
 			result = CreateTypeFromSnippet("class Foo<T> {}");
 			result.ParameterList[0].Name.ShouldBe("T");

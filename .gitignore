@@ -331,6 +331,7 @@ ASALocalRun/
 .mfractor/
 
 # Generated Files
+ManualTest.cs
 [Tt]ools/
 *.map
 

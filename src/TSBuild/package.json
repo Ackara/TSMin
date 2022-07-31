@@ -21,7 +21,7 @@
 	{
 		"typescript": "4.x",
 		"uglify-js": "3.x",
-		"glob": "7.x",
+		"glob": "8.x",
 		"multi-stage-sourcemap": "0.3.1"
 	}
 }

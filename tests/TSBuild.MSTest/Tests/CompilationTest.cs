@@ -90,8 +90,6 @@ namespace Acklann.TSBuild.Tests
 			error.Message.ShouldNotBeNullOrEmpty();
 		}
 
-		
-
 		#region Backing Members
 
 		private static IEnumerable<object[]> GetCompilierOptions()

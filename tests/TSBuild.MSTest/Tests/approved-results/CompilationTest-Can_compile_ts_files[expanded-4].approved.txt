@@ -114,13 +114,13 @@ var TSMin;
                         if (this.status >= 200 && this.status <= 299) {
                             pass(result);
                             if (!result) {
-                                console.warn(method + " " + this.responseURL + ": NO CONTENT");
+                                console.warn("".concat(method, " ").concat(this.responseURL, ": NO CONTENT"));
                             }
                         }
                         else {
                             reject({
                                 status: this.status, url: this.responseURL, data: result,
-                                message: (method + " " + this.responseURL + ": " + this.status + " " + (typeof result !== 'object' ? this.responseText : '')).trim()
+                                message: "".concat(method, " ").concat(this.responseURL, ": ").concat(this.status, " ").concat((typeof result !== 'object' ? this.responseText : '')).trim()
                             });
                             console.debug(result);
                         }
@@ -152,14 +152,14 @@ var TSMin;
         function Toast() {
         }
         Toast.toMoney = function (value) {
-            return "$" + value;
+            return "$".concat(value);
         };
         Toast.debug = function (message) {
             console.log("debug: " + message);
         };
         Toast.info = function (message) {
             var ele = document.getElementById("msg");
-            ele.innerHTML = "" + message;
+            ele.innerHTML = "".concat(message);
         };
         return Toast;
     }());

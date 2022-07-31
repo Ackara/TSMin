@@ -9,13 +9,13 @@
 	<PropertyGroup>
 		<Title>TSBuild</Title>
 		<Description>Helps you compile and minify typescript files on save and on build.</Description>
-		<Version>0.1.5</Version>
-		<AssemblyVersion>0.1.5</AssemblyVersion>
-		<AssemblyFileVersion>0.1.5</AssemblyFileVersion>
+		<Version>0.1.6</Version>
+		<AssemblyVersion>0.1.6</AssemblyVersion>
+		<AssemblyFileVersion>0.1.6</AssemblyFileVersion>
 		<PackageIcon>icon.png</PackageIcon>
-		<RepositoryUrl>https://github.com/Tekcari/TSBuild.git</RepositoryUrl>
-		<PackageProjectUrl>https://github.com/Tekcari/TSBuild</PackageProjectUrl>
-		<PackageReleaseNotes>https://github.com/Tekcari/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
+		<RepositoryUrl>https://github.com/Ackara/TSBuild.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Ackara/TSBuild</PackageProjectUrl>
+		<PackageReleaseNotes>https://github.com/Ackara/TSBuild/blob/master/changelog.md</PackageReleaseNotes>
 		<PackageTags>typescript compiler bundle msbuild</PackageTags>
 		<Authors>Tekcari</Authors>
 		<Company>Tekcari</Company>

@@ -22,12 +22,12 @@ namespace Acklann.TSBuild.CodeGeneration
 					if (sourceFile.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
 					{
 						foreach (TypeDefinition item in CSharpAdapter.ReadFile(sourceFile))
-							yield return item;
+							if (!string.IsNullOrEmpty(item.Name)) yield return item;
 					}
 					else if (sourceFile.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
 					{
 						foreach (Mono.Cecil.TypeDefinition item in ModuleDefinition.ReadModule(sourceFile).Types.Where(x => x.IsPublic))
-							yield return ILAdapter.AsTypeDeclaration(item);
+							if (!string.IsNullOrEmpty(item.Name)) yield return ILAdapter.AsTypeDeclaration(item);
 					}
 					else throw new NotSupportedException($"'{Path.GetExtension(sourceFile)}' files are not supported yet.");
 				}

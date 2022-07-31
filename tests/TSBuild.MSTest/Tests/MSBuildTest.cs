@@ -95,7 +95,7 @@ namespace Acklann.TSBuild.Tests
 			Diff.Approve(results);
 		}
 
-		[DataTestMethod]
+		//[DataTestMethod]
 		[DynamicData(nameof(GetTypescriptTestCases), DynamicDataSourceType.Method)]
 		public void Can_generate_typescript_models_from_source_files(string label, string[] sourceFiles, TypescriptGeneratorSettings opt)
 		{
@@ -121,28 +121,6 @@ namespace Acklann.TSBuild.Tests
 			// Assert
 			success.ShouldBeTrue();
 			Diff.ApproveFile(outputFile, label);
-		}
-
-		//[TestMethod]
-		public void Manual()
-		{
-			// Arrange
-
-			var mockEngine = A.Fake<IBuildEngine>();
-			var mockHost = A.Fake<ITaskHost>();
-			var srcFiles = new List<string>();
-
-			// Act
-
-			string outputFile = @"";
-			var sut = new GenerateTypescriptModels(outputFile, srcFiles.ToArray())
-			{
-				BuildEngine = mockEngine,
-				HostObject = mockHost
-			};
-			var result = sut.Execute();
-
-			// Assert
 		}
 
 		#region Backing Members
