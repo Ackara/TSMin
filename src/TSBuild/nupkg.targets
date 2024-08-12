@@ -11,9 +11,7 @@
 		<TSBuildConfigurationFile Condition="$(TSBuildConfigurationFile)==''">$(MSBuildProjectDirectory)\transpiler.json</TSBuildConfigurationFile>
 	</PropertyGroup>
 
-	<Target Name="CompileTypescriptFilesOnBuild"
-          BeforeTargets="PostBuildEvent"
-          Condition="$(ShouldCompileTypescriptOnBuild)">
+	<Target Name="CompileTypescriptFilesOnBuild" BeforeTargets="PostBuildEvent" Condition="$(ShouldCompileTypescriptOnBuild)">
 		<CallTarget Targets="CompileTypescriptFiles" />
 	</Target>
 
